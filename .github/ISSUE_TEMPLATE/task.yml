@@ -1,0 +1,40 @@
+name: Engineering task
+description: A reviewable Inkwell milestone task
+title: '[Task] '
+body:
+  - type: textarea
+    id: objective
+    attributes: { label: Objective }
+    validations: { required: true }
+  - type: textarea
+    id: scope
+    attributes: { label: Scope }
+    validations: { required: true }
+  - type: textarea
+    id: dependencies
+    attributes: { label: Dependencies }
+    validations: { required: true }
+  - type: textarea
+    id: modules
+    attributes: { label: Expected files or modules }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria }
+    validations: { required: true }
+  - type: textarea
+    id: security
+    attributes: { label: Security considerations }
+    validations: { required: true }
+  - type: textarea
+    id: tests
+    attributes: { label: Tests required }
+    validations: { required: true }
+  - type: textarea
+    id: done
+    attributes: { label: Definition of done }
+    validations: { required: true }
+  - type: input
+    id: branch
+    attributes: { label: Assigned branch name }
+    validations: { required: true }

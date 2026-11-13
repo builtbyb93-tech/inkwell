@@ -1,0 +1,1672 @@
+{
+  "owner": "builtbyb93-tech",
+  "repository": "inkwell",
+  "visibility": "private",
+  "projectTitle": "Inkwell",
+  "projectDescription": "Canonical Inkwell v0.6 engineering board",
+  "statuses": ["Backlog", "Ready", "In Progress", "Review", "Approved", "Complete", "Blocked"],
+  "labels": [
+    "foundation",
+    "frontend",
+    "backend",
+    "database",
+    "security",
+    "testing",
+    "documentation",
+    "deployment",
+    "accessibility",
+    "bug",
+    "enhancement",
+    "blocked",
+    "priority-high",
+    "priority-medium",
+    "priority-low"
+  ],
+  "milestones": [
+    "Phase 0 \u2014 Repository and Engineering Foundation",
+    "Phase 1 \u2014 Authentication and Project Foundation",
+    "Phase 2 \u2014 Idea Vault",
+    "Phase 3 \u2014 Story Bible",
+    "Phase 4 \u2014 Plot Board",
+    "Phase 5 \u2014 Search, Recovery, and Portability",
+    "Phase 6 \u2014 Read-Only Sharing",
+    "Phase 7 \u2014 Release Hardening"
+  ],
+  "requiredChecks": ["quality", "integration", "browser", "container", "security"],
+  "protection": {
+    "pullRequests": true,
+    "requiredApprovals": 1,
+    "dismissStaleReviews": true,
+    "resolveConversations": true,
+    "allowForcePushes": false,
+    "allowDeletions": false,
+    "autoMerge": false
+  },
+  "issues": [
+    {
+      "key": "P0-A",
+      "title": "[P0-A] Preserve v0.6 specification and engineering policies",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["documentation", "priority-high"],
+      "objective": "Preserve v0.6 specification and engineering policies",
+      "scope": {
+        "included": [
+          "All locked decisions and phase acceptance are mapped",
+          "Unresolved decisions have ADR options and recommendations"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": [],
+      "expectedFilesOrModules": ["README.md", "AGENTS.md", "docs"],
+      "acceptanceCriteria": [
+        "All locked decisions and phase acceptance are mapped",
+        "Unresolved decisions have ADR options and recommendations"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "P0-B",
+      "title": "[P0-B] Establish pinned monorepo and engineering checks",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["foundation", "priority-high"],
+      "objective": "Establish pinned monorepo and engineering checks",
+      "scope": {
+        "included": [
+          "Frozen clean install succeeds",
+          "Strict typecheck, lint and format pass without incompatible peers"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-A"],
+      "expectedFilesOrModules": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "packages/config",
+        "pnpm-lock.yaml"
+      ],
+      "acceptanceCriteria": [
+        "Frozen clean install succeeds",
+        "Strict typecheck, lint and format pass without incompatible peers"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "P0-C",
+      "title": "[P0-C] Create accessible responsive shell and theme/PWA foundation",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["frontend", "priority-high"],
+      "objective": "Create accessible responsive shell and theme/PWA foundation",
+      "scope": {
+        "included": [
+          "Keyboard skip/navigation and mobile layout work",
+          "Themes persist and axe scans pass",
+          "Unavailable creative features are accurately labelled"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-B"],
+      "expectedFilesOrModules": ["apps/web", "packages/ui"],
+      "acceptanceCriteria": [
+        "Keyboard skip/navigation and mobile layout work",
+        "Themes persist and axe scans pass",
+        "Unavailable creative features are accurately labelled"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "P0-D",
+      "title": "[P0-D] Establish local database, environment and container foundation",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["database", "priority-high"],
+      "objective": "Establish local database, environment and container foundation",
+      "scope": {
+        "included": [
+          "Local migration and database invariants pass",
+          "Container runs non-root and health works",
+          "No hosted resource or automatic migration is enabled"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-B"],
+      "expectedFilesOrModules": ["packages/db", "packages/editor", "compose.yaml", "deploy"],
+      "acceptanceCriteria": [
+        "Local migration and database invariants pass",
+        "Container runs non-root and health works",
+        "No hosted resource or automatic migration is enabled"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "P0-E",
+      "title": "[P0-E] Wire test, security and CI gates",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["testing", "priority-high"],
+      "objective": "Wire test, security and CI gates",
+      "scope": {
+        "included": [
+          "Unit, integration, browser and container checks pass",
+          "Secret/dependency scans run",
+          "Remote Actions is verified or reported blocked"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-C", "P0-D"],
+      "expectedFilesOrModules": ["tests", "scripts", ".github/workflows"],
+      "acceptanceCriteria": [
+        "Unit, integration, browser and container checks pass",
+        "Secret/dependency scans run",
+        "Remote Actions is verified or reported blocked"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "P0-F",
+      "title": "[P0-F] Review foundation and prepare PR/milestone evidence",
+      "milestone": "Phase 0 \u2014 Repository and Engineering Foundation",
+      "labels": ["documentation", "priority-high"],
+      "objective": "Review foundation and prepare PR/milestone evidence",
+      "scope": {
+        "included": [
+          "All results and limitations are recorded",
+          "PR is prepared without merge/deployment",
+          "Missing remote controls remain explicit blockers"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-A", "P0-B", "P0-C", "P0-D", "P0-E"],
+      "expectedFilesOrModules": ["docs/development/PHASE_0_REPORT.md", "PR"],
+      "acceptanceCriteria": [
+        "All results and limitations are recorded",
+        "PR is prepared without merge/deployment",
+        "Missing remote controls remain explicit blockers"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "chore/phase-0-engineering-foundation"
+    },
+    {
+      "key": "FEAT-001-A",
+      "title": "[FEAT-001-A] Register and verify an account atomically",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["security", "priority-high"],
+      "objective": "Register and verify an account atomically",
+      "scope": {
+        "included": [
+          "Verification is single-use and expiring",
+          "Account and exactly one workspace are created atomically"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["P0-F"],
+      "expectedFilesOrModules": [
+        "apps/web/auth",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Verification is single-use and expiring",
+        "Account and exactly one workspace are created atomically"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-register-and-verify-an-account-atomically"
+    },
+    {
+      "key": "FEAT-001-B",
+      "title": "[FEAT-001-B] Sign in, authorize and revoke sessions",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["security", "priority-high"],
+      "objective": "Sign in, authorize and revoke sessions",
+      "scope": {
+        "included": [
+          "Valid sign-in accesses only owned workspace",
+          "Logout and server revocation stop access",
+          "CSRF and secure-cookie checks pass"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-001-A"],
+      "expectedFilesOrModules": ["apps/web/auth", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Valid sign-in accesses only owned workspace",
+        "Logout and server revocation stop access",
+        "CSRF and secure-cookie checks pass"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-sign-in-authorize-and-revoke-sessions"
+    },
+    {
+      "key": "FEAT-001-C",
+      "title": "[FEAT-001-C] Recover account access safely",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["security", "priority-high"],
+      "objective": "Recover account access safely",
+      "scope": {
+        "included": [
+          "Recovery tokens are hashed/single-use/expiring",
+          "Reset invalidates sessions and avoids account enumeration"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-001-B"],
+      "expectedFilesOrModules": ["apps/web/auth", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Recovery tokens are hashed/single-use/expiring",
+        "Reset invalidates sessions and avoids account enumeration"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-recover-account-access-safely"
+    },
+    {
+      "key": "FEAT-002-A",
+      "title": "[FEAT-002-A] Manage owned projects",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Manage owned projects",
+      "scope": {
+        "included": [
+          "Project CRUD persists",
+          "Other accounts valid project IDs are rejected",
+          "Stale edits do not overwrite"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-001-B"],
+      "expectedFilesOrModules": [
+        "apps/web/projects",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Project CRUD persists",
+        "Other accounts valid project IDs are rejected",
+        "Stale edits do not overwrite"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-manage-owned-projects"
+    },
+    {
+      "key": "FEAT-002-B",
+      "title": "[FEAT-002-B] Manage multiple stories and dashboard navigation",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Manage multiple stories and dashboard navigation",
+      "scope": {
+        "included": [
+          "Multiple stories persist in one project",
+          "Dashboard empty/populated states are authorized"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-002-A"],
+      "expectedFilesOrModules": [
+        "apps/web/stories",
+        "apps/web/dashboard",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Multiple stories persist in one project",
+        "Dashboard empty/populated states are authorized"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-manage-multiple-stories-and-dashboard-navigation"
+    },
+    {
+      "key": "FEAT-003",
+      "title": "[FEAT-003] Provide account and privacy settings foundation",
+      "milestone": "Phase 1 \u2014 Authentication and Project Foundation",
+      "labels": ["security", "priority-high"],
+      "objective": "Provide account and privacy settings foundation",
+      "scope": {
+        "included": [
+          "Settings are account scoped",
+          "AI is disabled by default",
+          "Session/privacy controls have clear behavior"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-001-C"],
+      "expectedFilesOrModules": ["apps/web/settings", "packages/contracts", "packages/domain"],
+      "acceptanceCriteria": [
+        "Settings are account scoped",
+        "AI is disabled by default",
+        "Session/privacy controls have clear behavior"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-provide-account-and-privacy-settings-foundation"
+    },
+    {
+      "key": "FEAT-004",
+      "title": "[FEAT-004] Capture and edit categorized tagged ideas",
+      "milestone": "Phase 2 \u2014 Idea Vault",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Capture and edit categorized tagged ideas",
+      "scope": {
+        "included": [
+          "Quick capture and structured edits persist",
+          "Categories/tags work with authorized writes",
+          "Visible save states and version conflicts work"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-002-B"],
+      "expectedFilesOrModules": [
+        "apps/web/ideas",
+        "packages/editor",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Quick capture and structured edits persist",
+        "Categories/tags work with authorized writes",
+        "Visible save states and version conflicts work"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-capture-and-edit-categorized-tagged-ideas"
+    },
+    {
+      "key": "FEAT-005",
+      "title": "[FEAT-005] Filter, search, archive and restore ideas",
+      "milestone": "Phase 2 \u2014 Idea Vault",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Filter, search, archive and restore ideas",
+      "scope": {
+        "included": [
+          "Filtering and vault search return authorized results",
+          "Archive/restore preserves content and links"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-004"],
+      "expectedFilesOrModules": ["apps/web/ideas", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Filtering and vault search return authorized results",
+        "Archive/restore preserves content and links"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-filter-search-archive-and-restore-ideas"
+    },
+    {
+      "key": "FEAT-006-A",
+      "title": "[FEAT-006-A] Link ideas to multiple stories and scenes",
+      "milestone": "Phase 2 \u2014 Idea Vault",
+      "labels": ["database", "priority-medium"],
+      "objective": "Link ideas to multiple stories and scenes",
+      "scope": {
+        "included": [
+          "Typed links support multiple targets",
+          "Foreign workspace/project targets fail",
+          "Source relationships survive archive/restore"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-004"],
+      "expectedFilesOrModules": ["apps/web/ideas", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Typed links support multiple targets",
+        "Foreign workspace/project targets fail",
+        "Source relationships survive archive/restore"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-link-ideas-to-multiple-stories-and-scenes"
+    },
+    {
+      "key": "FEAT-006-B",
+      "title": "[FEAT-006-B] Convert ideas into stories, characters and scenes",
+      "milestone": "Phase 2 \u2014 Idea Vault",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Convert ideas into stories, characters and scenes",
+      "scope": {
+        "included": [
+          "All three target types use minimal valid creation services",
+          "Conversion is atomic and retains source provenance"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-006-A"],
+      "expectedFilesOrModules": [
+        "apps/web/ideas",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "All three target types use minimal valid creation services",
+        "Conversion is atomic and retains source provenance"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-convert-ideas-into-stories-characters-and-scenes"
+    },
+    {
+      "key": "FEAT-007-A",
+      "title": "[FEAT-007-A] Manage reusable shared canon records",
+      "milestone": "Phase 3 \u2014 Story Bible",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Manage reusable shared canon records",
+      "scope": {
+        "included": [
+          "Character/location/lore/event/organization records persist",
+          "Shared records can be reused across project stories"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-006-B"],
+      "expectedFilesOrModules": [
+        "apps/web/bible",
+        "packages/editor",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Character/location/lore/event/organization records persist",
+        "Shared records can be reused across project stories"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-manage-reusable-shared-canon-records"
+    },
+    {
+      "key": "FEAT-007-B",
+      "title": "[FEAT-007-B] Manage story-local canon",
+      "milestone": "Phase 3 \u2014 Story Bible",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Manage story-local canon",
+      "scope": {
+        "included": [
+          "Local records coexist with shared canon",
+          "Local editing cannot silently change shared records"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-007-A"],
+      "expectedFilesOrModules": ["apps/web/bible", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Local records coexist with shared canon",
+        "Local editing cannot silently change shared records"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-manage-story-local-canon"
+    },
+    {
+      "key": "FEAT-008",
+      "title": "[FEAT-008] Add typed canon relationships and backlinks",
+      "milestone": "Phase 3 \u2014 Story Bible",
+      "labels": ["database", "priority-medium"],
+      "objective": "Add typed canon relationships and backlinks",
+      "scope": {
+        "included": [
+          "Typed endpoint integrity is enforced",
+          "Authorized backlinks work",
+          "Cross-project links fail"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-007-B"],
+      "expectedFilesOrModules": [
+        "apps/web/bible",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Typed endpoint integrity is enforced",
+        "Authorized backlinks work",
+        "Cross-project links fail"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-add-typed-canon-relationships-and-backlinks"
+    },
+    {
+      "key": "FEAT-009",
+      "title": "[FEAT-009] Resolve overrides and review shared-canon conflicts",
+      "milestone": "Phase 3 \u2014 Story Bible",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Resolve overrides and review shared-canon conflicts",
+      "scope": {
+        "included": [
+          "Override absence and clear values differ",
+          "Shared revisions trigger review",
+          "No silent story-specific data loss"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-008"],
+      "expectedFilesOrModules": ["apps/web/bible", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Override absence and clear values differ",
+        "Shared revisions trigger review",
+        "No silent story-specific data loss"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-resolve-overrides-and-review-shared-canon-conflicts"
+    },
+    {
+      "key": "FEAT-010-A",
+      "title": "[FEAT-010-A] Organize plot groups with two-level integrity",
+      "milestone": "Phase 4 \u2014 Plot Board",
+      "labels": ["database", "priority-medium"],
+      "objective": "Organize plot groups with two-level integrity",
+      "scope": {
+        "included": ["At most root/child groups persist", "Cycles and mismatched stories fail"],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-009"],
+      "expectedFilesOrModules": ["apps/web/plot", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "At most root/child groups persist",
+        "Cycles and mismatched stories fail"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-organize-plot-groups-with-two-level-integrity"
+    },
+    {
+      "key": "FEAT-010-B",
+      "title": "[FEAT-010-B] Edit linked scene cards and details",
+      "milestone": "Phase 4 \u2014 Plot Board",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Edit linked scene cards and details",
+      "scope": {
+        "included": [
+          "Scene content/status persists with revisions",
+          "Character/location/idea links are authorized"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-010-A"],
+      "expectedFilesOrModules": [
+        "apps/web/plot",
+        "packages/editor",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Scene content/status persists with revisions",
+        "Character/location/idea links are authorized"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-edit-linked-scene-cards-and-details"
+    },
+    {
+      "key": "FEAT-011-A",
+      "title": "[FEAT-011-A] Persist atomic canonical scene ordering",
+      "milestone": "Phase 4 \u2014 Plot Board",
+      "labels": ["database", "priority-medium"],
+      "objective": "Persist atomic canonical scene ordering",
+      "scope": {
+        "included": [
+          "One story sequence is canonical",
+          "Concurrent moves detect conflicts",
+          "Failed reorders leave no partial order"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-010-B"],
+      "expectedFilesOrModules": ["packages/contracts", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "One story sequence is canonical",
+        "Concurrent moves detect conflicts",
+        "Failed reorders leave no partial order"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-persist-atomic-canonical-scene-ordering"
+    },
+    {
+      "key": "FEAT-011-B",
+      "title": "[FEAT-011-B] Provide board/list and accessible scene movement",
+      "milestone": "Phase 4 \u2014 Plot Board",
+      "labels": ["accessibility", "priority-medium"],
+      "objective": "Provide board/list and accessible scene movement",
+      "scope": {
+        "included": [
+          "Drag, keyboard and mobile movement share the same contract",
+          "Views preserve canonical order"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-011-A"],
+      "expectedFilesOrModules": ["apps/web/plot", "packages/ui"],
+      "acceptanceCriteria": [
+        "Drag, keyboard and mobile movement share the same contract",
+        "Views preserve canonical order"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-provide-board-list-and-accessible-scene-movement"
+    },
+    {
+      "key": "FEAT-012",
+      "title": "[FEAT-012] Duplicate and archive scenes",
+      "milestone": "Phase 4 \u2014 Plot Board",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Duplicate and archive scenes",
+      "scope": {
+        "included": [
+          "Duplication allocates new IDs and valid links",
+          "Archive preserves ordering/provenance semantics"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-011-B"],
+      "expectedFilesOrModules": ["apps/web/plot", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "Duplication allocates new IDs and valid links",
+        "Archive preserves ordering/provenance semantics"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-duplicate-and-archive-scenes"
+    },
+    {
+      "key": "FEAT-013",
+      "title": "[FEAT-013] Search the workspace with authorized filters",
+      "milestone": "Phase 5 \u2014 Search, Recovery, and Portability",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Search the workspace with authorized filters",
+      "scope": {
+        "included": [
+          "FTS covers approved record types",
+          "Every result is workspace authorized",
+          "Indexed queries meet an approved measured target"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-012"],
+      "expectedFilesOrModules": [
+        "apps/web/search",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "FTS covers approved record types",
+        "Every result is workspace authorized",
+        "Indexed queries meet an approved measured target"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-search-the-workspace-with-authorized-filters"
+    },
+    {
+      "key": "FEAT-014-A",
+      "title": "[FEAT-014-A] Complete autosave and revision-conflict UX",
+      "milestone": "Phase 5 \u2014 Search, Recovery, and Portability",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Complete autosave and revision-conflict UX",
+      "scope": {
+        "included": [
+          "Visible states reflect acknowledged saves",
+          "Stale edits never silently overwrite",
+          "Retries preserve version semantics"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-013"],
+      "expectedFilesOrModules": [
+        "apps/web",
+        "packages/editor",
+        "packages/contracts",
+        "packages/domain"
+      ],
+      "acceptanceCriteria": [
+        "Visible states reflect acknowledged saves",
+        "Stale edits never silently overwrite",
+        "Retries preserve version semantics"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-complete-autosave-and-revision-conflict-ux"
+    },
+    {
+      "key": "FEAT-014-B",
+      "title": "[FEAT-014-B] Recover interrupted edits within approved retention",
+      "milestone": "Phase 5 \u2014 Search, Recovery, and Portability",
+      "labels": ["security", "priority-high"],
+      "objective": "Recover interrupted edits within approved retention",
+      "scope": {
+        "included": [
+          "Supported interrupted edits recover",
+          "Buffers are account/workspace scoped",
+          "Logout and retention behavior are tested"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-014-A"],
+      "expectedFilesOrModules": ["apps/web", "packages/editor", "packages/domain"],
+      "acceptanceCriteria": [
+        "Supported interrupted edits recover",
+        "Buffers are account/workspace scoped",
+        "Logout and retention behavior are tested"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-recover-interrupted-edits-within-approved-retention"
+    },
+    {
+      "key": "FEAT-015-A",
+      "title": "[FEAT-015-A] Export structured versioned project archives",
+      "milestone": "Phase 5 \u2014 Search, Recovery, and Portability",
+      "labels": ["backend", "priority-medium"],
+      "objective": "Export structured versioned project archives",
+      "scope": {
+        "included": [
+          "Content and explicit relationship IDs are complete",
+          "Only authorized content/assets are exported"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-014-B"],
+      "expectedFilesOrModules": ["packages/contracts", "packages/domain", "apps/web/api"],
+      "acceptanceCriteria": [
+        "Content and explicit relationship IDs are complete",
+        "Only authorized content/assets are exported"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-export-structured-versioned-project-archives"
+    },
+    {
+      "key": "FEAT-015-B",
+      "title": "[FEAT-015-B] Validate and transactionally import remapped archives",
+      "milestone": "Phase 5 \u2014 Search, Recovery, and Portability",
+      "labels": ["database", "priority-medium"],
+      "objective": "Validate and transactionally import remapped archives",
+      "scope": {
+        "included": [
+          "Unsupported versions fail before writes",
+          "All links remap and round trips preserve content",
+          "Failures expose no partial project"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-015-A"],
+      "expectedFilesOrModules": [
+        "packages/contracts",
+        "packages/domain",
+        "packages/db",
+        "apps/web/api"
+      ],
+      "acceptanceCriteria": [
+        "Unsupported versions fail before writes",
+        "All links remap and round trips preserve content",
+        "Failures expose no partial project"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-validate-and-transactionally-import-remapped-archives"
+    },
+    {
+      "key": "FEAT-016",
+      "title": "[FEAT-016] Select and preview immutable snapshots",
+      "milestone": "Phase 6 \u2014 Read-Only Sharing",
+      "labels": ["frontend", "priority-medium"],
+      "objective": "Select and preview immutable snapshots",
+      "scope": {
+        "included": [
+          "Only explicitly selected content is copied",
+          "Preview matches published DTO",
+          "No live private traversal remains"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-015-B"],
+      "expectedFilesOrModules": [
+        "apps/web/sharing",
+        "packages/contracts",
+        "packages/domain",
+        "packages/db"
+      ],
+      "acceptanceCriteria": [
+        "Only explicitly selected content is copied",
+        "Preview matches published DTO",
+        "No live private traversal remains"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-select-and-preview-immutable-snapshots"
+    },
+    {
+      "key": "FEAT-017",
+      "title": "[FEAT-017] Issue expiring revocable read-only share links",
+      "milestone": "Phase 6 \u2014 Read-Only Sharing",
+      "labels": ["security", "priority-high"],
+      "objective": "Issue expiring revocable read-only share links",
+      "scope": {
+        "included": [
+          "High-entropy token hashes are stored",
+          "Expiry/revocation stop access",
+          "Public rendering never grants edits"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-016"],
+      "expectedFilesOrModules": ["apps/web/sharing", "packages/domain", "packages/db"],
+      "acceptanceCriteria": [
+        "High-entropy token hashes are stored",
+        "Expiry/revocation stop access",
+        "Public rendering never grants edits"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-issue-expiring-revocable-read-only-share-links"
+    },
+    {
+      "key": "FEAT-018",
+      "title": "[FEAT-018] Enforce snapshot download and private-asset policy",
+      "milestone": "Phase 6 \u2014 Read-Only Sharing",
+      "labels": ["security", "priority-high"],
+      "objective": "Enforce snapshot download and private-asset policy",
+      "scope": {
+        "included": [
+          "Content and asset requests recheck policy",
+          "Selected-only assets are exposed",
+          "Caches/direct URLs cannot bypass revocation"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-017"],
+      "expectedFilesOrModules": ["apps/web/sharing", "packages/domain", "storage adapter"],
+      "acceptanceCriteria": [
+        "Content and asset requests recheck policy",
+        "Selected-only assets are exposed",
+        "Caches/direct URLs cannot bypass revocation"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-enforce-snapshot-download-and-private-asset-policy"
+    },
+    {
+      "key": "FEAT-019",
+      "title": "[FEAT-019] Audit responsive PWA and accessibility",
+      "milestone": "Phase 7 \u2014 Release Hardening",
+      "labels": ["accessibility", "priority-medium"],
+      "objective": "Audit responsive PWA and accessibility",
+      "scope": {
+        "included": [
+          "Mobile/keyboard/zoom/screen-reader checks are reviewed",
+          "Installability is verified without private cache leakage"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-018"],
+      "expectedFilesOrModules": ["apps/web", "packages/ui", "tests/e2e"],
+      "acceptanceCriteria": [
+        "Mobile/keyboard/zoom/screen-reader checks are reviewed",
+        "Installability is verified without private cache leakage"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-audit-responsive-pwa-and-accessibility"
+    },
+    {
+      "key": "FEAT-020-A",
+      "title": "[FEAT-020-A] Review authorization, rate limits and security",
+      "milestone": "Phase 7 \u2014 Release Hardening",
+      "labels": ["security", "priority-high"],
+      "objective": "Review authorization, rate limits and security",
+      "scope": {
+        "included": [
+          "Cross-account regression suite passes",
+          "Rate limits hold across replicas",
+          "Security blockers are resolved"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-019"],
+      "expectedFilesOrModules": ["apps/web", "packages/domain", "packages/db", "tests"],
+      "acceptanceCriteria": [
+        "Cross-account regression suite passes",
+        "Rate limits hold across replicas",
+        "Security blockers are resolved"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-review-authorization-rate-limits-and-security"
+    },
+    {
+      "key": "FEAT-020-B",
+      "title": "[FEAT-020-B] Verify performance and redacted operational monitoring",
+      "milestone": "Phase 7 \u2014 Release Hardening",
+      "labels": ["testing", "priority-medium"],
+      "objective": "Verify performance and redacted operational monitoring",
+      "scope": {
+        "included": [
+          "Approved workload targets pass",
+          "Failures are observable without private content/secrets"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-020-A"],
+      "expectedFilesOrModules": ["apps/web", "deploy", "tests"],
+      "acceptanceCriteria": [
+        "Approved workload targets pass",
+        "Failures are observable without private content/secrets"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-verify-performance-and-redacted-operational-monitoring"
+    },
+    {
+      "key": "FEAT-021-A",
+      "title": "[FEAT-021-A] Demonstrate protected backup restoration",
+      "milestone": "Phase 7 \u2014 Release Hardening",
+      "labels": ["deployment", "priority-medium"],
+      "objective": "Demonstrate protected backup restoration",
+      "scope": {
+        "included": [
+          "Database and asset restore succeeds in isolation",
+          "Approved retention/access controls are verified"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-020-B"],
+      "expectedFilesOrModules": ["deploy", "docs/deployment"],
+      "acceptanceCriteria": [
+        "Database and asset restore succeeds in isolation",
+        "Approved retention/access controls are verified"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-demonstrate-protected-backup-restoration"
+    },
+    {
+      "key": "FEAT-021-B",
+      "title": "[FEAT-021-B] Prepare release candidate and separately approved staging",
+      "milestone": "Phase 7 \u2014 Release Hardening",
+      "labels": ["deployment", "priority-medium"],
+      "objective": "Prepare release candidate and separately approved staging",
+      "scope": {
+        "included": [
+          "Critical evidence passes and staging is owner approved",
+          "Production remains a separate migration/deployment approval"
+        ],
+        "excluded": [
+          "Later milestone implementation unless separately approved",
+          "Merging or deploying without owner approval"
+        ]
+      },
+      "dependencies": ["FEAT-021-A"],
+      "expectedFilesOrModules": ["deploy", "docs/deployment", "release PR"],
+      "acceptanceCriteria": [
+        "Critical evidence passes and staging is owner approved",
+        "Production remains a separate migration/deployment approval"
+      ],
+      "securityConsiderations": [
+        "Authorize every private resource and linked ID; preserve workspace/project integrity",
+        "No secrets/private content in source, logs, issue evidence or test fixtures",
+        "Use local isolated tests; no production data or infrastructure changes"
+      ],
+      "testsRequired": [
+        "Applicable unit/contract tests",
+        "Database/API authorization, validation and transaction tests when relevant",
+        "Browser/keyboard/accessibility tests for UI changes",
+        "Report unavailable checks explicitly"
+      ],
+      "definitionOfDone": [
+        "Acceptance criteria verified with evidence",
+        "Reviewed PR prepared; owner approval needed for merge",
+        "Task status reflects actual published evidence, not local draft assertions"
+      ],
+      "assignedBranch": "feature/{issue}-prepare-release-candidate-and-separately-approved-staging"
+    }
+  ]
+}
