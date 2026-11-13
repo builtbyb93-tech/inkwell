@@ -238,7 +238,7 @@ export async function updateStory(
 }
 export async function summary(account: AccountRecord) {
   const db = database();
-  const [projects, stories, recent] = await Promise.all([
+  const [projects, stories, recent, ideas, recentIdeas] = await Promise.all([
     db.project.count({ where: { workspaceId: account.workspaceId, archivedAt: null } }),
     db.story.count({
       where: { workspaceId: account.workspaceId, archivedAt: null, project: { archivedAt: null } },
@@ -248,6 +248,19 @@ export async function summary(account: AccountRecord) {
       orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
       take: 5,
     }),
+    db.idea.count({ where: { workspaceId: account.workspaceId, archivedAt: null } }),
+    db.idea.findMany({
+      where: { workspaceId: account.workspaceId, archivedAt: null },
+      orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
+      take: 5,
+      select: { id: true, title: true },
+    }),
   ]);
-  return { projects, stories, recent: recent.map(projectDto) };
+  return {
+    projects,
+    stories,
+    recent: recent.map(projectDto),
+    ideas,
+    recentIdeas: recentIdeas.map((idea) => ({ id: idea.id, title: idea.title })),
+  };
 }

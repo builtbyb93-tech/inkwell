@@ -228,6 +228,17 @@
     "target": "main",
     "mergeAuthorized": true,
     "deploymentAuthorized": false,
-    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/40"
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/40",
+    "mergeStatus": "merged",
+    "mergeCommit": "328e9ed0e55ebfc9303b2b1ca012193ee6684f86"
+  },
+  "phase2": {
+    "issues": [13, 14, 15, 16],
+    "branch": "feature/13-idea-vault",
+    "worktree": "/workspace/inkwell-worktrees/phase-2",
+    "baseCommit": "328e9ed0e55ebfc9303b2b1ca012193ee6684f86",
+    "target": "main",
+    "mergeAuthorized": false,
+    "deploymentAuthorized": false
   }
 }

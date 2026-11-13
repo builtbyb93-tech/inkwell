@@ -12,3 +12,5 @@ export function createDatabase(connectionString: string) {
 }
 
 export type Database = ReturnType<typeof createDatabase>;
+
+export { Prisma } from '../generated/prisma/client';

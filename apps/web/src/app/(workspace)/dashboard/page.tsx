@@ -20,6 +20,12 @@ export default async function Dashboard() {
       </section>
       <div className="stats-grid">
         <section className="workspace-card">
+          <h2>
+            <Link href="/ideas">Idea Vault</Link>
+          </h2>
+          <p className="stat-number">{data.ideas}</p>
+        </section>
+        <section className="workspace-card">
           <h2>Projects</h2>
           <p className="stat-number">{data.projects}</p>
         </section>
@@ -46,9 +52,26 @@ export default async function Dashboard() {
           </p>
         )}
       </section>
+      <section className="workspace-card">
+        <h2>Recent ideas</h2>
+        {data.recentIdeas.length ? (
+          <ul className="record-list">
+            {data.recentIdeas.map((idea) => (
+              <li key={idea.id}>
+                <Link href={`/ideas/${idea.id}`}>{idea.title}</Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            Capture the thought you don’t want to lose in your <Link href="/ideas">Idea Vault</Link>
+            .
+          </p>
+        )}
+      </section>
       <section className="future-tools">
         <h2>Room to grow</h2>
-        <p>Idea Vault, Story Bible, and Plot Board are coming in later milestones.</p>
+        <p>Story Bible and Plot Board are coming in later milestones.</p>
       </section>
     </>
   );

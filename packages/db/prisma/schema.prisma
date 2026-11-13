@@ -24,13 +24,18 @@ model User {
 }
 
 model Workspace {
-  id        String    @id @default(uuid()) @db.Uuid
-  ownerId   String    @unique @db.Uuid
-  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Restrict)
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  projects  Project[]
-  stories   Story[]
+  id             String         @id @default(uuid()) @db.Uuid
+  ownerId        String         @unique @db.Uuid
+  owner          User           @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  createdAt      DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @db.Timestamptz(3)
+  projects       Project[]
+  stories        Story[]
+  ideas          Idea[]
+  ideaCategories IdeaCategory[]
+  ideaTags       IdeaTag[]
+  characters     Character[]
+  scenes         Scene[]
 }
 
 enum TokenPurpose {
@@ -76,16 +81,19 @@ model RateLimitBucket {
 }
 
 model Project {
-  id          String    @id @default(uuid()) @db.Uuid
-  workspaceId String    @db.Uuid
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
-  title       String
-  description String    @default("")
-  version     Int       @default(1)
-  archivedAt  DateTime? @db.Timestamptz(3)
-  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
-  stories     Story[]
+  id              String           @id @default(uuid()) @db.Uuid
+  workspaceId     String           @db.Uuid
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  title           String
+  description     String           @default("")
+  version         Int              @default(1)
+  archivedAt      DateTime?        @db.Timestamptz(3)
+  createdAt       DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime         @updatedAt @db.Timestamptz(3)
+  stories         Story[]
+  characters      Character[]
+  scenes          Scene[]
+  ideaConversions IdeaConversion[]
 
   @@unique([id, workspaceId])
   @@index([workspaceId, archivedAt, createdAt, id])
@@ -105,5 +113,197 @@ model Story {
   createdAt   DateTime  @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
 
+  sequenceVersion  Int              @default(0)
+  scenes           Scene[]
+  ideaLinks        IdeaStoryLink[]
+  conversions      IdeaConversion[] @relation("ConvertedStory")
+  sceneConversions IdeaConversion[] @relation("ConversionParentStory")
+
+  @@unique([id, projectId, workspaceId])
   @@index([workspaceId, projectId, archivedAt, createdAt, id])
+}
+
+model IdeaCategory {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @db.Uuid
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  name        String
+  nameKey     String
+  version     Int       @default(1)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+  ideas       Idea[]
+
+  @@unique([id, workspaceId])
+  @@unique([workspaceId, nameKey])
+  @@index([workspaceId, createdAt, id])
+}
+
+model IdeaTag {
+  id          String              @id @default(uuid()) @db.Uuid
+  workspaceId String              @db.Uuid
+  workspace   Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  name        String
+  nameKey     String
+  version     Int                 @default(1)
+  createdAt   DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime            @updatedAt @db.Timestamptz(3)
+  ideas       IdeaTagAssignment[]
+
+  @@unique([id, workspaceId])
+  @@unique([workspaceId, nameKey])
+  @@index([workspaceId, createdAt, id])
+}
+
+model Idea {
+  id                   String                  @id @default(uuid()) @db.Uuid
+  workspaceId          String                  @db.Uuid
+  workspace            Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  title                String
+  content              Json
+  contentSchemaVersion Int                     @default(1)
+  contentText          String
+  searchVector         Unsupported("tsvector") @default(dbgenerated())
+  categoryId           String?                 @db.Uuid
+  category             IdeaCategory?           @relation(fields: [categoryId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  tags                 IdeaTagAssignment[]
+  version              Int                     @default(1)
+  archivedAt           DateTime?               @db.Timestamptz(3)
+  createdAt            DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                @updatedAt @db.Timestamptz(3)
+  storyLinks           IdeaStoryLink[]
+  sceneLinks           IdeaSceneLink[]
+  conversions          IdeaConversion[]
+
+  @@unique([id, workspaceId])
+  @@index([workspaceId, archivedAt, createdAt, id])
+  @@index([workspaceId, categoryId])
+  @@index([searchVector], type: Gin)
+}
+
+model IdeaTagAssignment {
+  ideaId      String  @db.Uuid
+  tagId       String  @db.Uuid
+  workspaceId String  @db.Uuid
+  idea        Idea    @relation(fields: [ideaId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  tag         IdeaTag @relation(fields: [tagId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+
+  @@id([ideaId, tagId])
+  @@index([workspaceId, tagId, ideaId])
+}
+
+model Character {
+  id                   String           @id @default(uuid()) @db.Uuid
+  workspaceId          String           @db.Uuid
+  workspace            Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId            String           @db.Uuid
+  project              Project          @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  name                 String
+  content              Json
+  contentSchemaVersion Int              @default(1)
+  contentText          String
+  version              Int              @default(1)
+  archivedAt           DateTime?        @db.Timestamptz(3)
+  createdAt            DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime         @updatedAt @db.Timestamptz(3)
+  conversions          IdeaConversion[]
+
+  @@unique([id, projectId, workspaceId])
+  @@index([workspaceId, projectId, archivedAt, createdAt, id])
+}
+
+model Scene {
+  id                   String           @id @default(uuid()) @db.Uuid
+  workspaceId          String           @db.Uuid
+  workspace            Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId            String           @db.Uuid
+  project              Project          @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  storyId              String           @db.Uuid
+  story                Story            @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  title                String
+  content              Json
+  contentSchemaVersion Int              @default(1)
+  contentText          String
+  position             Int
+  version              Int              @default(1)
+  archivedAt           DateTime?        @db.Timestamptz(3)
+  createdAt            DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime         @updatedAt @db.Timestamptz(3)
+  ideaLinks            IdeaSceneLink[]
+  conversions          IdeaConversion[]
+
+  @@unique([id, storyId, projectId, workspaceId])
+  @@unique([storyId, position])
+  @@index([workspaceId, projectId, storyId, archivedAt, createdAt, id])
+}
+
+model IdeaStoryLink {
+  id          String   @id @default(uuid()) @db.Uuid
+  workspaceId String   @db.Uuid
+  ideaId      String   @db.Uuid
+  idea        Idea     @relation(fields: [ideaId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  projectId   String   @db.Uuid
+  storyId     String   @db.Uuid
+  story       Story    @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([ideaId, storyId])
+  @@index([workspaceId, storyId])
+  @@index([ideaId, createdAt, id])
+}
+
+model IdeaSceneLink {
+  id          String   @id @default(uuid()) @db.Uuid
+  workspaceId String   @db.Uuid
+  ideaId      String   @db.Uuid
+  idea        Idea     @relation(fields: [ideaId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  projectId   String   @db.Uuid
+  storyId     String   @db.Uuid
+  sceneId     String   @db.Uuid
+  scene       Scene    @relation(fields: [sceneId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([ideaId, sceneId])
+  @@index([workspaceId, sceneId])
+  @@index([ideaId, createdAt, id])
+  @@index([workspaceId, storyId, ideaId])
+}
+
+enum IdeaConversionKind {
+  STORY
+  CHARACTER
+  SCENE
+}
+
+model IdeaConversion {
+  id                         String             @id @default(uuid()) @db.Uuid
+  workspaceId                String             @db.Uuid
+  requestKey                 String             @db.Uuid
+  requestHash                String
+  ideaId                     String             @db.Uuid
+  idea                       Idea               @relation(fields: [ideaId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  projectId                  String             @db.Uuid
+  project                    Project            @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  parentStoryId              String?            @db.Uuid
+  parentStory                Story?             @relation("ConversionParentStory", fields: [parentStoryId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  targetStoryId              String?            @db.Uuid
+  targetStory                Story?             @relation("ConvertedStory", fields: [targetStoryId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  targetCharacterId          String?            @db.Uuid
+  targetCharacter            Character?         @relation(fields: [targetCharacterId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  targetSceneId              String?            @db.Uuid
+  targetScene                Scene?             @relation(fields: [targetSceneId, parentStoryId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
+  kind                       IdeaConversionKind
+  sourceVersion              Int
+  titleSnapshot              String
+  contentSnapshot            Json
+  sourceContentSchemaVersion Int                @default(1)
+  createdAt                  DateTime           @default(now()) @db.Timestamptz(3)
+
+  @@unique([workspaceId, requestKey])
+  @@index([ideaId, createdAt, id])
+  @@index([workspaceId, targetStoryId])
+  @@index([workspaceId, targetCharacterId])
+  @@index([workspaceId, targetSceneId])
+  @@index([workspaceId, parentStoryId])
+  @@index([projectId, workspaceId])
 }

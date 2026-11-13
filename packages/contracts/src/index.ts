@@ -105,3 +105,6 @@ export type AccountRecord = {
   aiEnabled: false;
   workspaceId: string;
 };
+
+export * from './rich-text';
+export * from './ideas';

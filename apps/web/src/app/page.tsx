@@ -76,7 +76,7 @@ export default function Home() {
             <h2 id="ideas-heading">Idea Vault</h2>
             <p>A place for the thought you don’t want to lose.</p>
             <EmptyState title="Leave room for a spark">
-              Quick capture, tags, and connections are coming soon.
+              Capture, tag, and connect ideas in your private workspace.
             </EmptyState>
           </section>
           <section id="projects" className="workspace-card" aria-labelledby="projects-heading">

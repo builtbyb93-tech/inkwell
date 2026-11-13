@@ -35,3 +35,10 @@ export function decodeCursor(value: string): { id: string; createdAt: Date } | n
     return null;
   }
 }
+
+export function taxonomyNameKey(name: string): string {
+  return name.normalize('NFKC').trim().replace(/\s+/g, ' ').toLocaleLowerCase('en-US');
+}
+export function ideaTitle(text: string): string {
+  return text.trim().split(/\r?\n/)[0]?.slice(0, 120) || 'Untitled idea';
+}

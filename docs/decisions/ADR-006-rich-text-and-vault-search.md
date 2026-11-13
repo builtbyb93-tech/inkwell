@@ -1,0 +1,13 @@
+# ADR-006: Versioned rich text and indexed vault search
+
+Status: selected for Phase 2; production performance and hosted deployment remain release gates.
+
+Store Tiptap JSON plus derived plain text and contentSchemaVersion=1. Keep document format version distinct from optimistic record version and story sequenceVersion. Conversion snapshots also record their format version. Readers reject unsupported stored versions safely instead of interpreting them as v1. No client HTML is persisted/rendered verbatim.
+
+The portable v1 parser allows paragraphs, headings 1–3, lists/list items, quotes, code blocks, hard breaks/rules and bounded text marks (bold, italic, underline, strike, code, links). It validates parent/child grammar, attributes and mark combinations; code cannot combine with other marks. Links allow only explicit HTTP, HTTPS or mailto URLs. Images, arbitrary HTML, scripts, event/style attributes and unknown nodes fail validation. React/ProseMirror render escaped text; readonly links use noopener/noreferrer. Editing links does not contact a provider. No private attachment storage surface is opened here.
+
+Bounds: 10,000 derived text characters, 1,000 nodes, depth 8 and 24 KiB serialized content, within the existing 32 KiB request boundary; titles are 1–120 characters and an idea can assign up to 20 tag IDs per request. These bound parsing, SQL and rendering cost without truncating stored source content. Quick Capture derives a title locally and creates the same validated document format. Saves are explicit; autosave/offline recovery stays Phase 5. Editing is disabled while mutations are pending; conflicts retain the draft and provide explicit discard/reload.
+
+For vault search, select PostgreSQL's built-in simple dictionary and websearch_to_tsquery: language-neutral token matching, quoted phrases, no stemming/fuzzy promise, no external search service or extension. A stored generated weighted tsvector (title A/body B) with GIN updates transactionally whenever title/body text changes. Workspace/archive/category/tag/relationship filters are parameterized and independently scoped. Selected tags use AND semantics. Results use stable descending (createdAt,id) cursors, 20 by default/50 maximum, not unstable ranking pagination. The ID and metadata reads share a repeatable-read snapshot. Scope, FK and backlink predicates have supporting indexes.
+
+No corpus-scale latency claim follows from small test fixtures. Release hardening must measure actual target-VPS plans/load and review language/tokenization needs. Later workspace-wide search extends this boundary rather than bypassing authorization.

@@ -4,7 +4,7 @@ The owner's v0.6 directive and explicit approvals govern. Read product, architec
 
 ## Scope and approvals
 
-- Current authorization: Phase 0 is merged; Phase 1 implementation is complete and the owner explicitly approved merging PR #40 after review findings are fixed and all required checks pass. Phase 2 implementation and deployment are not authorized.
+- Current authorization: Phases 0/1 are merged. The owner approved Phase 2 Idea Vault implementation, testing and PR preparation for issues #13–#16. Phase 2 merge and deployment are not authorized.
 - Never merge or enable auto-merge without explicit owner approval.
 - Provisioning, production migrations/deployment, DNS, destructive actions, paid dependencies, scope/major architecture changes, and deletion of unmerged worktrees/branches require their own approval.
 - Do not modify unrelated projects. Use `builtbyb93-tech/inkwell`; ordinary work uses branches/worktrees, not forks.
