@@ -20,3 +20,7 @@ Phase 2 ideas are global to the workspace. An idea can connect to multiple owned
 ## Phase 3 canon graph
 
 ADR-007 permits a concrete common CanonRecord with closed kind enum and immutable identity. Both endpoints are qualified SQL FKs; database triggers enforce the typed matrix and shared/story context. A type/id pair cannot bypass integrity. Conversion provenance still points to shared Characters only. Project graph edges are read-only in story views; story graph edges cannot reference another story's local record. Indexes cover both directions, scoped stable paging and active/archive retrieval. Archived endpoints remain visible as archived references; restoring links requires active endpoints. No scene/canon joins or graph deletion is introduced.
+
+## Phase 4 scene graph
+
+SceneCharacterLink/SceneLocationLink use scoped concrete FKs and SQL type/context guards. Shared or same-story-local canon can be linked; foreign project/story-local/type endpoints fail. Scene references display effective story overrides and authorized canon backlinks. Idea references reuse versioned IdeaSceneLink operations; source conversions remain immutable and retained. Scene duplication creates new edge IDs and a qualified immutable duplicatedFromId, copies current valid links (including archived endpoint labels), and does not copy IdeaConversion records. ADR-008 describes independent content/reference preconditions and archive semantics.

@@ -6,6 +6,9 @@ export default async function Project({ params }: { params: Promise<{ projectId:
   const { projectId } = await params;
   return (
     <div className="stack">
+      <Link className="button" href={`/projects/${projectId}/plot`}>
+        Open Plot Boards
+      </Link>
       <Link className="button" href={`/projects/${projectId}/canon`}>
         Open project Story Bible
       </Link>

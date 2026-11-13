@@ -43,3 +43,4 @@ export function ideaTitle(text: string): string {
   return text.trim().split(/\r?\n/)[0]?.slice(0, 120) || 'Untitled idea';
 }
 export * from './canon';
+export * from './plot';

@@ -11,6 +11,9 @@ export default async function Story({
   const { projectId, storyId } = await params;
   return (
     <div className="stack">
+      <Link className="button" href={`/projects/${projectId}/stories/${storyId}/plot`}>
+        Open Plot Board
+      </Link>
       <Link className="button" href={`/projects/${projectId}/stories/${storyId}/canon`}>
         Open story Story Bible
       </Link>

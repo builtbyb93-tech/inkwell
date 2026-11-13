@@ -1,5 +1,10 @@
 import 'server-only';
-import { type AccountRecord, type RichDocument, type TargetRecord } from '@inkwell/contracts';
+import {
+  type AccountRecord,
+  type RichDocument,
+  type SceneStatus,
+  type TargetRecord,
+} from '@inkwell/contracts';
 import { database } from './database';
 import { HttpError, notFound } from './http';
 import { id } from './records';
@@ -67,6 +72,7 @@ export async function appendSceneSeed(
   projectId: string,
   storyId: string,
   source: Seed,
+  options: { groupId?: string | null; status?: SceneStatus; duplicatedFromId?: string } = {},
 ) {
   const story = await tx.story.updateMany({
     where: { id: id(storyId), projectId, workspaceId: account.workspaceId, archivedAt: null },
@@ -86,6 +92,7 @@ export async function appendSceneSeed(
       content: jsonDocument(source.content),
       contentText: source.contentText,
       position: (max._max.position ?? -1) + 1,
+      ...options,
     },
   });
 }

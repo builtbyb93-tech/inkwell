@@ -9,6 +9,7 @@ export function AppFrame({ children, name }: { children: React.ReactNode; name?:
           ['/dashboard', 'Overview'],
           ['/ideas', 'Idea Vault'],
           ['/bible', 'Story Bible'],
+          ['/plot', 'Plot Board'],
           ['/projects', 'Projects & stories'],
           ['/settings', 'Account & privacy'],
         ]

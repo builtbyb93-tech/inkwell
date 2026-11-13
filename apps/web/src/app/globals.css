@@ -700,3 +700,75 @@ fieldset {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.plot-controls {
+  display: grid;
+  gap: 1rem;
+}
+.plot-scenes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+.plot-board {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.plot-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+.plot-tile {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  min-width: 0;
+}
+.plot-tile h2 {
+  font-size: 1.4rem;
+  margin: 0.75rem 0;
+  overflow-wrap: anywhere;
+}
+.plot-tile p {
+  overflow-wrap: anywhere;
+}
+.scene-excerpt {
+  white-space: pre-wrap;
+  color: var(--muted);
+}
+.drag-handle {
+  margin-left: auto;
+  cursor: grab;
+}
+.scene-move {
+  margin-top: 1rem;
+}
+.scene-move summary {
+  cursor: pointer;
+}
+.scene-move form {
+  margin-top: 1rem;
+}
+.plot-groups {
+  padding-left: 1.25rem;
+}
+.plot-groups li {
+  margin: 0.75rem 0;
+}
+.plot-controls label,
+.plot-tile form {
+  min-width: 0;
+}
+.plot-controls select,
+.plot-tile select {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  .plot-tile {
+    padding: 1rem;
+  }
+  .drag-handle {
+    display: none;
+  }
+}
