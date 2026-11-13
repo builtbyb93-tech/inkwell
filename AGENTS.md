@@ -31,6 +31,6 @@ Milestone reports include name, issues, branch, worktree, base/final SHAs, files
 
 ## GitHub access and current gates
 
-The canonical private repository, Project and Phase 0 PR #39 are published. Main remains the README bootstrap; no merge/deployment is approved. GitHub rejected private branch protection with a plan-related 403. Do not buy a plan, make source public, invite collaborators, waive checks or merge to bypass this gate.
+The owner explicitly approved public source visibility on 2026-11-13. The canonical repository is public; the Project remains private. Main protection is verified: all five CI checks, one non-author approval, stale-review dismissal, conversation resolution and admin enforcement; force pushes/deletion are blocked. Auto-merge is disabled. Do not weaken these controls, invite collaborators, merge or deploy without the relevant owner authorization. No paid plan was purchased. Main remains the README bootstrap; feature work is in PR #39.
 
 Cloud GitHub HTTP requests are authenticated as BradyBuilds even without valid Authorization headers. Those responses cannot verify a newly supplied account credential. Do not repeat the cloud device/PAT login loop. Use the linked builtbyb93-tech GitHub connector when its capabilities suffice; administrative operations use the separately authorized Mac with its locally verified builtbyb93-tech OAuth credential. Never transfer or print credentials. Keep local credential storage outside all checkouts and disclose no token values.

@@ -49,4 +49,4 @@ Coverage reviewed against all twelve primary systems and all phases in MVP_SCOPE
 
 ## Published planning
 
-The 38 tasks are published as repository issues #1–#38, with Phase 0 in #1–#6. Project: https://github.com/users/builtbyb93-tech/projects/1. Draft PR #39 contains the foundation. Private-plan main protection is a blocking owner decision recorded in #6. No task is closed by local verification alone.
+The 38 tasks are published as repository issues #1–#38, with Phase 0 in #1–#6. Project: https://github.com/users/builtbyb93-tech/projects/1. Draft PR #39 contains the foundation. The owner approved public visibility and main protection is now verified. Non-author review and explicit owner merge approval remain recorded in #6. No task is closed by local verification alone.

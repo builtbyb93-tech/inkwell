@@ -6,7 +6,7 @@ Inkwell helps creators capture, organize, develop, connect, and retrieve ideas a
 
 Phase 0 engineering foundation. The responsive shell, themes, operational endpoints, local database foundation, and test/build tooling are implemented. Authentication and creative tools are not implemented. No private or fabricated user data is shown. No service worker or offline editing is enabled.
 
-The canonical private repository is [builtbyb93-tech/inkwell](https://github.com/builtbyb93-tech/inkwell). [Draft PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39) contains the foundation. Planning is published on the [Inkwell Project](https://github.com/users/builtbyb93-tech/projects/1). Protected main is blocked by the current GitHub plan; see [setup status](docs/development/SETUP_STATUS.md).
+The canonical public repository is [builtbyb93-tech/inkwell](https://github.com/builtbyb93-tech/inkwell). [Draft PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39) contains the foundation. Planning is published on the [Inkwell Project](https://github.com/users/builtbyb93-tech/projects/1). Main protection is enabled; a non-author review and explicit owner merge approval remain required. See [setup status](docs/development/SETUP_STATUS.md).
 
 ## Local development
 

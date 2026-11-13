@@ -1,7 +1,7 @@
 {
   "owner": "builtbyb93-tech",
   "repository": "inkwell",
-  "visibility": "private",
+  "visibility": "public",
   "projectTitle": "Inkwell",
   "projectDescription": "Canonical Inkwell v0.6 engineering board",
   "statuses": ["Backlog", "Ready", "In Progress", "Review", "Approved", "Complete", "Blocked"],
@@ -1668,5 +1668,6 @@
       ],
       "assignedBranch": "feature/{issue}-prepare-release-candidate-and-separately-approved-staging"
     }
-  ]
+  ],
+  "visibilityDecision": "Owner explicitly approved public source on 2026-11-13 to enable protected main without a paid upgrade."
 }

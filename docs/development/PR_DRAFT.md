@@ -8,4 +8,4 @@ Local verification includes 17 unit/integration/browser tests, frozen installs, 
 
 Authentication and creative tools are later milestones. The current SQL migration creates User/Workspace foundations and was exercised only on local disposable databases. Hosted resources and deployment are not enabled.
 
-GitHub's current plan blocks protected main for this private repository. Keep the repository private and do not merge until that gate and a non-author review are resolved and the owner explicitly approves. No upgrade, collaborator invitation or deployment is authorized automatically.
+The owner approved public source visibility and main protection is now enabled and verified. All five CI checks, one non-author approval, conversation resolution and admin enforcement are required; force pushes/deletion and auto-merge are disabled. A non-author reviewer and explicit owner merge approval remain outstanding. No paid plan, collaborator invitation or deployment is authorized automatically.

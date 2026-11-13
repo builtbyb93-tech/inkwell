@@ -1,10 +1,10 @@
 # Phase 0 — Repository and Engineering Foundation
 
-Status: local implementation and initial CI verified; repository/planning/PR published; milestone completion blocked on protected-main plan support and review. This is not approval to merge, provision or deploy.
+Status: local implementation and initial CI verified; repository/planning/PR published; public source and main protection verified; milestone awaits non-author review and owner merge approval. This is not approval to merge, provision or deploy.
 
 ## Git and issue references
 
-- Approved canonical owner/repository: builtbyb93-tech/inkwell. Canonical private repository is published: https://github.com/builtbyb93-tech/inkwell.
+- Approved canonical owner/repository: builtbyb93-tech/inkwell. Canonical public repository (owner-approved visibility) is published: https://github.com/builtbyb93-tech/inkwell.
 - GitHub issue references: Phase 0 #1–#6; all 38 tasks are published as #1–#38. See GITHUB_RESOURCES.json for the mapping.
 - Branch: chore/phase-0-engineering-foundation.
 - Worktree: /workspace/inkwell-worktrees/phase-0.
@@ -38,7 +38,7 @@ Planning manifest: 8 milestones, 15 required labels, 7 exact workflow statuses, 
 | Full Docker build                         | Passed with exact Node digest, frozen lockfile and optional trusted build CA                                         |
 | Final container runtime                   | Non-root UID 1000; shell/health 200; safe readiness 503 without DB; healthy; build CA absent                         |
 | GitHub Actions                            | Run 1 passed on implementation 8c4c31d; latest head checks are verified in the owner handoff                         |
-| Branch protection / Project / issues / PR | Project/issues/PR published; protected main rejected by private-plan 403                                             |
+| Branch protection / Project / issues / PR | Project/issues/PR published; public visibility and main protection verified; review pending                          |
 
 Local environment required writable tool caches, a trusted managed-network CA mounted only during builds, and an ephemeral in-memory package metadata cache to fit an 8 GiB filesystem. TLS verification remains enabled. No host CA is embedded in the runtime. Test containers are local and disposable; the development database volume is retained. No VPS services were changed.
 
@@ -58,13 +58,13 @@ Migration tooling rejects remote hosts and unrelated database names. Integration
 
 Authentication, creative features, rich-text authoring, storage operations, FTS, recovery, portability and sharing are later milestones. PWA installability/full browser/manual screen-reader/backup/load/release checks are future acceptance gates. Storage/auth/mail/retention decisions remain documented proposals before dependent implementation.
 
-The connector lacks administrative creation surfaces, so the authorized Mac performed setup using its verified owner authorization. The canonical repository remains private. GitHub rejected protected-main setup with 403: Upgrade to GitHub Pro or make this repository public to enable this feature. No paid upgrade, visibility change or collaborator invitation occurred. An eligible non-author review remains required before merge.
+The connector lacks administrative creation surfaces, so the authorized Mac performed setup using its verified owner authorization. The owner approved public source after GitHub rejected private protection on the existing plan. Repository visibility is public and main protection is verified: all five strict CI checks, one non-author approval, stale-review dismissal, conversation resolution, admin enforcement and linear history; no force pushes/deletion. No paid upgrade occurred. The Project remains private. A non-author reviewer is still needed; no collaborator has been invited.
 
 ## PR, merge and deployment
 
 PR: https://github.com/builtbyb93-tech/inkwell/pull/39 (draft). Merge status: not merged; auto-merge disabled. Deployment status: not deployed; no Coolify provisioning, production migration or DNS change.
 
-Recommended next step: resolve the private-plan protection gate and non-author review, verify the latest CI checks, and obtain explicit owner merge approval. Only then propose Phase 1 under a separate milestone approval.
+Recommended next step: obtain eligible non-author review, verify the latest CI checks, and obtain explicit owner merge approval. Only then propose Phase 1 under a separate milestone approval.
 
 ## Files changed
 

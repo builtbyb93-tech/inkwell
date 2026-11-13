@@ -3,7 +3,7 @@
   "repository": {
     "id": 1456687539,
     "url": "https://github.com/builtbyb93-tech/inkwell",
-    "visibility": "private"
+    "visibility": "public"
   },
   "project": {
     "url": "https://github.com/users/builtbyb93-tech/projects/1",
@@ -201,14 +201,22 @@
   },
   "nativeDependencyEdges": 42,
   "mainProtection": {
-    "configured": false,
-    "status": 403,
-    "message": "Upgrade to GitHub Pro or make this repository public to enable this feature."
+    "configured": true,
+    "requiredChecks": ["quality", "integration", "browser", "container", "security"],
+    "strictChecks": true,
+    "requiredApprovals": 1,
+    "dismissStaleReviews": true,
+    "enforceAdmins": true,
+    "conversationResolution": true,
+    "linearHistory": true,
+    "forcePushes": false,
+    "deletions": false
   },
   "autoMerge": false,
   "baseCommit": "f32e82185ebf637238e9f2e6e1f0e999175779dc",
   "implementationCommit": "8c4c31defbf93f0dfa4d3526a58cd0cdc475a9bc",
   "implementationCiRun": "https://github.com/builtbyb93-tech/inkwell/actions/runs/43442184636",
   "mergeStatus": "not merged",
-  "deploymentStatus": "not deployed"
+  "deploymentStatus": "not deployed",
+  "reviewerStatus": "Eligible non-author reviewer required; no additional collaborator invited"
 }

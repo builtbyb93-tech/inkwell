@@ -4,7 +4,7 @@ The owner approved Phase 0 on 2026-11-13 and selected builtbyb93-tech. Merging, 
 
 ## Published resources
 
-- Private canonical repository: https://github.com/builtbyb93-tech/inkwell.
+- Public canonical repository (owner-approved visibility): https://github.com/builtbyb93-tech/inkwell.
 - Project: https://github.com/users/builtbyb93-tech/projects/1.
 - Draft foundation PR: https://github.com/builtbyb93-tech/inkwell/pull/39.
 - Phase 0 issues: #1 through #6. Full plan: 38 issues, 8 milestones and all 15 requested labels.
@@ -22,7 +22,9 @@ A local bare publication mirror on the Mac transports the same canonical reposit
 
 ## Remaining gate
 
-GitHub rejected main protection with 403: Upgrade to GitHub Pro or make this repository public to enable this feature. Repository visibility stays private; no plan purchase, public-source change or collaborator invitation has occurred. Resolve eligible-plan protection and an eligible non-author reviewer before merging. Auto-merge is disabled; no PR is merged or approved automatically.
+The owner explicitly approved making the source repository public on 2026-11-13. GitHub accepted main protection after the visibility transition completed. Verified settings require quality, integration, browser, container and security checks; strict up-to-date status; one non-author approval; dismissal of stale reviews; resolved conversations; linear history; and enforcement for administrators. Force pushes and deletion are disabled. Auto-merge remains disabled. No paid plan was purchased; the Project remains private.
+
+A non-author reviewer with eligible repository access is still needed; the only current collaborator is the PR author/owner. No additional collaborator has been invited. No PR is merged or approved automatically. Owner approval of public visibility does not authorize merging or deployment.
 
 CI results and actual published references are recorded in PHASE_0_REPORT.md and the owner handoff. Planning resources are real GitHub issues, not a substitute local status tracker. No issue is marked complete before verified acceptance and approved merge.
 
