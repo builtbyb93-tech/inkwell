@@ -5,3 +5,6 @@ packages:
 allowBuilds:
   '@prisma/engines': true
   prisma: true
+
+# Only explicit, supported providers are installed; unused optional auth peers stay absent.
+autoInstallPeers: false

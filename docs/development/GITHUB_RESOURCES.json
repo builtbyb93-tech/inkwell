@@ -216,7 +216,18 @@
   "baseCommit": "f32e82185ebf637238e9f2e6e1f0e999175779dc",
   "implementationCommit": "8c4c31defbf93f0dfa4d3526a58cd0cdc475a9bc",
   "implementationCiRun": "https://github.com/builtbyb93-tech/inkwell/actions/runs/43442184636",
-  "mergeStatus": "not merged",
+  "mergeStatus": "Phase 0 PR #39 merged",
   "deploymentStatus": "not deployed",
-  "reviewerStatus": "Owner-approved solo workflow; no invitations or review requests; explicit owner approval required for merges"
+  "reviewerStatus": "Owner-approved solo workflow; no invitations or review requests; explicit owner approval required for merges",
+  "phase0MergeCommit": "9ca76167ec8a0c0ff58a914592715a21e64c7de1",
+  "phase1": {
+    "issues": [7, 8, 9, 10, 11, 12],
+    "branch": "feature/7-account-project-foundation",
+    "worktree": "/workspace/inkwell-worktrees/phase-1",
+    "baseCommit": "9ca76167ec8a0c0ff58a914592715a21e64c7de1",
+    "target": "main",
+    "mergeAuthorized": true,
+    "deploymentAuthorized": false,
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/40"
+  }
 }

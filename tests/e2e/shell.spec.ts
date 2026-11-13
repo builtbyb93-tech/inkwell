@@ -16,7 +16,7 @@ test('shell supports keyboard access, theme selection, and honest empty states',
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
   await expect(page.getByLabel('Theme', { exact: true })).toHaveValue('dark');
-  await expect(page.getByText('Account access and creative tools', { exact: false })).toBeVisible();
+  await expect(page.getByText('Your ideas deserve a place', { exact: false })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
@@ -38,12 +38,11 @@ test('operational routes reveal no infrastructure details', async ({ request }) 
   const health = await request.get('/api/v1/health');
   expect(health.status()).toBe(200);
   const ready = await request.get('/api/v1/ready');
-  expect(ready.status()).toBe(503);
+  expect(ready.status()).toBe(200);
   expect(ready.headers()['cache-control']).toContain('no-store');
   const body = await ready.json();
-  expect(body.error.code).toBe('SERVICE_UNAVAILABLE');
-  expect(body.error.message).toBe('Service is not ready.');
-  expect(Object.keys(body.error).sort()).toEqual(['code', 'message', 'requestId']);
+  expect(body.data.status).toBe('ready');
+  expect(Object.keys(body.data).sort()).toEqual(['status', 'version']);
 });
 
 test('theme selection works when browser storage is denied', async ({ page }) => {

@@ -20,3 +20,7 @@ Repository and issues are published. Phase 0 issues #1–#6 share this cohesive 
 At most three active task worktrees later, each with one branch/task, recorded base/path/PR target, independent tests and separate DB/storage/ports. Initially use one. Do not concurrently edit schema/migrations or shared files without an approved integration plan. One schema integration owner sequences migrations. Do not delete unmerged worktrees/branches without approval.
 
 Forks are reserved for external contributors, independent repository-boundary experiments, or owner request. Untrusted fork CI receives no production secrets.
+
+## Phase 1 execution
+
+Phase 0 PR #39 merged at `9ca76167ec8a0c0ff58a914592715a21e64c7de1`; issues #1–#6 and milestone 1 closed after verified merge. Phase 1 issues #7–#12 share cohesive branch `feature/7-account-project-foundation`, worktree `/workspace/inkwell-worktrees/phase-1`, base that merge commit, target main. The owner approved implementation; Phase 1 merge/deployment remain unapproved. PostgreSQL uses Compose project inkwell_phase1 and loopback port 55433; SMTP/inbox use 11025/18025. Every SQL/browser run has an independent generated database. Phase 0 worktree/branch remain intact; only disposable generated dependencies/build caches were removed to recover local disk. No unrelated resources were modified.

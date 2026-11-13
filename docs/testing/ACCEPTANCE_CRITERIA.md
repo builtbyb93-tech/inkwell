@@ -1,6 +1,6 @@
 # Acceptance criteria
 
-Only Phase 0 is implemented. Later gates are required tests, not current passes.
+Phases 0 and 1 have implementations. Evidence must be read from their milestone reports; later gates are required tests, not current passes.
 
 | Phase | Required evidence                                                                                                                                                                                                                                   |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -25,3 +25,9 @@ Only Phase 0 is implemented. Later gates are required tests, not current passes.
 The integration runner creates/removes only its own `inkwell_test_<uuid>` database. No remote host is permitted. It cannot validate production permissions or hosted restoration. Every worktree has separate writable services and ports.
 
 Automated axe checks are useful evidence, not a complete accessibility audit. Manual screen-reader/focus/zoom checks and broader browser/PWA coverage remain release gates. No snapshot tests merely mirroring markup or fabricated coverage percentages are required.
+
+## Phase 1 verification
+
+Unit tests cover strict portable inputs, omitted-field preservation, version preconditions and cursors. SQL tests cover verification/replay/expiry, Argon2 storage, exactly one atomic workspace, recovery/session invalidation, HTTPS cookie configuration, multi-story persistence, foreign resource/FK rejection, archive/restore, competing revisions and atomic durable limits. Browser journeys use a real production server and local SMTP with two accounts, actual Auth.js cookie/CSRF flows, password recovery, logout/replayed-cookie rejection, manual-save conflict retention, privacy settings and private-screen axe checks on desktop/mobile. Unsafe Origin, malformed input, missing preconditions and rate-limit responses are tested. Every browser run migrates and removes its own database.
+
+No production email delivery, hosted HTTPS proxy, native-token auth, Safari/PWA install, manual screen-reader/zoom audit, hosted backup restore or release load test is claimed. These remain staging/release gates; automated axe is not a complete accessibility audit. No fabricated coverage percentage or live deployment is reported.

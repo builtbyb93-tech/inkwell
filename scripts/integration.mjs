@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomUUID, randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import pg from 'pg';
 
@@ -15,7 +15,11 @@ const name = `inkwell_test_${randomUUID().replaceAll('-', '')}`;
 const admin = new pg.Pool({ connectionString: raw, connectionTimeoutMillis: 3000 });
 const target = new URL(raw);
 target.pathname = `/${name}`;
-const testEnv = { ...process.env, DATABASE_URL: target.toString() };
+const testEnv = {
+  ...process.env,
+  DATABASE_URL: target.toString(),
+  NEXTAUTH_SECRET: randomBytes(32).toString('base64url'),
+};
 let created = false;
 let exitCode = 1;
 try {

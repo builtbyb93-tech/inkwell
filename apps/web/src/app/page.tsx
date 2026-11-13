@@ -1,5 +1,6 @@
 import { EmptyState } from '@inkwell/ui';
 import { ThemeSelect } from '@/components/theme-select';
+import Link from 'next/link';
 
 const navigation = [
   ['overview', 'Overview'],
@@ -48,7 +49,7 @@ export default function Home() {
       </aside>
       <main id="main" tabIndex={-1}>
         <div className="topbar">
-          <span className="status-label">In development</span>
+          <Link href="/sign-in">Sign in</Link>
           <ThemeSelect />
         </div>
         <section id="overview" className="welcome" aria-labelledby="welcome-heading">
@@ -62,9 +63,12 @@ export default function Home() {
             can tell.
           </p>
           <p className="preview-note">
-            Inkwell is taking shape. Account access and creative tools are coming in future
-            releases.
+            Your ideas deserve a place of their own. Begin with a private project and the stories
+            that belong to it.
           </p>
+          <Link className="button button-link" href="/register">
+            Create your workspace
+          </Link>
         </section>
         <div className="section-grid">
           <section id="ideas" className="workspace-card" aria-labelledby="ideas-heading">
@@ -80,7 +84,7 @@ export default function Home() {
             <h2 id="projects-heading">Projects & stories</h2>
             <p>One project. All the stories that belong to it.</p>
             <EmptyState title="A beginning is waiting">
-              Project and story organization are coming soon.
+              Create an account to start organizing your projects and stories.
             </EmptyState>
           </section>
           <section id="bible" className="workspace-card" aria-labelledby="bible-heading">
