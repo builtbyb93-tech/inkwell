@@ -1,0 +1,20 @@
+name: Bug report
+description: Report reproducible behavior without private content
+title: '[Bug] '
+labels: ['bug']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      {
+        label: Problem and reproduction steps,
+        description: Use synthetic examples; never include tokens or private story content.,
+      }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected and actual behavior }
+    validations: { required: true }
+  - type: textarea
+    id: environment
+    attributes: { label: Browser, version, device, and safe request identifier }

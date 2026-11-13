@@ -1,0 +1,25 @@
+{
+  "name": "@inkwell/web",
+  "version": "0.6.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "node ../../scripts/start.mjs",
+    "typecheck": "next typegen && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@inkwell/contracts": "workspace:*",
+    "@inkwell/db": "workspace:*",
+    "@inkwell/domain": "workspace:*",
+    "@inkwell/ui": "workspace:*",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "tailwindcss": "4.3.5"
+  }
+}

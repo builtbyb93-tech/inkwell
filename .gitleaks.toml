@@ -1,0 +1,7 @@
+title = "Inkwell secret scanning"
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Explicit public local-only development examples"
+paths = ['''(^|/)\.env\.example$''']
