@@ -1,4 +1,5 @@
 'use client';
+import { useHydrated } from './use-hydrated';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { api, authPost, message } from './api-client';
@@ -27,6 +28,7 @@ const buttons: Record<AuthMode, string> = {
   'resend-verification': 'Send verification link',
 };
 export function AuthForm({ mode }: { mode: AuthMode }) {
+  const hydrated = useHydrated();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -98,13 +100,26 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         {mode === 'register' && (
           <label>
             Your name
-            <input name="displayName" autoComplete="name" required maxLength={80} />
+            <input
+              name="displayName"
+              disabled={!hydrated || pending}
+              autoComplete="name"
+              required
+              maxLength={80}
+            />
           </label>
         )}
         {needsEmail && (
           <label>
             Email
-            <input name="email" type="email" autoComplete="email" required maxLength={254} />
+            <input
+              name="email"
+              disabled={!hydrated || pending}
+              type="email"
+              autoComplete="email"
+              required
+              maxLength={254}
+            />
           </label>
         )}
         {needsPassword && (
@@ -112,6 +127,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             Password
             <input
               name="password"
+              disabled={!hydrated || pending}
               type="password"
               autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'}
               required
@@ -136,7 +152,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             {success}
           </p>
         )}
-        <button className="button" disabled={pending || (tokenMode && !token)}>
+        <button className="button" disabled={!hydrated || pending || (tokenMode && !token)}>
           {pending ? 'Working…' : buttons[mode]}
         </button>
       </form>

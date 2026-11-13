@@ -7,6 +7,7 @@ export function AppFrame({ children, name }: { children: React.ReactNode; name?:
     name !== undefined
       ? [
           ['/dashboard', 'Overview'],
+          ['/ideas', 'Idea Vault'],
           ['/projects', 'Projects & stories'],
           ['/settings', 'Account & privacy'],
         ]

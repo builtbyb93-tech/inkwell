@@ -5,7 +5,13 @@ const config: NextConfig = {
   output: 'standalone',
   agentRules: false,
   outputFileTracingRoot: path.join(import.meta.dirname, '../..'),
-  transpilePackages: ['@inkwell/contracts', '@inkwell/db', '@inkwell/domain', '@inkwell/ui'],
+  transpilePackages: [
+    '@inkwell/contracts',
+    '@inkwell/db',
+    '@inkwell/domain',
+    '@inkwell/ui',
+    '@inkwell/editor',
+  ],
   poweredByHeader: false,
   async headers() {
     return [

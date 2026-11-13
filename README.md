@@ -4,7 +4,7 @@ Every great story starts somewhere.
 
 Inkwell helps creators capture, organize, develop, connect, and retrieve ideas and stories across narrative formats.
 
-Phase 0 is merged in [PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39). Phase 1 adds verified accounts, password recovery, revocable sessions, one private workspace per account, persistent projects and multiple stories, a dashboard, archive/restore, optimistic edit protection, and account/privacy settings. AI remains disabled. Vault, canon, Plot Board, autosave, import/export, sharing, and offline editing arrive in later milestones.
+Phase 0 is merged in [PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39). [Phase 1 PR #40](https://github.com/builtbyb93-tech/inkwell/pull/40) is merged and adds verified accounts, password recovery, revocable sessions, one private workspace per account, persistent projects and multiple stories, a dashboard, archive/restore, optimistic edit protection, and account/privacy settings. AI remains disabled. Phase 2 adds Idea Vault capture, structured editing, categories/tags, indexed search, multi-target references and source-preserving conversions. Canon management, Plot Board, autosave, import/export, sharing, and offline editing arrive in later milestones.
 
 The canonical public repository is [builtbyb93-tech/inkwell](https://github.com/builtbyb93-tech/inkwell). Planning lives on the private [Inkwell Project](https://github.com/users/builtbyb93-tech/projects/1). Main requires PRs and all five passing CI checks; the owner approved zero required GitHub reviews for solo development. Every merge still needs explicit owner approval. No collaborators are invited.
 
@@ -23,7 +23,7 @@ pnpm db:generate
 pnpm dev
 ```
 
-Open `http://127.0.0.1:3000`. Root development and database scripts load `.env`. Register an account, then open the local email inbox at `http://127.0.0.1:18025` to verify it. Local mail is captured, not delivered to external recipients. Auth requires a generated secret, database, and SMTP configuration; health remains dependency-independent.
+Open `http://127.0.0.1:3001`. Root development and database scripts load `.env`. Register an account, then open the local email inbox at `http://127.0.0.1:18026` to verify it. Local mail is captured, not delivered to external recipients. Auth requires a generated secret, database, and SMTP configuration; health remains dependency-independent.
 
 ```sh
 pnpm check
@@ -31,7 +31,7 @@ pnpm db:validate
 pnpm test:integration
 pnpm exec playwright install --no-shell chromium
 pnpm test:e2e
-docker build -f deploy/Dockerfile -t inkwell:phase1 .
+docker build -f deploy/Dockerfile -t inkwell:phase2 .
 ```
 
 For a managed network with an additional trusted certificate authority, pass its public CA file as an optional BuildKit secret: `--secret id=build_ca,src=/path/to/approved-ca.crt`. The mount exists only during dependency installation, is not copied into the runtime, and does not disable TLS verification. Do not pass credentials as build arguments.

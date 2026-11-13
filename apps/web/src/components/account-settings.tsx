@@ -1,8 +1,10 @@
 'use client';
+import { useHydrated } from './use-hydrated';
 import { useState } from 'react';
 import type { AccountRecord } from '@inkwell/contracts';
 import { api, message } from './api-client';
 export function AccountSettings({ initial }: { initial: AccountRecord }) {
+  const hydrated = useHydrated();
   const [account, setAccount] = useState(initial);
   const [name, setName] = useState(initial.displayName);
   const [pending, setPending] = useState(false);
@@ -39,7 +41,7 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
             Your name
             <input
               value={name}
-              disabled={pending}
+              disabled={!hydrated || pending}
               onChange={(e) => {
                 setName(e.target.value);
                 setSaved('');
@@ -48,7 +50,7 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
               maxLength={80}
             />
           </label>
-          <button className="button" disabled={pending}>
+          <button className="button" disabled={!hydrated || pending}>
             {pending ? 'Saving…' : 'Save account'}
           </button>
           <p role="status" className="save-state">
@@ -78,7 +80,7 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
         </p>
         <button
           className="quiet-button"
-          disabled={pending}
+          disabled={!hydrated || pending}
           onClick={async () => {
             setPending(true);
             setError('');

@@ -74,6 +74,9 @@ importers:
       '@inkwell/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@inkwell/editor':
+        specifier: workspace:*
+        version: link:../../packages/editor
       '@inkwell/mail':
         specifier: workspace:*
         version: link:../../packages/mail
@@ -137,6 +140,9 @@ importers:
 
   packages/editor:
     dependencies:
+      '@inkwell/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@tiptap/core':
         specifier: 3.33.1
         version: 3.33.1(@tiptap/pm@3.33.1)

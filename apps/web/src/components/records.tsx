@@ -1,4 +1,5 @@
 'use client';
+import { useHydrated } from './use-hydrated';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -116,6 +117,7 @@ export function RecordList({ projectId }: { projectId?: string }) {
 }
 
 export function RecordEditor({ projectId, recordId }: { projectId?: string; recordId?: string }) {
+  const hydrated = useHydrated();
   const router = useRouter();
   const story = Boolean(projectId);
   const kind = story ? 'story' : 'project';
@@ -224,7 +226,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
           Title
           <input
             name="title"
-            disabled={pending}
+            disabled={!hydrated || pending}
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
@@ -240,7 +242,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
               Story format
               <input
                 name="format"
-                disabled={pending}
+                disabled={!hydrated || pending}
                 aria-describedby="story-format-help"
                 value={format}
                 onChange={(e) => {
@@ -260,7 +262,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
         <textarea
           id="record-content"
           name="content"
-          disabled={pending}
+          disabled={!hydrated || pending}
           rows={6}
           value={content}
           onChange={(e) => {
@@ -275,7 +277,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
           </p>
         )}
         <div className="inline-actions">
-          <button className="button" disabled={pending}>
+          <button className="button" disabled={!hydrated || pending}>
             {pending ? 'Saving…' : recordId ? 'Save changes' : `Create ${kind}`}
           </button>
           <span role="status" className="save-state">
@@ -285,12 +287,12 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
       </form>
       {recordId && record && (
         <div className="record-actions">
-          <button className="quiet-button" disabled={pending} onClick={reload}>
+          <button className="quiet-button" disabled={!hydrated || pending} onClick={reload}>
             Discard edits and reload
           </button>
           <button
             className="quiet-button"
-            disabled={pending || dirty}
+            disabled={!hydrated || pending || dirty}
             onClick={async () => {
               setPending(true);
               setError('');
