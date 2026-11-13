@@ -1,0 +1,214 @@
+{
+  "owner": "builtbyb93-tech",
+  "repository": {
+    "id": 1456687539,
+    "url": "https://github.com/builtbyb93-tech/inkwell",
+    "visibility": "private"
+  },
+  "project": {
+    "url": "https://github.com/users/builtbyb93-tech/projects/1",
+    "boardUrl": "https://github.com/users/builtbyb93-tech/projects/1/views/2",
+    "statuses": ["Backlog", "Ready", "In Progress", "Review", "Approved", "Complete", "Blocked"]
+  },
+  "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/39",
+  "milestones": {
+    "Phase 0 \u2014 Repository and Engineering Foundation": {
+      "number": 1,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/1"
+    },
+    "Phase 1 \u2014 Authentication and Project Foundation": {
+      "number": 2,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/2"
+    },
+    "Phase 2 \u2014 Idea Vault": {
+      "number": 3,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/3"
+    },
+    "Phase 3 \u2014 Story Bible": {
+      "number": 4,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/4"
+    },
+    "Phase 4 \u2014 Plot Board": {
+      "number": 5,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/5"
+    },
+    "Phase 5 \u2014 Search, Recovery, and Portability": {
+      "number": 6,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/6"
+    },
+    "Phase 6 \u2014 Read-Only Sharing": {
+      "number": 7,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/7"
+    },
+    "Phase 7 \u2014 Release Hardening": {
+      "number": 8,
+      "url": "https://github.com/builtbyb93-tech/inkwell/milestone/8"
+    }
+  },
+  "issues": {
+    "P0-A": {
+      "number": 1,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/1"
+    },
+    "P0-B": {
+      "number": 2,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/2"
+    },
+    "P0-C": {
+      "number": 3,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/3"
+    },
+    "P0-D": {
+      "number": 4,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/4"
+    },
+    "P0-E": {
+      "number": 5,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/5"
+    },
+    "P0-F": {
+      "number": 6,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/6"
+    },
+    "FEAT-001-A": {
+      "number": 7,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/7"
+    },
+    "FEAT-001-B": {
+      "number": 8,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/8"
+    },
+    "FEAT-001-C": {
+      "number": 9,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/9"
+    },
+    "FEAT-002-A": {
+      "number": 10,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/10"
+    },
+    "FEAT-002-B": {
+      "number": 11,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/11"
+    },
+    "FEAT-003": {
+      "number": 12,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/12"
+    },
+    "FEAT-004": {
+      "number": 13,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/13"
+    },
+    "FEAT-005": {
+      "number": 14,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/14"
+    },
+    "FEAT-006-A": {
+      "number": 15,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/15"
+    },
+    "FEAT-006-B": {
+      "number": 16,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/16"
+    },
+    "FEAT-007-A": {
+      "number": 17,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/17"
+    },
+    "FEAT-007-B": {
+      "number": 18,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/18"
+    },
+    "FEAT-008": {
+      "number": 19,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/19"
+    },
+    "FEAT-009": {
+      "number": 20,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/20"
+    },
+    "FEAT-010-A": {
+      "number": 21,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/21"
+    },
+    "FEAT-010-B": {
+      "number": 22,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/22"
+    },
+    "FEAT-011-A": {
+      "number": 23,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/23"
+    },
+    "FEAT-011-B": {
+      "number": 24,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/24"
+    },
+    "FEAT-012": {
+      "number": 25,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/25"
+    },
+    "FEAT-013": {
+      "number": 26,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/26"
+    },
+    "FEAT-014-A": {
+      "number": 27,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/27"
+    },
+    "FEAT-014-B": {
+      "number": 28,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/28"
+    },
+    "FEAT-015-A": {
+      "number": 29,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/29"
+    },
+    "FEAT-015-B": {
+      "number": 30,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/30"
+    },
+    "FEAT-016": {
+      "number": 31,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/31"
+    },
+    "FEAT-017": {
+      "number": 32,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/32"
+    },
+    "FEAT-018": {
+      "number": 33,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/33"
+    },
+    "FEAT-019": {
+      "number": 34,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/34"
+    },
+    "FEAT-020-A": {
+      "number": 35,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/35"
+    },
+    "FEAT-020-B": {
+      "number": 36,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/36"
+    },
+    "FEAT-021-A": {
+      "number": 37,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/37"
+    },
+    "FEAT-021-B": {
+      "number": 38,
+      "url": "https://github.com/builtbyb93-tech/inkwell/issues/38"
+    }
+  },
+  "nativeDependencyEdges": 42,
+  "mainProtection": {
+    "configured": false,
+    "status": 403,
+    "message": "Upgrade to GitHub Pro or make this repository public to enable this feature."
+  },
+  "autoMerge": false,
+  "baseCommit": "f32e82185ebf637238e9f2e6e1f0e999175779dc",
+  "implementationCommit": "8c4c31defbf93f0dfa4d3526a58cd0cdc475a9bc",
+  "implementationCiRun": "https://github.com/builtbyb93-tech/inkwell/actions/runs/43442184636",
+  "mergeStatus": "not merged",
+  "deploymentStatus": "not deployed"
+}

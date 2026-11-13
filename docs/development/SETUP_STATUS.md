@@ -1,29 +1,29 @@
 # Phase 0 setup status
 
-## Authorization
+The owner approved Phase 0 on 2026-11-13 and selected builtbyb93-tech. Merging, later milestones, VPS provisioning, production migrations/deployment, destructive actions and DNS changes remain outside that authorization.
 
-The owner approved the pre-flight Phase 0 scope on 2026-11-13 and chose builtbyb93-tech. Merging, later phases, VPS provisioning, production migrations/deployment, destructive actions and DNS are not authorized.
+## Published resources
 
-## Local repository
+- Private canonical repository: https://github.com/builtbyb93-tech/inkwell.
+- Project: https://github.com/users/builtbyb93-tech/projects/1.
+- Draft foundation PR: https://github.com/builtbyb93-tech/inkwell/pull/39.
+- Phase 0 issues: #1 through #6. Full plan: 38 issues, 8 milestones and all 15 requested labels.
+- Project statuses: Backlog, Ready, In Progress, Review, Approved, Complete, Blocked.
+- Main contains only the approved README bootstrap f32e82185ebf637238e9f2e6e1f0e999175779dc.
+- Feature branch: chore/phase-0-engineering-foundation; task worktree /workspace/inkwell-worktrees/phase-0; administrative checkout /workspace/inkwell.
 
-- Administrative checkout: `/workspace/inkwell`, main.
-- Approved minimal README bootstrap: `f32e82185ebf637238e9f2e6e1f0e999175779dc` (local, not claimed published).
-- Task worktree: `/workspace/inkwell-worktrees/phase-0`.
-- Branch: `chore/phase-0-engineering-foundation`.
-- Intended origin: `https://github.com/builtbyb93-tech/inkwell.git`.
+## Verified access route
 
-## Remote administration blocker
+Cloud GitHub requests return BradyBuilds even with missing/invalid credentials, so those account checks could not validate the user's authorization. The owner-authorized Mac returns 401 for anonymous access and correctly verified a fresh OAuth authorization as builtbyb93-tech. Administrative operations use that Mac; supported repository/PR operations use the linked GitHub connector.
 
-GitHub connector can access the selected account's repositories but has no repository/Project/label/milestone/ruleset creation operations. Existing cloud CLI credentials resolve to BradyBuilds. Two owner-completed device flows also returned BradyBuilds when verified with `gh api user`. Do not create the repository under that identity or claim the correct owner access is configured.
+Credentials remain outside source with restricted permissions. An attempted existing-credential transfer was rejected by automatic review and was not performed. A PAT appeared in terminal history during manual entry; it was not saved by the verification helper, and the owner was instructed to revoke it. Do not use or reproduce it. The Mac uses a separately issued, unexposed OAuth credential.
 
-Credential files are outside both repository/worktree paths in a restricted directory. The workspace has no OS keyring; CLI reports file-based credential storage. Tokens/passwords are never printed or copied into source.
+A local bare publication mirror on the Mac transports the same canonical repository and commits; it is not a fork or a development worktree. Cloud development remains isolated in the approved worktree.
 
-Required next access condition: verify a CLI authorization for builtbyb93-tech (or an explicitly owner-approved administrative delegation to this repository). Do not request tokens in chat. Repository creation, Project/labels/milestones/issues, protection, remote CI and PR publication remain blocked until that condition is satisfied.
+## Remaining gate
 
-## Reviewable preparation
+GitHub rejected main protection with 403: Upgrade to GitHub Pro or make this repository public to enable this feature. Repository visibility stays private; no plan purchase, public-source change or collaborator invitation has occurred. Resolve eligible-plan protection and an eligible non-author reviewer before merging. Auto-merge is disabled; no PR is merged or approved automatically.
 
-`github-plan.json` contains exact statuses, labels, milestones and issue drafts with required fields/dependencies/branches. The issue and PR templates, CI workflow and protection recommendations are local artifacts, not evidence of remote setup. No issue numbers or PR URLs are fabricated.
+CI results and actual published references are recorded in PHASE_0_REPORT.md and the owner handoff. Planning resources are real GitHub issues, not a substitute local status tracker. No issue is marked complete before verified acceptance and approved merge.
 
-After access: recheck repository/Project collisions, create only the approved canonical private repository, publish the bootstrap, configure supported protection and review checks, publish the task branch, prepare the PR and verify Actions. Stop before merging. Private-plan protection support and an eligible non-author reviewer must be confirmed.
-
-No VPS resource was created or changed. Local Docker services are development/test resources only. See PHASE_0_REPORT.md for final verification evidence and remaining limitations.
+No VPS resources, production schema, deployment or DNS were changed. Local test resources remain separate from staging/production.

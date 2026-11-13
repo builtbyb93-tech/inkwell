@@ -15,7 +15,7 @@ Owner approval in chat is required before merging; it does not manufacture a Git
 | Administrative checkout | main, `/workspace/inkwell`                                                   | bootstrap only; no feature edits                  |
 | Phase 0 task            | chore/phase-0-engineering-foundation, `/workspace/inkwell-worktrees/phase-0` | `f32e82185ebf637238e9f2e6e1f0e999175779dc` → main |
 
-Remote repository/issue setup is blocked until correct owner CLI access is verified. The local descriptive branch therefore has no fabricated issue number. Its base is a local approved bootstrap, not a claimed published commit.
+Repository and issues are published. Phase 0 issues #1–#6 share this cohesive foundation branch; its descriptive name is retained. The bootstrap base is published on main. Draft PR #39 targets main. GitHub rejected protected-main setup because the current private-repository plan does not support it; no paid upgrade, public visibility change or merge is authorized automatically. A non-author reviewer is still required by the proposed policy.
 
 At most three active task worktrees later, each with one branch/task, recorded base/path/PR target, independent tests and separate DB/storage/ports. Initially use one. Do not concurrently edit schema/migrations or shared files without an approved integration plan. One schema integration owner sequences migrations. Do not delete unmerged worktrees/branches without approval.
 

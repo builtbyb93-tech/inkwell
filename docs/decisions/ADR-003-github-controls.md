@@ -1,11 +1,11 @@
 # ADR-003: private repository administration and protection
 
-Status: blocked pending verified administration access and plan support.
+Status: account access resolved; protected-main plan gate blocked.
 
-Approved owner: builtbyb93-tech. The connector reads its existing repositories but lacks repository/Project/label/milestone/protection creation tools. The cloud CLI and two device authorizations resolve to BradyBuilds. Do not create under that account or assume its rights apply to the selected owner.
+Owner: builtbyb93-tech. Canonical private repository: https://github.com/builtbyb93-tech/inkwell. The GitHub connector supports repository/issue/PR operations but lacks the required administrative creation surfaces. Administrative operations now run through the owner-authorized Mac using a locally issued OAuth credential whose identity was verified there as builtbyb93-tech with project, repo and workflow scopes.
 
-Recommendation: obtain securely configured CLI access whose verified login is builtbyb93-tech, then create the canonical private repository and planning infrastructure. Never put tokens in chat or source. GitHub CLI storage in this workspace has no OS keyring, so credential files must stay outside the checkout with restricted permissions.
+Cloud diagnostics returned BradyBuilds for valid, missing and deliberately invalid authorization. Earlier cloud account checks were therefore unreliable. A fresh authorization initiated on the Mac resolved the issue. No existing cloud credential was copied; automatic review rejected the proposed transfer while account identity was unresolved. Do not retry cloud credential-entry loops or transfer secrets through logs. Credential files are outside source with restricted permissions.
 
-Verify private-plan branch protection support, Projects scope and an eligible non-author reviewer. If unavailable, report a blocker. Do not silently weaken controls, switch repository visibility, buy a plan, auto-merge or use forks as a workaround.
+GitHub returned 403 for main protection: Upgrade to GitHub Pro or make this repository public to enable this feature. Keep the approved source repository private. An eligible plan or an explicitly approved visibility/scope change is an owner decision; no purchase or visibility change is performed automatically. No main merge is permitted while the required protection gate remains unresolved. A non-author reviewer remains required, and no collaborator has been invited.
 
-The owner approved a minimal README bootstrap on main; feature work uses a dedicated branch/worktree. No remote creation, GitHub review, CI pass or protected-main status is asserted by local preparation.
+The approved README-only bootstrap is published on main. Feature code is in draft PR #39. Auto-merge is disabled. Source/CI/planning publication is authorized Phase 0 work; merging and deployment remain separately gated.

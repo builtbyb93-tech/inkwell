@@ -28,3 +28,9 @@ Run applicable format, lint, type, unit, integration, browser/accessibility and 
 GitHub Issues are task truth. Search before creating duplicates. Each issue has objective, scope, dependencies, expected modules, acceptance criteria, security considerations, tests, definition of done, and assigned branch.
 
 Milestone reports include name, issues, branch, worktree, base/final SHAs, files, completed scope, tests/results, security findings, migrations, limitations, PR, merge/deployment status, and next milestone. Preserve blocked work and evidence.
+
+## GitHub access and current gates
+
+The canonical private repository, Project and Phase 0 PR #39 are published. Main remains the README bootstrap; no merge/deployment is approved. GitHub rejected private branch protection with a plan-related 403. Do not buy a plan, make source public, invite collaborators, waive checks or merge to bypass this gate.
+
+Cloud GitHub HTTP requests are authenticated as BradyBuilds even without valid Authorization headers. Those responses cannot verify a newly supplied account credential. Do not repeat the cloud device/PAT login loop. Use the linked builtbyb93-tech GitHub connector when its capabilities suffice; administrative operations use the separately authorized Mac with its locally verified builtbyb93-tech OAuth credential. Never transfer or print credentials. Keep local credential storage outside all checkouts and disclose no token values.

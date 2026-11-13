@@ -1,6 +1,6 @@
 # Task dependencies and execution plan
 
-The master directive is present; no pre-existing Inkwell SRS, architecture or UX source documents were found. Requirements are traced in prose to PRODUCT_SPEC/MVP_SCOPE rather than invented source IDs. Feature IDs below are proposed stable planning keys, not GitHub issue numbers. Do not renumber/recycle them.
+The master directive is present; no pre-existing Inkwell SRS, architecture or UX source documents were found. Requirements are traced in prose to PRODUCT_SPEC/MVP_SCOPE rather than invented source IDs. Feature IDs below are stable planning keys; published issue references are mapped in GITHUB_RESOURCES.json. Do not renumber/recycle them.
 
 ## Phase 0 foundation
 
@@ -46,3 +46,7 @@ Review means PR prepared; Approved requires owner/reviewer/check evidence; Compl
 ## Risk/coverage verification
 
 Coverage reviewed against all twelve primary systems and all phases in MVP_SCOPE. No product system is intentionally omitted. Open implementation decisions: auth/session proof, S3 choice, retention/limits/dictionaries, hosted capacity and administration permissions. No calendar estimates or source requirement/screen IDs are fabricated. Later phases remain a dependency order subject to explicit scope/architecture approval.
+
+## Published planning
+
+The 38 tasks are published as repository issues #1–#38, with Phase 0 in #1–#6. Project: https://github.com/users/builtbyb93-tech/projects/1. Draft PR #39 contains the foundation. Private-plan main protection is a blocking owner decision recorded in #6. No task is closed by local verification alone.

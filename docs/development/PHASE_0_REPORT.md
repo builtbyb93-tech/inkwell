@@ -1,22 +1,22 @@
 # Phase 0 — Repository and Engineering Foundation
 
-Status: local implementation verified; milestone completion blocked on GitHub administration/publication. This is not approval to merge, provision or deploy.
+Status: local implementation and initial CI verified; repository/planning/PR published; milestone completion blocked on protected-main plan support and review. This is not approval to merge, provision or deploy.
 
 ## Git and issue references
 
-- Approved canonical owner/repository: builtbyb93-tech/inkwell. Authenticated connector lookup still returns 404; no remote repository is claimed created.
-- GitHub issue references: unassigned. P0-A through P0-F and 32 future task drafts are in github-plan.json (38 total), not published issues.
+- Approved canonical owner/repository: builtbyb93-tech/inkwell. Canonical private repository is published: https://github.com/builtbyb93-tech/inkwell.
+- GitHub issue references: Phase 0 #1–#6; all 38 tasks are published as #1–#38. See GITHUB_RESOURCES.json for the mapping.
 - Branch: chore/phase-0-engineering-foundation.
 - Worktree: /workspace/inkwell-worktrees/phase-0.
 - Administrative checkout: /workspace/inkwell.
-- Base commit: f32e82185ebf637238e9f2e6e1f0e999175779dc, the approved minimal local README bootstrap.
+- Base commit: f32e82185ebf637238e9f2e6e1f0e999175779dc, the approved README-only bootstrap published on main.
 - Final commit: the committed branch HEAD; its exact SHA is recorded in the accompanying owner handoff and exported /workspace/INKWELL_PHASE_0_REPORT.md after this report is committed.
 
 ## Completed local scope
 
 Modular pnpm monorepo; exact Node/TypeScript/framework/dependency pins; shared contracts/domain/db/UI/editor/config packages; formatting/linting/strict types; minimal responsive keyboard-accessible shell with light/dark/system themes and honest empty states; PWA manifest/icons; health/readiness routes with safe errors; local PostgreSQL and foundational migration; separate hosted environment templates; non-root standalone Docker runtime; unit/integration/browser/accessibility harnesses; SHA-pinned CI without deployment; secret/dependency checks; PR/issue templates and CODEOWNERS; required product/architecture/API/security/testing/deployment/development documentation and ADRs.
 
-Planning manifest: 8 milestones, 15 required labels, 7 exact workflow statuses, 38 issue drafts. Required issue fields are present, keys are unique and dependencies are acyclic. Nothing is claimed published.
+Planning manifest: 8 milestones, 15 required labels, 7 exact workflow statuses, 38 issue drafts. Required issue fields are present, keys are unique and dependencies are acyclic. Project: https://github.com/users/builtbyb93-tech/projects/1. Draft PR: https://github.com/builtbyb93-tech/inkwell/pull/39.
 
 ## Tests and results
 
@@ -37,14 +37,14 @@ Planning manifest: 8 milestones, 15 required labels, 7 exact workflow statuses, 
 | Planning manifest                         | 38 drafts valid, required fields present, acyclic dependencies                                                       |
 | Full Docker build                         | Passed with exact Node digest, frozen lockfile and optional trusted build CA                                         |
 | Final container runtime                   | Non-root UID 1000; shell/health 200; safe readiness 503 without DB; healthy; build CA absent                         |
-| GitHub Actions                            | Not run: correct owner administration/publication access unavailable                                                 |
-| Branch protection / Project / issues / PR | Blocked; local artifacts are prepared, not published                                                                 |
+| GitHub Actions                            | Run 1 passed on implementation 8c4c31d; latest head checks are verified in the owner handoff                         |
+| Branch protection / Project / issues / PR | Project/issues/PR published; protected main rejected by private-plan 403                                             |
 
 Local environment required writable tool caches, a trusted managed-network CA mounted only during builds, and an ephemeral in-memory package metadata cache to fit an 8 GiB filesystem. TLS verification remains enabled. No host CA is embedded in the runtime. Test containers are local and disposable; the development database volume is retained. No VPS services were changed.
 
 ## Security findings
 
-No production/private content or real credentials committed. CLI credential files are outside the repository with restricted filesystem permissions; the workspace has no OS keyring. Both device authorization attempts verified as BradyBuilds, so no mutation was made under that identity for the chosen owner.
+No production/private content or real credentials committed. Cloud identity checks were unreliable: missing and invalid Authorization headers also returned BradyBuilds. A fresh authorization initiated on the owner-authorized Mac correctly verified builtbyb93-tech; credentials stay outside source with restricted permissions. Automatic review rejected the earlier credential transfer; no such transfer occurred. A PAT appeared in terminal history during manual entry; the owner was instructed to revoke it. The Mac uses a separately issued unexposed OAuth credential.
 
 One moderate development-only finding remains: GHSA-g3hv-75wg-m249 in minimatch 10.2.6 through lint tools. Reported fix 11.0.1 is outside their current major range; no unreviewed major override is forced. See SECURITY_MODEL for impact/mitigation. No high/critical findings or production dependency advisories were reported by the executed audits. This foundation is not a production security sign-off.
 
@@ -58,19 +58,19 @@ Migration tooling rejects remote hosts and unrelated database names. Integration
 
 Authentication, creative features, rich-text authoring, storage operations, FTS, recovery, portability and sharing are later milestones. PWA installability/full browser/manual screen-reader/backup/load/release checks are future acceptance gates. Storage/auth/mail/retention decisions remain documented proposals before dependent implementation.
 
-The connector lacks repository/Project/label/milestone/protection creation operations. CLI verification continues to identify BradyBuilds, including after two owner-completed device flows. Correct builtbyb93-tech administration access (or separately approved delegation) is required. Private-repository protection support, Projects scope and an eligible non-author reviewer are unverified. No new account, visibility change, paid plan or alternate repository was substituted.
+The connector lacks administrative creation surfaces, so the authorized Mac performed setup using its verified owner authorization. The canonical repository remains private. GitHub rejected protected-main setup with 403: Upgrade to GitHub Pro or make this repository public to enable this feature. No paid upgrade, visibility change or collaborator invitation occurred. An eligible non-author review remains required before merge.
 
 ## PR, merge and deployment
 
-PR URL: unavailable; docs/development/PR_DRAFT.md is prepared locally. Merge status: not merged; no auto-merge. Deployment status: not deployed; no Coolify provisioning, production migration or DNS change.
+PR: https://github.com/builtbyb93-tech/inkwell/pull/39 (draft). Merge status: not merged; auto-merge disabled. Deployment status: not deployed; no Coolify provisioning, production migration or DNS change.
 
-Recommended next step: finish Phase 0 remote setup with verified owner access, publish the foundation branch/PR and verify Actions and protection. Stop for owner merge approval. Only then propose Phase 1 authentication/project work under its own milestone approval.
+Recommended next step: resolve the private-plan protection gate and non-author review, verify the latest CI checks, and obtain explicit owner merge approval. Only then propose Phase 1 under a separate milestone approval.
 
 ## Files changed
 
 The inventory below lists this foundation change relative to the approved bootstrap.
 
-92 files changed:
+Initial implementation inventory (92 files; this publication update adds resource mapping):
 
 - `.dockerignore`
 - `.env.example`
