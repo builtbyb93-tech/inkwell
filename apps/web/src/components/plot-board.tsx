@@ -24,7 +24,8 @@ function SceneTile({
   archived: boolean;
 }) {
   const [groupId, setGroupId] = useState(row.groupId ?? ''),
-    [beforeId, setBeforeId] = useState(row.id);
+    [beforeId, setBeforeId] = useState(row.id),
+    [moveOpen, setMoveOpen] = useState(false);
   return (
     <li
       data-scene-id={row.id}
@@ -99,55 +100,57 @@ function SceneTile({
                 Move later
               </button>
             </div>
-            <details className="scene-move">
+            <details className="scene-move" onToggle={(e) => setMoveOpen(e.currentTarget.open)}>
               <summary>Move or regroup scene</summary>
-              <form
-                aria-label={'Move scene ' + row.title}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  onMove(row.id, {
-                    groupId: groupId || null,
-                    ...(beforeId === row.id ? {} : { beforeId: beforeId || null }),
-                  });
-                }}
-              >
-                <fieldset disabled={disabled}>
-                  <label>
-                    Destination group
-                    <select
-                      aria-label="Destination group"
-                      value={groupId}
-                      onChange={(e) => setGroupId(e.target.value)}
-                    >
-                      <option value="">Ungrouped</option>
-                      {groups.map((g) => (
-                        <option key={g.id} value={g.id}>
-                          {g.title}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Insert before
-                    <select
-                      aria-label="Insert before"
-                      value={beforeId}
-                      onChange={(e) => setBeforeId(e.target.value)}
-                    >
-                      <option value={row.id}>Keep sequence position</option>
-                      <option value="">End of full story</option>
-                      {scenes
-                        .filter((s) => s.id !== row.id)
-                        .map((s) => (
-                          <option key={s.id} value={s.id}>
-                            Scene {s.position + 1}: {s.title}
+              {moveOpen && (
+                <form
+                  aria-label={'Move scene ' + row.title}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    onMove(row.id, {
+                      groupId: groupId || null,
+                      ...(beforeId === row.id ? {} : { beforeId: beforeId || null }),
+                    });
+                  }}
+                >
+                  <fieldset disabled={disabled}>
+                    <label>
+                      Destination group
+                      <select
+                        aria-label="Destination group"
+                        value={groupId}
+                        onChange={(e) => setGroupId(e.target.value)}
+                      >
+                        <option value="">Ungrouped</option>
+                        {groups.map((g) => (
+                          <option key={g.id} value={g.id}>
+                            {g.title}
                           </option>
                         ))}
-                    </select>
-                  </label>
-                  <button className="button">Apply scene move</button>
-                </fieldset>
-              </form>
+                      </select>
+                    </label>
+                    <label>
+                      Insert before
+                      <select
+                        aria-label="Insert before"
+                        value={beforeId}
+                        onChange={(e) => setBeforeId(e.target.value)}
+                      >
+                        <option value={row.id}>Keep sequence position</option>
+                        <option value="">End of full story</option>
+                        {scenes
+                          .filter((s) => s.id !== row.id)
+                          .map((s) => (
+                            <option key={s.id} value={s.id}>
+                              Scene {s.position + 1}: {s.title}
+                            </option>
+                          ))}
+                      </select>
+                    </label>
+                    <button className="button">Apply scene move</button>
+                  </fieldset>
+                </form>
+              )}
             </details>
           </>
         )}
