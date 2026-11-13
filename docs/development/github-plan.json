@@ -35,7 +35,7 @@
   "requiredChecks": ["quality", "integration", "browser", "container", "security"],
   "protection": {
     "pullRequests": true,
-    "requiredApprovals": 1,
+    "requiredApprovals": 0,
     "dismissStaleReviews": true,
     "resolveConversations": true,
     "allowForcePushes": false,

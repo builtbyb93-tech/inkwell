@@ -4,7 +4,7 @@ The owner's v0.6 directive and explicit approvals govern. Read product, architec
 
 ## Scope and approvals
 
-- Current authorization: Phase 0 foundation, local verification, and preparation of a PR.
+- Current authorization: complete and merge Phase 0 PR #39 after passing checks, then implement Phase 1 authentication/workspace/project/story/dashboard scope. Phase 1 merge and deployment are not authorized.
 - Never merge or enable auto-merge without explicit owner approval.
 - Provisioning, production migrations/deployment, DNS, destructive actions, paid dependencies, scope/major architecture changes, and deletion of unmerged worktrees/branches require their own approval.
 - Do not modify unrelated projects. Use `builtbyb93-tech/inkwell`; ordinary work uses branches/worktrees, not forks.
@@ -31,6 +31,8 @@ Milestone reports include name, issues, branch, worktree, base/final SHAs, files
 
 ## GitHub access and current gates
 
-The owner explicitly approved public source visibility on 2026-11-13. The canonical repository is public; the Project remains private. Main protection is verified: all five CI checks, one non-author approval, stale-review dismissal, conversation resolution and admin enforcement; force pushes/deletion are blocked. Auto-merge is disabled. Do not weaken these controls, invite collaborators, merge or deploy without the relevant owner authorization. No paid plan was purchased. Main remains the README bootstrap; feature work is in PR #39.
+The owner explicitly approved public source visibility on 2026-11-13. The canonical repository is public; the Project remains private. Main protection is verified: all five CI checks, zero required GitHub reviews, stale-review dismissal, conversation resolution and admin enforcement; force pushes/deletion are blocked. Auto-merge is disabled. Do not weaken these controls, invite collaborators, merge or deploy without the relevant owner authorization. No paid plan was purchased. Main remains the README bootstrap; feature work is in PR #39.
 
 Cloud GitHub HTTP requests are authenticated as BradyBuilds even without valid Authorization headers. Those responses cannot verify a newly supplied account credential. Do not repeat the cloud device/PAT login loop. Use the linked builtbyb93-tech GitHub connector when its capabilities suffice; administrative operations use the separately authorized Mac with its locally verified builtbyb93-tech OAuth credential. Never transfer or print credentials. Keep local credential storage outside all checkouts and disclose no token values.
+
+Owner approval update: zero required GitHub reviews is the approved solo-owner policy. Required PRs, five strict CI checks, admin enforcement, conversation resolution and explicit owner approval for every merge remain. No invitations or review requests may be sent.

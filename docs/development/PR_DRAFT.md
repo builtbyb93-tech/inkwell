@@ -8,4 +8,4 @@ Local verification includes 17 unit/integration/browser tests, frozen installs, 
 
 Authentication and creative tools are later milestones. The current SQL migration creates User/Workspace foundations and was exercised only on local disposable databases. Hosted resources and deployment are not enabled.
 
-The owner approved public source visibility and main protection is now enabled and verified. All five CI checks, one non-author approval, conversation resolution and admin enforcement are required; force pushes/deletion and auto-merge are disabled. A non-author reviewer and explicit owner merge approval remain outstanding. No paid plan, collaborator invitation or deployment is authorized automatically.
+The owner approved public source visibility and main protection is now enabled and verified. All five CI checks, zero required GitHub reviews, conversation resolution and admin enforcement are required; force pushes/deletion and auto-merge are disabled. The owner explicitly approved the solo-owner policy and merging this Phase 0 PR after passing checks. No paid plan, collaborator invitation or deployment is authorized automatically.

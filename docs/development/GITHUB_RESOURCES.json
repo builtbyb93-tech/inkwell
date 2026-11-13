@@ -204,7 +204,7 @@
     "configured": true,
     "requiredChecks": ["quality", "integration", "browser", "container", "security"],
     "strictChecks": true,
-    "requiredApprovals": 1,
+    "requiredApprovals": 0,
     "dismissStaleReviews": true,
     "enforceAdmins": true,
     "conversationResolution": true,
@@ -218,5 +218,5 @@
   "implementationCiRun": "https://github.com/builtbyb93-tech/inkwell/actions/runs/43442184636",
   "mergeStatus": "not merged",
   "deploymentStatus": "not deployed",
-  "reviewerStatus": "Eligible non-author reviewer required; no additional collaborator invited"
+  "reviewerStatus": "Owner-approved solo workflow; no invitations or review requests; explicit owner approval required for merges"
 }

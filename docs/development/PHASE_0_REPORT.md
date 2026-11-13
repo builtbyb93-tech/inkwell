@@ -1,6 +1,6 @@
 # Phase 0 — Repository and Engineering Foundation
 
-Status: local implementation and initial CI verified; repository/planning/PR published; public source and main protection verified; milestone awaits non-author review and owner merge approval. This is not approval to merge, provision or deploy.
+Status: local implementation and initial CI verified; repository/planning/PR published; public source and main protection verified; owner approved the solo-owner policy and Phase 0 merge after passing checks. This is not approval to merge, provision or deploy.
 
 ## Git and issue references
 
@@ -58,13 +58,13 @@ Migration tooling rejects remote hosts and unrelated database names. Integration
 
 Authentication, creative features, rich-text authoring, storage operations, FTS, recovery, portability and sharing are later milestones. PWA installability/full browser/manual screen-reader/backup/load/release checks are future acceptance gates. Storage/auth/mail/retention decisions remain documented proposals before dependent implementation.
 
-The connector lacks administrative creation surfaces, so the authorized Mac performed setup using its verified owner authorization. The owner approved public source after GitHub rejected private protection on the existing plan. Repository visibility is public and main protection is verified: all five strict CI checks, one non-author approval, stale-review dismissal, conversation resolution, admin enforcement and linear history; no force pushes/deletion. No paid upgrade occurred. The Project remains private. A non-author reviewer is still needed; no collaborator has been invited.
+The connector lacks administrative creation surfaces, so the authorized Mac performed setup using its verified owner authorization. The owner approved public source after GitHub rejected private protection on the existing plan. Repository visibility is public and main protection is verified: all five strict CI checks, zero required GitHub reviews, stale-review dismissal, conversation resolution, admin enforcement and linear history; no force pushes/deletion. No paid upgrade occurred. The Project remains private. The owner approved zero required GitHub reviews, retaining PRs, CI, admin enforcement and explicit owner merge approval. No invitations or review requests are authorized.
 
 ## PR, merge and deployment
 
 PR: https://github.com/builtbyb93-tech/inkwell/pull/39 (draft). Merge status: not merged; auto-merge disabled. Deployment status: not deployed; no Coolify provisioning, production migration or DNS change.
 
-Recommended next step: obtain eligible non-author review, verify the latest CI checks, and obtain explicit owner merge approval. Only then propose Phase 1 under a separate milestone approval.
+Recommended next step: verify current checks and execute the explicitly approved Phase 0 merge. The owner also approved Phase 1 implementation; its merge and all deployment remain separately gated.
 
 ## Files changed
 

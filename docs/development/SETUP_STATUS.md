@@ -22,9 +22,9 @@ A local bare publication mirror on the Mac transports the same canonical reposit
 
 ## Remaining gate
 
-The owner explicitly approved making the source repository public on 2026-11-13. GitHub accepted main protection after the visibility transition completed. Verified settings require quality, integration, browser, container and security checks; strict up-to-date status; one non-author approval; dismissal of stale reviews; resolved conversations; linear history; and enforcement for administrators. Force pushes and deletion are disabled. Auto-merge remains disabled. No paid plan was purchased; the Project remains private.
+The owner explicitly approved making the source repository public on 2026-11-13. GitHub accepted main protection after the visibility transition completed. Verified settings require quality, integration, browser, container and security checks; strict up-to-date status; zero required GitHub reviews; dismissal of stale reviews; resolved conversations; linear history; and enforcement for administrators. Force pushes and deletion are disabled. Auto-merge remains disabled. No paid plan was purchased; the Project remains private.
 
-A non-author reviewer with eligible repository access is still needed; the only current collaborator is the PR author/owner. No additional collaborator has been invited. No PR is merged or approved automatically. Owner approval of public visibility does not authorize merging or deployment.
+The owner explicitly approved zero required GitHub reviews and merging PR #39 once checks pass. Required PRs, all CI checks, admin enforcement, conversation resolution and separate owner approval for future merges remain. No invitations, review requests or deployment are authorized.
 
 CI results and actual published references are recorded in PHASE_0_REPORT.md and the owner handoff. Planning resources are real GitHub issues, not a substitute local status tracker. No issue is marked complete before verified acceptance and approved merge.
 
