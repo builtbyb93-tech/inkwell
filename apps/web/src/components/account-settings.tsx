@@ -39,6 +39,7 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
             Your name
             <input
               value={name}
+              disabled={pending}
               onChange={(e) => {
                 setName(e.target.value);
                 setSaved('');

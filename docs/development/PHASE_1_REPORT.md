@@ -1,6 +1,6 @@
 # Phase 1 — Authentication and Project Foundation
 
-Implementation authorized by the owner after Phase 0. Phase 1 merge and all deployment remain unapproved. No invitations/review requests were sent.
+Implementation authorized by the owner after Phase 0. The owner approved merging Phase 1 PR #40 after review fixes and passing checks. Deployment remains unapproved. No invitations/review requests were sent.
 
 | Field                      | Evidence/status                                                                                                                                                                                                 |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -16,7 +16,7 @@ Implementation authorized by the owner after Phase 0. Phase 1 merge and all depl
 | CI                         | Required quality, integration, browser, container and security jobs; status is read from GitHub, never assumed from local checks                                                                                |
 | Migration                  | 20261113010000_accounts_projects; additive identity/session/token/rate/project/story schema and scope FKs; applied only locally/disposable test DBs                                                             |
 | Security                   | Argon2id; hashed single-use tokens; registry revocation; Origin/CSRF; scoped DTOs/FKs; optimistic writes; durable rate limits; no-store + nonce CSP; patched SMTP dependency isolation                          |
-| Merge                      | Not authorized / not merged                                                                                                                                                                                     |
+| Merge                      | Owner approved; final checks pending                                                                                                                                                                            |
 | Deployment                 | Not deployed; no VPS, DNS, hosted database/storage/mail/proxy changes                                                                                                                                           |
 | Recommended next milestone | Owner review/approval of Phase 1 merge, then Phase 2 Idea Vault under its own approved scope                                                                                                                    |
 
@@ -35,3 +35,7 @@ Recovery/verification mail lookup and delivery run through Next's after-response
 Sessions are seven days; verification 24 hours; recovery 30 minutes. Argon2id uses 19 MiB/two passes/parallelism one. Five local samples were 20/11/10/26/10 ms; remeasure on the approved VPS. Auth-token/session retention and backup recovery require operating review before production. Local PostgreSQL 17.12 uses a pinned Alpine variant because VFS image expansion exhausted the managed workspace; CI keeps pinned Bookworm. Only Inkwell's generated dependencies/build caches/images were reclaimed; source branches/worktrees were retained.
 
 Manual screen-reader/Safari/PWA installation testing, hosted delivery/backup restoration and release load/security audit remain later gates. Autosave/recovery buffers, rich-text authoring, Vault/canon/Plot Board/search/import/export/sharing are later phases. No native-token flow, AI provider or offline private-content caching is introduced.
+
+## Owner-approved merge follow-up
+
+The owner explicitly approved merging PR #40. Pre-merge review found that enabled title fields could accept edits during an in-flight save and then be replaced by the earlier response. Project/story fields and the equivalent account name field now disable editing during submission. Desktop/mobile regression checks hold real API responses open, verify the fields are disabled, release the response, verify editing resumes, and reload the story to confirm persistence. The review thread will be resolved only after verification. Required checks are rerun on the corrected head before merging. This approval does not authorize Phase 2 implementation or deployment.

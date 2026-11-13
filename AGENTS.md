@@ -4,7 +4,7 @@ The owner's v0.6 directive and explicit approvals govern. Read product, architec
 
 ## Scope and approvals
 
-- Current authorization: complete and merge Phase 0 PR #39 after passing checks, then implement Phase 1 authentication/workspace/project/story/dashboard scope. Phase 1 merge and deployment are not authorized.
+- Current authorization: Phase 0 is merged; Phase 1 implementation is complete and the owner explicitly approved merging PR #40 after review findings are fixed and all required checks pass. Phase 2 implementation and deployment are not authorized.
 - Never merge or enable auto-merge without explicit owner approval.
 - Provisioning, production migrations/deployment, DNS, destructive actions, paid dependencies, scope/major architecture changes, and deletion of unmerged worktrees/branches require their own approval.
 - Do not modify unrelated projects. Use `builtbyb93-tech/inkwell`; ordinary work uses branches/worktrees, not forks.

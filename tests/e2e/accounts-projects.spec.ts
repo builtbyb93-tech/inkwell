@@ -1,9 +1,28 @@
 import { randomUUID } from 'node:crypto';
-import { test, expect, type APIRequestContext } from '@playwright/test';
+import { test, expect, type APIRequestContext, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { accountLink } from '../support/mail';
 
 const password = 'A private beginning among the stars 42!';
+async function holdSaveResponse(page: Page, path: string) {
+  let release = () => {};
+  let reached = () => {};
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const ready = new Promise<void>((resolve) => {
+    reached = resolve;
+  });
+  const pattern = '**' + path;
+  await page.route(pattern, async (route) => {
+    if (route.request().method() !== 'PATCH') return route.continue();
+    const response = await route.fetch();
+    reached();
+    await gate;
+    await route.fulfill({ response });
+  });
+  return { ready, release, remove: () => page.unroute(pattern) };
+}
 async function signIn(client: APIRequestContext, origin: string, email: string, value = password) {
   const csrf = await client.get('/api/v1/auth/csrf');
   expect(csrf.status()).toBe(200);
@@ -92,6 +111,22 @@ test('verified accounts organize private projects and stories, recover access, a
   await expect(page.getByLabel('Title', { exact: true })).toHaveValue('My unsaved title');
   await page.getByRole('button', { name: 'Discard edits and reload' }).click();
   await expect(page.getByRole('status')).toHaveText('Current version loaded.');
+  await page.getByLabel('Title', { exact: true }).fill('A saved title');
+  const heldStory = await holdSaveResponse(page, storyPath);
+  try {
+    await page.getByRole('button', { name: 'Save changes', exact: true }).click();
+    await heldStory.ready;
+    await expect(page.getByLabel('Title', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('Story format', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('Synopsis', { exact: true })).toBeDisabled();
+  } finally {
+    heldStory.release();
+  }
+  await expect(page.getByRole('status')).toHaveText('Saved.');
+  await heldStory.remove();
+  await expect(page.getByLabel('Title', { exact: true })).toBeEnabled();
+  await page.reload();
+  await expect(page.getByLabel('Title', { exact: true })).toHaveValue('A saved title');
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
       .violations,
@@ -199,8 +234,17 @@ test('verified accounts organize private projects and stories, recover access, a
   expect((await signIn(context.request, origin, email, newPassword)).status()).toBe(200);
   await page.goto('/settings');
   await page.getByLabel('Your name', { exact: true }).fill('Ada Storyteller');
-  await page.getByRole('button', { name: 'Save account' }).click();
+  const heldAccount = await holdSaveResponse(page, '/api/v1/account');
+  try {
+    await page.getByRole('button', { name: 'Save account' }).click();
+    await heldAccount.ready;
+    await expect(page.getByLabel('Your name', { exact: true })).toBeDisabled();
+  } finally {
+    heldAccount.release();
+  }
   await expect(page.getByRole('status')).toHaveText('Saved.');
+  await heldAccount.remove();
+  await expect(page.getByLabel('Your name', { exact: true })).toBeEnabled();
   await expect(page.getByText('AI is disabled.', { exact: true })).toBeVisible();
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())

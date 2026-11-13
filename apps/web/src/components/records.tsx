@@ -224,6 +224,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
           Title
           <input
             name="title"
+            disabled={pending}
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
@@ -239,6 +240,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
               Story format
               <input
                 name="format"
+                disabled={pending}
                 aria-describedby="story-format-help"
                 value={format}
                 onChange={(e) => {
@@ -258,6 +260,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
         <textarea
           id="record-content"
           name="content"
+          disabled={pending}
           rows={6}
           value={content}
           onChange={(e) => {
