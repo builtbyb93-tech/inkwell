@@ -4,7 +4,7 @@ Every great story starts somewhere.
 
 Inkwell helps creators capture, organize, develop, connect, and retrieve ideas and stories across narrative formats.
 
-Phase 0 is merged in [PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39). [Phase 1 PR #40](https://github.com/builtbyb93-tech/inkwell/pull/40) is merged and adds verified accounts, password recovery, revocable sessions, one private workspace per account, persistent projects and multiple stories, a dashboard, archive/restore, optimistic edit protection, and account/privacy settings. AI remains disabled. Phase 2 adds Idea Vault capture, structured editing, categories/tags, indexed search, multi-target references and source-preserving conversions. Canon management, Plot Board, autosave, import/export, sharing, and offline editing arrive in later milestones.
+Phase 0 is merged in [PR #39](https://github.com/builtbyb93-tech/inkwell/pull/39). [Phase 1 PR #40](https://github.com/builtbyb93-tech/inkwell/pull/40) is merged and adds verified accounts, password recovery, revocable sessions, one private workspace per account, persistent projects and multiple stories, a dashboard, archive/restore, optimistic edit protection, and account/privacy settings. AI remains disabled. Phase 2 adds Idea Vault capture, structured editing, categories/tags, indexed search, multi-target references and source-preserving conversions. Phase 3 adds shared/story-specific Story Bibles, five canon kinds, typed relationships/backlinks and separate explicit overrides/conflict review. Plot Board, autosave, import/export, sharing, and offline editing arrive in later milestones.
 
 The canonical public repository is [builtbyb93-tech/inkwell](https://github.com/builtbyb93-tech/inkwell). Planning lives on the private [Inkwell Project](https://github.com/users/builtbyb93-tech/projects/1). Main requires PRs and all five passing CI checks; the owner approved zero required GitHub reviews for solo development. Every merge still needs explicit owner approval. No collaborators are invited.
 
@@ -23,7 +23,7 @@ pnpm db:generate
 pnpm dev
 ```
 
-Open `http://127.0.0.1:3001`. Root development and database scripts load `.env`. Register an account, then open the local email inbox at `http://127.0.0.1:18026` to verify it. Local mail is captured, not delivered to external recipients. Auth requires a generated secret, database, and SMTP configuration; health remains dependency-independent.
+Open `http://127.0.0.1:3002`. Root development and database scripts load `.env`. Register an account, then open the local email inbox at `http://127.0.0.1:18027` to verify it. Local mail is captured, not delivered to external recipients. Auth requires a generated secret, database, and SMTP configuration; health remains dependency-independent.
 
 ```sh
 pnpm check
@@ -31,7 +31,7 @@ pnpm db:validate
 pnpm test:integration
 pnpm exec playwright install --no-shell chromium
 pnpm test:e2e
-docker build -f deploy/Dockerfile -t inkwell:phase2 .
+docker build -f deploy/Dockerfile -t inkwell:phase3 .
 ```
 
 For a managed network with an additional trusted certificate authority, pass its public CA file as an optional BuildKit secret: `--secret id=build_ca,src=/path/to/approved-ca.crt`. The mount exists only during dependency installation, is not copied into the runtime, and does not disable TLS verification. Do not pass credentials as build arguments.
@@ -52,3 +52,5 @@ In restricted workspaces, prefix pnpm commands with writable cache settings: `XD
 Start with [PRODUCT_SPEC](docs/product/PRODUCT_SPEC.md), [MVP_SCOPE](docs/product/MVP_SCOPE.md), [SYSTEM_DESIGN](docs/architecture/SYSTEM_DESIGN.md), and [ACCEPTANCE_CRITERIA](docs/testing/ACCEPTANCE_CRITERIA.md). Exact pins are recorded in [VERSIONS](docs/development/VERSIONS.md) and the lockfile.
 
 One canonical repository; feature branches and isolated worktrees; main is administrative. Each milestone ends with evidence and a PR. Owner approval is required before merging. Provisioning, production migrations/deployment, destructive actions, and DNS changes have separate approval gates. No paid dependency or hosting substitution is authorized.
+
+Open Story Bible from the navigation to choose a shared project Bible, or open a story and choose its Story Bible. Shared edits require project context; local records and overrides stay specific to their story. See ADR-007 for scope, typed links, explicit clears and conflict review. PR #41 (Phase 2) merged at `57bc6ba`; Phase 3 implementation/PR preparation is approved, with merge and deployment separately gated.

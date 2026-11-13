@@ -51,7 +51,7 @@ export function seedStory(tx: Tx, account: AccountRecord, projectId: string, sou
   });
 }
 export function seedCharacter(tx: Tx, account: AccountRecord, projectId: string, source: Seed) {
-  return tx.character.create({
+  return tx.canonRecord.create({
     data: {
       workspaceId: account.workspaceId,
       projectId,
@@ -128,8 +128,14 @@ export async function getTarget(
   id(targetId);
   const db = database();
   if (kind === 'CHARACTER') {
-    const row = await db.character.findFirst({
-      where: { id: targetId, projectId, workspaceId: account.workspaceId },
+    const row = await db.canonRecord.findFirst({
+      where: {
+        id: targetId,
+        projectId,
+        workspaceId: account.workspaceId,
+        kind: 'CHARACTER',
+        scope: 'SHARED',
+      },
       include: {
         conversions: {
           where: { workspaceId: account.workspaceId },

@@ -1,6 +1,6 @@
 # Relationship integrity
 
-Phase 2 implements Idea Story/Scene references and typed conversion provenance. Other relationship families remain planned for their approved phases.
+Phase 2 implements Idea Story/Scene references and typed conversion provenance. Phase 3 adds concrete typed canon relationships and authorized backlinks; scene joins and snapshot relationships remain later milestones.
 
 | Relation                   | Rules                                                                                                              |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -16,3 +16,7 @@ Reject cross-project canon/scene links even within the same account. A type/id p
 Archival preserves provenance; restore/deletion revalidate endpoints and have tested semantics. Conversions, link changes and imports are transactional with version preconditions. Backlinks authorize source and target.
 
 Phase 2 ideas are global to the workspace. An idea can connect to multiple owned projects through independently qualified targets; this never merges their canon. Wrong project/story/scene chains fail, including mismatches within one workspace. Separate link tables and guarded typed conversion columns provide SQL integrity. Native requests cannot inject arbitrary endpoint types or workspace ownership. Conversion links preserve provenance; manual reference removal compares the idea version. Archive/restore leaves references intact. Later canon-to-canon/scene relationships remain same-project only.
+
+## Phase 3 canon graph
+
+ADR-007 permits a concrete common CanonRecord with closed kind enum and immutable identity. Both endpoints are qualified SQL FKs; database triggers enforce the typed matrix and shared/story context. A type/id pair cannot bypass integrity. Conversion provenance still points to shared Characters only. Project graph edges are read-only in story views; story graph edges cannot reference another story's local record. Indexes cover both directions, scoped stable paging and active/archive retrieval. Archived endpoints remain visible as archived references; restoring links requires active endpoints. No scene/canon joins or graph deletion is introduced.

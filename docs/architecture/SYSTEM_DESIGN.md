@@ -23,3 +23,7 @@ FTS indexes update transactionally with content. Search always includes workspac
 ## Open decisions
 
 See ADRs for stable authentication, S3 choice and private-repository protection. Mail delivery, archive/attachment limits, search dictionaries, recovery/deletion/backup retention and production load targets need decisions before dependent features. Coolify remains the approved deployment target; provisioning/deployment remain separately gated.
+
+## Phase 3 Story Bible
+
+Project and story Bible routes use the same versioned REST services and scoped transactions as future native clients. Portable Zod contracts describe record kinds, field-presence override modes, review decisions and typed relationships. Pure domain rules compare fields and validate endpoint kinds. Server-only Prisma services authorize every context/source/destination. Separate list, record, override/review and relationship components reuse Tiptap and safe rendering. No paid service, external AI or background task is required. See ADR-007.
