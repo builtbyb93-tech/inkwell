@@ -5,6 +5,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 const key = 'inkwell-theme';
 const event = 'inkwell-theme-change';
 let memoryTheme = 'system';
+let persistenceUnavailable = false;
 
 function subscribe(callback: () => void) {
   window.addEventListener('storage', callback);
@@ -16,6 +17,7 @@ function subscribe(callback: () => void) {
 }
 
 function getTheme() {
+  if (persistenceUnavailable) return memoryTheme;
   try {
     const value = localStorage.getItem(key);
     return value === 'light' || value === 'dark' ? value : 'system';
@@ -41,7 +43,8 @@ export function ThemeSelect() {
           try {
             localStorage.setItem(key, e.target.value);
           } catch {
-            // Storage can be unavailable in privacy-restricted browsers.
+            // Reads may still work when writes fail because storage is full.
+            persistenceUnavailable = true;
           }
           window.dispatchEvent(new Event(event));
         }}

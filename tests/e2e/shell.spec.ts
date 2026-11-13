@@ -64,3 +64,20 @@ test('theme selection works when browser storage is denied', async ({ page }) =>
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.getByLabel('Theme', { exact: true })).toHaveValue('dark');
 });
+
+test('theme selection uses memory when storage reads work but writes fail', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('inkwell-theme', 'light');
+    Object.defineProperty(Storage.prototype, 'setItem', {
+      value: () => {
+        throw new DOMException('Storage full', 'QuotaExceededError');
+      },
+    });
+  });
+  await page.goto('/');
+  await expect(page.getByLabel('Theme', { exact: true })).toHaveValue('light');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.getByLabel('Theme', { exact: true })).toHaveValue('dark');
+  expect(await page.evaluate(() => localStorage.getItem('inkwell-theme'))).toBe('light');
+});
