@@ -108,3 +108,4 @@ export type AccountRecord = {
 
 export * from './rich-text';
 export * from './ideas';
+export * from './canon';

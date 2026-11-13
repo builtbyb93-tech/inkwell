@@ -59,9 +59,13 @@ export function IdeaTargetView({
         </Link>
         <RichTextView document={target.content} />
         <p className="field-help">
-          {kind === 'CHARACTER'
-            ? 'Character editing is coming with Story Bible.'
-            : 'Scene editing and organization are coming with Plot Board.'}
+          {kind === 'CHARACTER' ? (
+            <Link href={`/projects/${projectId}/canon/${targetId}`}>
+              Develop character in Story Bible
+            </Link>
+          ) : (
+            'Scene editing and organization are coming with Plot Board.'
+          )}
         </p>
       </section>
       <section className="workspace-card">

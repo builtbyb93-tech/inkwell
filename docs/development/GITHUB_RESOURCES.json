@@ -239,6 +239,28 @@
     "baseCommit": "328e9ed0e55ebfc9303b2b1ca012193ee6684f86",
     "target": "main",
     "mergeAuthorized": true,
-    "deploymentAuthorized": false
+    "deploymentAuthorized": false,
+    "mergeStatus": "merged",
+    "mergeCommit": "57bc6ba6f24fbaa5c0d98c166bb1c804d8f08767",
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/41"
+  },
+  "phase3": {
+    "issues": [17, 18, 19, 20],
+    "branch": "feature/17-story-bible",
+    "worktree": "/workspace/inkwell-worktrees/phase-3",
+    "baseCommit": "57bc6ba6f24fbaa5c0d98c166bb1c804d8f08767",
+    "target": "main",
+    "mergeAuthorized": false,
+    "deploymentAuthorized": false,
+    "activeWorktrees": 1,
+    "schemaOwner": "Phase 3 integration task",
+    "resources": {
+      "compose": "inkwell_phase3",
+      "postgres": 55435,
+      "smtp": 11027,
+      "mailpit": 18027,
+      "app": 3002,
+      "e2e": 3300
+    }
   }
 }

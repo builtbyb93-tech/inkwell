@@ -648,3 +648,55 @@ legend {
 .related-records li button {
   margin: 0.5rem 0 0.5rem 0.75rem;
 }
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 1rem;
+}
+.canon-filters {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+}
+.canon-list li {
+  align-items: start;
+}
+.canon-list li > div {
+  width: 100%;
+  min-width: 0;
+}
+.canon-list p {
+  margin: 0.4rem 0;
+}
+.canon-review {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+.canon-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.canon-columns > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.canon-columns h4 {
+  font-size: 0.85rem;
+}
+.canon-comparison {
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 700px) {
+  .canon-filters,
+  .canon-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

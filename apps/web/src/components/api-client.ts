@@ -9,10 +9,17 @@ export class ApiClientError extends Error {
 }
 export async function api<T>(
   path: string,
-  options: { method?: string; body?: unknown; version?: number; requestKey?: string } = {},
+  options: {
+    method?: string;
+    body?: unknown;
+    version?: number;
+    createOnly?: boolean;
+    requestKey?: string;
+  } = {},
 ): Promise<T> {
   const headers: Record<string, string> = {};
   if (options.body !== undefined) headers['Content-Type'] = 'application/json';
+  if (options.createOnly) headers['If-None-Match'] = '*';
   if (options.requestKey) headers['Idempotency-Key'] = options.requestKey;
   if (options.version !== undefined) headers['If-Match'] = `"${options.version}"`;
   const response = await fetch('/api/v1' + path, {

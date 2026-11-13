@@ -50,3 +50,7 @@ Coverage reviewed against all twelve primary systems and all phases in MVP_SCOPE
 ## Published planning
 
 The 38 tasks are published as repository issues #1–#38, with Phase 0 in #1–#6. Project: https://github.com/users/builtbyb93-tech/projects/1. Draft PR #39 contains the foundation. The owner approved public visibility and main protection is now verified. The owner approved a solo-owner review policy and Phase 0 merge after passing checks, recorded in #6. Phase 1 implementation is approved; no Phase 1 merge or deployment is authorized. No task is closed by local verification alone.
+
+## Phase 3 issue execution
+
+After verified Phase 2 merge, implement #17 shared records → #18 local records → #19 typed relationships/backlinks → #20 override/conflict review on one cohesive integration branch. One schema owner maintains migration order. Required authorization/concurrency/archive tests accompany each boundary. Issues remain In Progress until implementation and validation are published, then Review pending owner acceptance. Phase 4 depends on the approved Phase 3 merge; do not start Plot Board implementation from an unapproved feature head.

@@ -11,3 +11,7 @@
 9. Imports remap source/override relationships. Snapshots contain selected effective copies without private source traversal.
 
 Phase 3 tests cover clear/inherit, disjoint/conflicting shared edits, stale revisions, archival, unauthorized scope and backlinks. Define field-level conflict granularity before enabling canon writes.
+
+## Phase 3 implementation
+
+ADR-007 defines name/notes conflict granularity, explicit INHERIT/CUSTOM/CLEAR contracts, base revision and override preconditions, and explicit KEEP/INHERIT review. Shared and local records occupy independent fixed-scope rows; overrides occupy their own table. Relevant shared edits flag review while inherited fields follow current shared values. Disjoint edits do not destroy private story values. Shared archival preserves overrides and backlinks; custom story values remain discoverable with an archive warning. Editing an override requires restoring its shared base; reviewing existing conflicts remains an explicit permitted action. Promotion and permanent deletion are not implemented.
