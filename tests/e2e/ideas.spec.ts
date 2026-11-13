@@ -52,6 +52,10 @@ test('creators capture, format, classify, connect and convert ideas without losi
   const second = await post(context.request, origin, `/projects/${project.id}/stories`, {
     title: 'Second journey',
   });
+  await post(context.request, origin, '/ideas', {
+    title: 'Unlinked thought',
+    content: plainDocument('Only in the whole vault'),
+  });
   const seed = await post(context.request, origin, '/ideas', {
     title: 'Existing scene',
     content: plainDocument('An earlier thought'),
@@ -177,7 +181,31 @@ test('creators capture, format, classify, connect and convert ideas without losi
   const restored = (await (await context.request.get(`/api/v1/ideas/${ideaId}`)).json()).data;
   expect(restored.counts).toEqual(before.counts);
   expect(restored.tags[0].name).toBe('Cosmic');
-  await page.goto('/ideas');
+  async function openFullVault() {
+    const mobile = page.locator('.mobile-header details');
+    const isMobile = await mobile.isVisible();
+    if (isMobile && (await mobile.getAttribute('open')) === null)
+      await mobile.locator('summary').click();
+    await page
+      .getByRole('navigation', {
+        name: isMobile ? 'Mobile navigation' : 'Main navigation',
+        exact: true,
+      })
+      .getByRole('link', { name: 'Idea Vault', exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/ideas$/);
+    await expect(page.getByRole('link', { name: 'Unlinked thought', exact: true })).toBeVisible();
+  }
+  await page.goto(`/ideas?storyId=${first.id}`);
+  await expect(page.getByRole('link', { name: 'Silver comet', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Unlinked thought', exact: true })).toHaveCount(0);
+  await openFullVault();
+  await page.goto('/ideas?archived=true');
+  await page.getByText('Search & filter ideas', { exact: true }).click();
+  await expect(page.getByLabel('Show archived ideas', { exact: true })).toBeChecked();
+  await openFullVault();
+  await page.getByText('Search & filter ideas', { exact: true }).click();
+  await expect(page.getByLabel('Show archived ideas', { exact: true })).not.toBeChecked();
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
       .violations,

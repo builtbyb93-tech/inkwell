@@ -170,18 +170,7 @@ export function IdeaVault({
         new URLSearchParams(filters).has('sceneId')) && (
         <div className="inline-actions">
           <span className="field-help">Showing ideas linked to this story or scene.</span>
-          <button
-            className="quiet-button"
-            disabled={pending}
-            onClick={() => {
-              const params = new URLSearchParams(filters);
-              params.delete('storyId');
-              params.delete('sceneId');
-              setFilters(params.toString());
-            }}
-          >
-            Clear relationship filter
-          </button>
+          <Link href="/ideas">Open full vault</Link>
         </div>
       )}
       <section className="workspace-card">

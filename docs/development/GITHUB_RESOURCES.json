@@ -238,7 +238,7 @@
     "worktree": "/workspace/inkwell-worktrees/phase-2",
     "baseCommit": "328e9ed0e55ebfc9303b2b1ca012193ee6684f86",
     "target": "main",
-    "mergeAuthorized": false,
+    "mergeAuthorized": true,
     "deploymentAuthorized": false
   }
 }

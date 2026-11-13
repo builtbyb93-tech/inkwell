@@ -9,6 +9,7 @@ export default async function Ideas({
   const params = await searchParams;
   return (
     <IdeaVault
+      key={JSON.stringify([params.storyId ?? '', params.sceneId ?? '', params.archived === 'true'])}
       storyId={typeof params.storyId === 'string' ? params.storyId : ''}
       sceneId={typeof params.sceneId === 'string' ? params.sceneId : ''}
       initialArchived={params.archived === 'true'}

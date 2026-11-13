@@ -84,6 +84,7 @@ test('verified accounts organize private projects and stories, recover access, a
   const projectId = page.url().split('/').at(-1)!;
   await expect(page.getByLabel('Title', { exact: true })).toHaveValue('The quiet universe');
   await page.getByRole('link', { name: 'New story', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('A new story.');
   await page.getByLabel('Title', { exact: true }).fill('The first light');
   await page.getByLabel('Story format', { exact: true }).fill('Animated short');
   await page.getByLabel('Synopsis', { exact: true }).fill('A small light travels home.');
