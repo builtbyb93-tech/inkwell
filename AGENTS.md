@@ -4,8 +4,8 @@ The owner's v0.6 directive and explicit approvals govern. Read product, architec
 
 ## Scope and approvals
 
-- Current authorization: Phases 0–2 are merged. The owner approved merging PR #41 and continuing Phase 3 Story Bible implementation, testing and PR preparation for issues #17–#20. Phase 3 merge and all deployment remain separately gated.
-- Never merge or enable auto-merge without explicit owner approval.
+- Current authorization: Phases 0–3 are merged. The owner authorized continuation into Phase 4 Plot Board (#21–#25) and approved all in-scope Inkwell PR merges after required checks and review. Do not ask again for that merge authorization. Never enable auto-merge or bypass protection. Deployment, hosted migrations/infrastructure, DNS, destructive actions, paid dependencies and scope/major architecture changes remain separately gated.
+- Standing owner approval covers reviewed, tested, in-scope PR merges. Do not enable auto-merge.
 - Provisioning, production migrations/deployment, DNS, destructive actions, paid dependencies, scope/major architecture changes, and deletion of unmerged worktrees/branches require their own approval.
 - Do not modify unrelated projects. Use `builtbyb93-tech/inkwell`; ordinary work uses branches/worktrees, not forks.
 - AI is disabled by default. No background generation, external provider calls, or private content transmission is authorized.

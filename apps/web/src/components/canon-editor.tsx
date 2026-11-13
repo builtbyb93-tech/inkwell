@@ -10,6 +10,7 @@ import { bibleUrl, canonPath, canonLabel, type BibleContext } from './canon-path
 import { useHydrated } from './use-hydrated';
 import { CanonOverrideEditor } from './canon-override';
 import { CanonRelations } from './canon-relations';
+import { CanonSceneReferences } from './scene-references';
 export function CanonDetail({ context: c, recordId }: { context: BibleContext; recordId: string }) {
   const [row, setRow] = useState<CanonRecord | null>(null),
     [error, setError] = useState('');
@@ -44,6 +45,14 @@ export function CanonDetail({ context: c, recordId }: { context: BibleContext; r
         <CanonEditor initial={row} context={c} />
       )}
       <CanonRelations context={c} recordId={recordId} />
+      {(row.kind === 'CHARACTER' || row.kind === 'LOCATION') && (
+        <CanonSceneReferences context={c} recordId={recordId} />
+      )}
+      {row.kind === 'CHARACTER' && row.scope === 'SHARED' && (
+        <Link href={`/projects/${c.projectId}/characters/${recordId}`}>
+          Character overview and source ideas
+        </Link>
+      )}
     </div>
   );
 }

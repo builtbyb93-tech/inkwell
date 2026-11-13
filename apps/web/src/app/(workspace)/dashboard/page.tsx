@@ -72,7 +72,8 @@ export default async function Dashboard() {
       <section className="future-tools">
         <h2>Room to grow</h2>
         <p>
-          Develop shared and story-specific canon in your Story Bible. Plot Board is coming next.
+          Develop shared and story-specific canon in your Story Bible. Organize scenes in your Plot
+          Board.
         </p>
       </section>
     </>

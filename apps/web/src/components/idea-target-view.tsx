@@ -64,7 +64,9 @@ export function IdeaTargetView({
               Develop character in Story Bible
             </Link>
           ) : (
-            'Scene editing and organization are coming with Plot Board.'
+            <Link href={`/projects/${projectId}/stories/${storyId}/plot/scenes/${targetId}`}>
+              Develop scene in Plot Board
+            </Link>
           )}
         </p>
       </section>

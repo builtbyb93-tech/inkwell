@@ -250,7 +250,7 @@
     "worktree": "/workspace/inkwell-worktrees/phase-3",
     "baseCommit": "57bc6ba6f24fbaa5c0d98c166bb1c804d8f08767",
     "target": "main",
-    "mergeAuthorized": false,
+    "mergeAuthorized": true,
     "deploymentAuthorized": false,
     "activeWorktrees": 1,
     "schemaOwner": "Phase 3 integration task",
@@ -261,6 +261,29 @@
       "mailpit": 18027,
       "app": 3002,
       "e2e": 3300
+    },
+    "mergeStatus": "merged",
+    "mergeCommit": "889dc16dae228a690e9c6aa1a99a15f021098229",
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/42"
+  },
+  "phase4": {
+    "issues": [21, 22, 23, 24, 25],
+    "branch": "feature/21-plot-board",
+    "worktree": "/workspace/inkwell-worktrees/phase-4",
+    "baseCommit": "889dc16dae228a690e9c6aa1a99a15f021098229",
+    "target": "main",
+    "mergeAuthorized": true,
+    "deploymentAuthorized": false,
+    "activeWorktrees": 1,
+    "schemaOwner": "Phase 4 integration task",
+    "resources": {
+      "compose": "inkwell_phase4",
+      "postgres": 55436,
+      "smtp": 11028,
+      "mailpit": 18028,
+      "app": 3003,
+      "e2e": 3400
     }
-  }
+  },
+  "standingMergeAuthorization": "Owner approved all in-scope merges after required checks/review; auto-merge remains disabled; deployment separately gated"
 }
