@@ -1,0 +1,11 @@
+# ADR-004: SMTP delivery and dependency isolation
+
+Status: selected for Phase 1; compatibility established by local SMTP integration/browser journeys and CI evidence in the milestone report.
+
+Options: use NextAuth's optional email provider (unneeded for password credentials and currently specifies vulnerable Nodemailer 7), force its peer to a newer major, or keep app-owned verification/recovery delivery separate. Select the third option. `packages/mail` uses stable Nodemailer 10.5.0 with bundled types, a narrow SMTP text-message interface, and file/URL access disabled. No raw-message or attachment input is exposed. NextAuth uses only its Credentials provider; its optional mail peer is absent. No peer override or advisory suppression is used. pnpm automatic peer installation is disabled; required Vite 8.3.8 is pinned explicitly, and `pnpm peers check` verifies the graph.
+
+Local/CI Mailpit 1.33.1 captures only generated test messages. It binds to loopback in development. It is not a production mail service. Hosted SMTP credentials, sender/domain verification and deliverability must be configured and verified before staging/production approval; no paid provider is assumed or provisioned.
+
+Verification tokens expire after 24 hours; recovery tokens after 30 minutes. Both use 32 random bytes, store SHA-256 hashes, are single-use, and are serialized against the account row. Resending supersedes prior links. Links use browser fragments, which are cleared before the explicit confirmation POST; Referrer-Policy is no-referrer. Password recovery revokes all sessions. Email text contains no creative content.
+
+The HTTP route schedules account lookup/token issuance and SMTP through Next’s after-response lifecycle. Registration itself commits account/workspace first. Delivery therefore occurs after database commit and outside the generic response latency. Failure returns the same generic acknowledgement and allows resend; this is not guaranteed/queued delivery. A transactional outbox would add operational storage and token-protection complexity and is deferred unless delivery needs justify it. Registration never replaces an existing account's password. Password reset cannot activate an unverified account. Non-loopback SMTP requires validated TLS/STARTTLS; OAuth mail authorization and user-controlled transports are not exposed.

@@ -1,0 +1,8 @@
+services:
+  mailpit:
+    image: axllent/mailpit:v1.33.1@sha256:aef2aacc11f075ec0fb6874275ee4a421e688e11a96ebb296134d1735c7761ce
+    ports:
+      - '127.0.0.1:${SMTP_PORT:-11025}:1025'
+      - '127.0.0.1:${MAILPIT_HTTP_PORT:-18025}:8025'
+    environment:
+      MP_MAX_MESSAGES: 500

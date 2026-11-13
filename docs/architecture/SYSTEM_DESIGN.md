@@ -2,7 +2,7 @@
 
 ## Current implementation
 
-Phase 0 provides a Next.js shell, operational REST routes, contract/domain packages, Prisma User/Workspace foundation, local PostgreSQL and engineering tooling. No auth flow or creative record API is implemented.
+Phase 1 adds Auth.js-compatible Credentials/JWT transport with a server-checked session registry, app-owned registration/verification/recovery, scoped project/story REST services, an authenticated dashboard and account settings. SMTP delivery is isolated in packages/mail. No paid provider, background AI, or hosted resource is required.
 
 ## Planned modular monolith
 

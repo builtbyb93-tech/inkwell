@@ -27,3 +27,9 @@ Release gates: acceptance evidence → reviewed PR → owner-approved merge → 
 ## Backups and unresolved prerequisites
 
 Choose encrypted protected off-host backup storage and retention with the owner. Back up both database and referenced assets; demonstrate restore in an isolated environment before production. No retention schedule, paid destination, public domain, SMTP provider or capacity target has been invented. Establish monitoring and redaction without sending private story content to third parties.
+
+## Phase 1 configuration, not provisioning
+
+Provide unique NEXTAUTH_SECRET (at least 32 characters), HTTPS NEXTAUTH_URL ending `/api/v1/auth`, dedicated DATABASE_URL, SMTP_HOST/PORT/FROM, and SMTP_USER/SMTP_PASSWORD where required. SMTP_SECURE selects implicit TLS; non-loopback delivery otherwise requires STARTTLS with certificate verification. Never reuse staging/production credentials. Configure the reverse proxy to strip incoming X-Forwarded-For before considering TRUST_PROXY=true; otherwise keep it false. CSP redirects and origin checks use configured public origin. Auth routes must not be cached. Health is dependency-independent; database readiness is not proof of SMTP deliverability or production authorization.
+
+Mailpit is local/CI only; do not deploy its unauthenticated inbox publicly. No hosted mail resource, database, application, storage, DNS, proxy setting or production secret was created or changed in Phase 1. Staging remains access-controlled and separately approved. Production migration `20261113010000_accounts_projects` requires a reviewed backup/recovery plan and separate owner approval. Its additive schema is proven only on disposable/local databases so far. Runtime SQL credentials must not be the migration superuser.

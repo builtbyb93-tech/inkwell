@@ -1,6 +1,6 @@
 # Data model
 
-Only **User** and **Workspace** are migrated in Phase 0. The following is the planned model, elaborated with each approved feature.
+Phase 0 migrated User/Workspace. Phase 1 adds password/verification/profile/revocation/version fields, AuthToken, AuthSession, RateLimitBucket, Project and Story through additive migration `20261113010000_accounts_projects`. The remaining aggregates below are planned.
 
 | Aggregate   | Records/invariants                                                                                                                                               |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,3 +24,11 @@ One canonical sequence per story independent of group/view. Moves coordinate on 
 ## Content and portability
 
 Persist validated versioned Tiptap JSON plus derived safe text. Bound size/node types/URL schemes. PostgreSQL FTS uses indexed tsvectors and ownership/archive predicates; dictionary choice is explicit. Validate import version/shape/limits, allocate IDs, remap all links, check scope and commit atomically. Stage assets privately, publish only committed manifests, clean failed staging.
+
+## Phase 1 integrity and concurrency
+
+Registration creates the User and its sole Workspace in one nested transaction; ownerId uniqueness rejects a second workspace. Tokens store hashes and UTC expiry/consumption; sessions store authVersion plus expiry/revocation. Account-row locking serializes token issue/consume/reset and prevents stale-password sign-in races. Seven-day sessions require both valid encrypted JWT and current registry/user state.
+
+Project belongs to Workspace. Story has its own Workspace FK and composite `(projectId,workspaceId)` FK to Project `(id,workspaceId)`; cross-workspace parents fail at the database boundary. Creative FKs restrict deletion. Every read/write includes workspace scope. Editable creative fields have integer versions; conditional writes compare version and increment atomically. Parent-row locking serializes story mutation against project archiving. Updating a child touches the parent's activity timestamp without changing the version of its editable fields.
+
+Archive/restore preserves children and original content. No permanent creative deletion exists. Migration is additive and has only been applied to disposable/local databases. A hosted migration/recovery plan and owner approval are still required before production. Security token/session retention and hosted runtime-role grants need operational review before public release.

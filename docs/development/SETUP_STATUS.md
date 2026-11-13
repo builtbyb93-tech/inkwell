@@ -1,5 +1,7 @@
 # Phase 0 setup status
 
+Current update: Phase 0 PR #39 merged at `9ca76167ec8a0c0ff58a914592715a21e64c7de1` after owner approval and all five passing checks on feature head `4d51b650a67535b243a9ae413222966f43640b69` (CI run 43452416799). Issues #1–#6 and milestone 1 are complete/closed. Phase 1 implementation is authorized on its isolated branch; its merge and all deployment remain gated. No invitations or review requests are authorized. The details below preserve the original setup history.
+
 The owner approved Phase 0 on 2026-11-13 and selected builtbyb93-tech. Merging, later milestones, VPS provisioning, production migrations/deployment, destructive actions and DNS changes remain outside that authorization.
 
 ## Published resources

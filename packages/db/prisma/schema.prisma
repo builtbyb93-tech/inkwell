@@ -7,19 +7,103 @@ datasource db {
   provider = "postgresql"
 }
 
-// Foundation only: no registration, sessions or user-facing CRUD in Phase 0.
 model User {
-  id        String     @id @default(uuid()) @db.Uuid
-  email     String     @unique
-  createdAt DateTime   @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime   @updatedAt @db.Timestamptz(3)
-  workspace Workspace?
+  id              String        @id @default(uuid()) @db.Uuid
+  email           String        @unique
+  createdAt       DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime      @updatedAt @db.Timestamptz(3)
+  workspace       Workspace?
+  passwordHash    String?
+  emailVerifiedAt DateTime?     @db.Timestamptz(3)
+  displayName     String        @default("")
+  authVersion     Int           @default(0)
+  version         Int           @default(1)
+  aiEnabled       Boolean       @default(false)
+  tokens          AuthToken[]
+  sessions        AuthSession[]
 }
 
 model Workspace {
-  id        String   @id @default(uuid()) @db.Uuid
-  ownerId   String   @unique @db.Uuid
-  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  id        String    @id @default(uuid()) @db.Uuid
+  ownerId   String    @unique @db.Uuid
+  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
+  projects  Project[]
+  stories   Story[]
+}
+
+enum TokenPurpose {
+  VERIFY_EMAIL
+  RESET_PASSWORD
+}
+
+model AuthToken {
+  id         String       @id @default(uuid()) @db.Uuid
+  userId     String       @db.Uuid
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose    TokenPurpose
+  tokenHash  String       @unique
+  expiresAt  DateTime     @db.Timestamptz(3)
+  consumedAt DateTime?    @db.Timestamptz(3)
+  createdAt  DateTime     @default(now()) @db.Timestamptz(3)
+
+  @@index([userId, purpose])
+  @@index([expiresAt])
+}
+
+model AuthSession {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  authVersion Int
+  expiresAt   DateTime  @db.Timestamptz(3)
+  revokedAt   DateTime? @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+model RateLimitBucket {
+  id          String   @id @default(uuid()) @db.Uuid
+  keyHash     String
+  windowStart DateTime @db.Timestamptz(3)
+  count       Int      @default(1)
+
+  @@unique([keyHash, windowStart])
+  @@index([windowStart])
+}
+
+model Project {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @db.Uuid
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  title       String
+  description String    @default("")
+  version     Int       @default(1)
+  archivedAt  DateTime? @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+  stories     Story[]
+
+  @@unique([id, workspaceId])
+  @@index([workspaceId, archivedAt, createdAt, id])
+}
+
+model Story {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @db.Uuid
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId   String    @db.Uuid
+  project     Project   @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  title       String
+  synopsis    String    @default("")
+  format      String    @default("")
+  version     Int       @default(1)
+  archivedAt  DateTime? @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@index([workspaceId, projectId, archivedAt, createdAt, id])
 }

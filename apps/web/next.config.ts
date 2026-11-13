@@ -16,10 +16,6 @@ const config: NextConfig = {
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'Referrer-Policy', value: 'no-referrer' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-          {
-            key: 'Content-Security-Policy',
-            value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
-          },
         ],
       },
       {
