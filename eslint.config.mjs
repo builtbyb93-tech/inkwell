@@ -18,6 +18,12 @@ export default [
     },
   },
   {
+    files: ['apps/web/public/sw.js'],
+    languageOptions: {
+      globals: { self: 'readonly', caches: 'readonly', fetch: 'readonly', Response: 'readonly' },
+    },
+  },
+  {
     files: ['apps/web/**/*.tsx'],
     plugins: { '@next/next': nextPlugin },
     rules: {

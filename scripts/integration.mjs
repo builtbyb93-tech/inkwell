@@ -24,13 +24,24 @@ const testEnv = {
 assertLocalTestStorage();
 let created = false;
 let exitCode = 1;
+admin.on('error', () => {
+  console.error('Isolated test database connection failed.');
+  exitCode = 1;
+});
 try {
   // name is generated locally from a UUID, never interpolated from user input.
   await admin.query(`CREATE DATABASE "${name}"`);
   created = true;
   for (const args of [
     ['node', 'scripts/database.mjs', 'migrate', 'deploy'],
-    ['pnpm', 'exec', 'vitest', 'run', '--project', 'integration'],
+    [
+      'pnpm',
+      'exec',
+      'vitest',
+      'run',
+      '--project',
+      process.argv.includes('--backup') ? 'backup' : 'integration',
+    ],
   ]) {
     const [command, ...rest] = args;
     const result = spawnSync(command, rest, { env: testEnv, stdio: 'inherit' });
@@ -50,6 +61,13 @@ try {
       connectionString: target.toString(),
       connectionTimeoutMillis: 3000,
     });
+    let closingCleanup = false;
+    cleanup.on('error', (error) => {
+      if (!(closingCleanup && error.code === '57P01')) {
+        console.error('Isolated cleanup connection failed.');
+        exitCode = 1;
+      }
+    });
     try {
       const result = await cleanup.query('SELECT "objectKey" FROM "Snapshot"');
       const objects = s3Storage();
@@ -60,6 +78,7 @@ try {
         exitCode = 1;
       }
     } finally {
+      closingCleanup = true;
       await cleanup.end();
     }
     await admin.query(`DROP DATABASE "${name}" WITH (FORCE)`);

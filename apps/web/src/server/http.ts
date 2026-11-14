@@ -1,5 +1,5 @@
 import 'server-only';
-import { randomUUID } from 'node:crypto';
+import { reportFailure } from './observability';
 import { NextResponse } from 'next/server';
 import { expectedVersion } from '@inkwell/domain';
 import type { ApiErrorCode } from '@inkwell/contracts';
@@ -30,7 +30,10 @@ export function failure(error: unknown) {
         message: known
           ? error.message
           : 'This service is temporarily unavailable. Please try again.',
-        requestId: randomUUID(),
+        requestId: reportFailure(
+          known ? error.status : 503,
+          known ? error.code : 'SERVICE_UNAVAILABLE',
+        ),
       },
     },
     { status: known ? error.status : 503, headers: { 'Cache-Control': 'no-store' } },

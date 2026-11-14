@@ -1,0 +1,67 @@
+# Template only. No provisioning or deployment is activated by committing this.
+# Validate configuration and obtain the environment-specific approval first.
+name: inkwell_${INKWELL_ENV:?Set staging or production after approval}
+services:
+  app:
+    image: ${INKWELL_IMAGE:?Use an approved image digest}
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL:?Dedicated runtime login only}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:?Set the approved origin}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?Set a unique secret}
+      SMTP_HOST: ${SMTP_HOST:?Set approved SMTP}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_FROM: ${SMTP_FROM:?Set approved sender}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:?Set scoped SMTP login}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:?Set scoped SMTP credential}
+      TRUST_PROXY: ${TRUST_PROXY:-false}
+      S3_ENDPOINT: http://127.0.0.1:3900
+      S3_REGION: inkwell
+      S3_BUCKET: ${S3_BUCKET:?Dedicated private bucket}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?Scoped runtime identity}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?Scoped runtime credential}
+    ports: ['127.0.0.1:${APP_BIND_PORT:?Choose the approved loopback port}:3000']
+    depends_on:
+      postgres: { condition: service_healthy }
+    read_only: true
+    tmpfs: ['/tmp:mode=1777,size=64m']
+    security_opt: ['no-new-privileges:true']
+    cap_drop: [ALL]
+    mem_limit: 768m
+    cpus: 0.75
+    restart: unless-stopped
+  postgres:
+    image: postgres:17.12-bookworm@sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Separate migration owner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Owner credential never passed to app}
+      POSTGRES_DB: ${POSTGRES_DB:?Dedicated database}
+    volumes: ['postgres_data:/var/lib/postgresql/data']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 512m
+    cpus: 0.5
+    restart: unless-stopped
+  garage:
+    image: dxflrs/garage:v2.5.0@sha256:677e5b758e4425a325b811c425c026bf35a4bf42f7ddbaa773de3f4fd779a5a5
+    command: ['/garage', '-c', '/etc/garage.toml', 'server']
+    # Private loopback S3 within app's network namespace. No public S3/admin/RPC
+    # ports or HTTP exception for remote endpoints; one app replica per MVP env.
+    network_mode: service:app
+    volumes:
+      - ${GARAGE_CONFIG_FILE:?Protected absolute configuration path}:/etc/garage.toml:ro
+      - garage_meta:/var/lib/garage/meta
+      - garage_data:/var/lib/garage/data
+    mem_limit: 384m
+    cpus: 0.25
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  garage_meta:
+  garage_data:

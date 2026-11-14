@@ -10,6 +10,7 @@ export function proxy(request: NextRequest) {
     "img-src 'self' data:",
     "font-src 'self'",
     `connect-src 'self'${dev ? ' ws:' : ''}`,
+    "worker-src 'self'",
     "object-src 'none'",
     "base-uri 'none'",
     "frame-ancestors 'none'",
@@ -21,10 +22,11 @@ export function proxy(request: NextRequest) {
   const response = NextResponse.next({ request: { headers } });
   response.headers.set('Content-Security-Policy', policy);
   response.headers.set('Cache-Control', 'private, no-store');
+  response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   return response;
 }
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|icon|manifest.webmanifest|robots.txt).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|icon|manifest.webmanifest|sw.js|offline.html|robots.txt).*)',
   ],
 };

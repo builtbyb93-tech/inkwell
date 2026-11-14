@@ -68,3 +68,9 @@ The private version 1 archive includes archived content, canon override bases, s
 Open **Snapshot sharing** or a project's **Share selected content** action. Choose records and optional connections, create a private frozen copy, preview it, then explicitly choose link expiry and JSON download permission. Source edits stay private. Revoke links from the same preview; raw links are shown only once. Shared copies contain new IDs and no live private traversal. Revocation blocks future requests; it cannot recall content recipients already copied.
 
 For local/CI sharing tests, run `pnpm storage:local` after configuring the worktree's local .env; it creates an isolated private Garage service and ignored credentials. Then run the normal integration/browser suites. Do not point test tooling at hosted storage. Hosted S3 configuration, backup/restore and Coolify activation remain separately approved release work. See ADR-012 and the API/security/deployment plans.
+
+## Release candidate operations
+
+Phase 7 adds an online-first PWA with public-only offline assets, bounded redacted error events, replica-coordinated rate-limit proof, least-privilege SQL grant profiles and an authenticated encrypted backup rehearsal. Run `pnpm test:backup` separately from the main SQL suite; it creates its own disposable database and restore bucket. `pnpm backup:local retention-plan` never deletes backups. See [backup and restore](docs/deployment/BACKUP_RESTORE.md), [release runbook](docs/deployment/RELEASE_RUNBOOK.md) and [ADR-013](docs/decisions/013-release-hardening.md).
+
+`pnpm release:check` checks populated private configuration without printing it or deploying; `pnpm release:compose-check` checks only synthetic Compose syntax. Hosted staging, off-host storage/SMTP verification and all production migration/deployment remain separate owner gates. Coolify is the deployment target; no unrelated service or public DNS is modified by these commands.

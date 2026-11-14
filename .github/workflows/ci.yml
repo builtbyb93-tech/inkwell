@@ -28,6 +28,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm db:validate
+      - run: pnpm release:compose-check
 
   integration:
     runs-on: ubuntu-24.04
@@ -67,6 +68,7 @@ jobs:
           S3_BUCKET: inkwell-ci
           S3_PORT: 13906
       - run: pnpm test:integration
+      - run: pnpm test:backup
 
   browser:
     runs-on: ubuntu-24.04
@@ -117,10 +119,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: docker build -f deploy/Dockerfile -t inkwell:ci .
-      - name: Verify non-root runtime and liveness
+      - name: Verify restricted non-root runtime and liveness
         run: |
           test "$(docker image inspect inkwell:ci --format '{{.Config.User}}')" = node
-          docker run --detach --name inkwell-ci --publish 127.0.0.1:3300:3000 inkwell:ci
+          docker run --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m --cap-drop ALL --security-opt no-new-privileges --detach --name inkwell-ci --publish 127.0.0.1:3300:3000 inkwell:ci
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:3300/api/v1/health; then exit 0; fi
             sleep 1
