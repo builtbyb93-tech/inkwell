@@ -547,3 +547,59 @@ test('Quick Capture restores an interrupted thought and clears even an in-flight
     0,
   );
 });
+
+test('a cached recovery candidate cannot be restored after a tab resumes past its expiry', async ({
+  page,
+  context,
+  baseURL,
+}) => {
+  await verifiedAuthor(context.request, baseURL!);
+  const r = await idea(context.request, baseURL!);
+  await page.route('**/api/v1/draft-saves', (route) => route.abort('failed'));
+  await page.goto('/ideas/' + r.id);
+  await page.getByLabel('Idea title', { exact: true }).fill('A draft that must expire');
+  await expect(page.locator('.reliability-panel')).toContainText('Draft protected on this device');
+  await page.reload();
+  await expect(
+    page.getByRole('button', { name: 'Restore device draft', exact: true }),
+  ).toBeVisible();
+  await page.clock.install();
+  await page.clock.setSystemTime(new Date(Date.now() + 8 * 86400000));
+  await page.getByRole('button', { name: 'Restore device draft', exact: true }).click();
+  await expect(page.locator('.reliability-panel')).toContainText(
+    'This device draft expired or was cleared.',
+  );
+  await expect(page.getByRole('button', { name: 'Restore device draft', exact: true })).toHaveCount(
+    0,
+  );
+  await expect(page.getByLabel('Idea title', { exact: true })).toHaveValue('Lantern original');
+  await expect.poll(async () => (await stored(page)).count).toBe(0);
+  expect((await (await context.request.get('/api/v1/ideas/' + r.id)).json()).data).toMatchObject({
+    version: 1,
+    title: 'Lantern original',
+  });
+});
+
+test('a recovery write queued before suspension cannot renew a seven-day-old unedited draft', async ({
+  page,
+  context,
+  baseURL,
+}) => {
+  await verifiedAuthor(context.request, baseURL!);
+  await page.goto('/ideas/new');
+  await page.getByLabel('Idea title', { exact: true }).fill('');
+  await expect(page.getByRole('button', { name: 'Create idea', exact: true })).toBeEnabled();
+  await page.clock.install();
+  await page.clock.pauseAt(new Date(Date.now() + 1000));
+  await page.getByLabel('Idea title', { exact: true }).fill('A queued draft that must expire');
+  await expect(page.getByRole('form', { name: 'Edit idea' }).getByRole('status')).toHaveText(
+    'Unsaved changes',
+  );
+  await page.clock.setSystemTime(new Date(Date.now() + 8 * 86400000));
+  await page.clock.runFor(200);
+  await expect(page.locator('.reliability-panel')).toContainText('This device draft expired.');
+  await expect.poll(async () => (await stored(page)).count).toBe(0);
+  await expect(page.getByLabel('Idea title', { exact: true })).toHaveValue(
+    'A queued draft that must expire',
+  );
+});

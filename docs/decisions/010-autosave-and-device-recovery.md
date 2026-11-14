@@ -17,3 +17,7 @@ Authenticated layout supplies account/workspace scope and an HMAC session partit
 Alternatives: localStorage lacks transactional purge guards and stores readable content; server revisions introduce an unresolved retention system. Neither is needed for this online-first milestone. No offline editing promise, background synchronization or service-worker caching of private content is introduced.
 
 Quick Capture uses the same optional device-recovery store and explicit creation boundary. Successful creation/discard/unchanged-save acknowledgement invalidates pending buffer tasks before clearing; queued or in-flight local encryption cannot leave a stale “new record” draft after its successful capture.
+
+Restore re-reads and validates the stored buffer at the explicit action boundary, including expiry after tab suspension. An expired/cleared candidate is discarded; a replaced buffer is offered for another explicit restore rather than silently applying a cached copy. Cached candidate fields cannot renew an already-expired buffer.
+
+Expiry is measured from the last field edit, rather than the eventual storage-write time. A debounce/encryption operation delayed by suspension cannot refresh an unedited seven-day-old buffer. Online persistence and the visible live editor remain independent of recovery availability.

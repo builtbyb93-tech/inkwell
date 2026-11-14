@@ -96,6 +96,7 @@ export async function putRecovery(
   slot: string,
   version: number,
   fields: unknown,
+  editedAt: number,
 ) {
   const text = JSON.stringify({ version, fields });
   if (new TextEncoder().encode(text).byteLength > recoveryMaxBytes)
@@ -141,12 +142,19 @@ export async function putRecovery(
       'Device recovery is full. Clear drafts in Account & privacy, or save online.',
     );
   }
+  const expiresAt = editedAt + recoveryDays * 86400000;
+  if (!Number.isFinite(editedAt) || expiresAt <= now) {
+    await done;
+    throw new RecoveryStorageError(
+      'This device draft expired. Save online or make a new edit to protect it.',
+    );
+  }
   store.put({
     id,
     owner: lease.owner,
     slot,
-    expiresAt: now + recoveryDays * 86400000,
-    savedAt: now,
+    expiresAt,
+    savedAt: editedAt,
     iv,
     cipher,
   } satisfies Stored);

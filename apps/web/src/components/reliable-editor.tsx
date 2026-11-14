@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 import {
   DraftSaveInput,
+  recoveryDays,
   type DraftSaveAck,
   RichDocumentSchema,
   CanonKind,
@@ -95,6 +96,7 @@ export function useReliableEditor<F>(options: Options<F>) {
     alive: true,
   });
   const chain = useRef<Promise<unknown>>(Promise.resolve());
+  const editedAt = useRef(Date.now());
   const serialized = canonicalJson(options.fields),
     dirty = serialized !== basis;
   function setBase(fields: F, version: number) {
@@ -147,6 +149,7 @@ export function useReliableEditor<F>(options: Options<F>) {
     let live = true;
     setChecking(true);
     if (!recovery.lease?.enabled) {
+      setCandidate(null);
       setChecking(false);
       return;
     }
@@ -176,15 +179,19 @@ export function useReliableEditor<F>(options: Options<F>) {
     // Recheck when settings rotate the lease; field edits must not reread old buffers.
   }, [options.slot, options.loaded, recovery.ready, recovery.lease?.generation]);
   useEffect(() => {
+    editedAt.current = Date.now();
+  }, [serialized]);
+  useEffect(() => {
     if (!options.loaded || checking || candidate || !recovery.lease?.enabled || !dirty) return;
     const lease = recovery.lease,
       slot = options.slot,
       fields = options.fields,
-      epoch = state.current.epoch;
+      epoch = state.current.epoch,
+      editTime = editedAt.current;
     const timer = setTimeout(() => {
       void queue(async () => {
         if (epoch !== state.current.epoch) return;
-        await putRecovery(lease, slot, state.current.version, fields);
+        await putRecovery(lease, slot, state.current.version, fields, editTime);
         if (state.current.alive) setDevice('Draft protected on this device for seven days.');
       });
     }, 100);
@@ -338,14 +345,48 @@ export function useReliableEditor<F>(options: Options<F>) {
   }
   async function restore() {
     if (!candidate) return;
-    const r = candidate;
-    latest.current.apply(r.fields);
-    state.current.version = r.version;
-    setCandidate(null);
-    if (r.version !== latest.current.version) {
-      state.current.halt = true;
-      setConflict(true);
-      setError('This recovered draft used an older revision. Compare before saving.');
+    const lease = recovery.lease;
+    if (!lease?.enabled) {
+      setCandidate(null);
+      setDevice('This device draft was cleared.');
+      return;
+    }
+    try {
+      // Re-read at the explicit action boundary: this tab may have been suspended
+      // past expiry, or another tab may have replaced/cleared the buffer.
+      const stored = await getRecovery(lease, latest.current.slot);
+      if (!stored || stored.savedAt + recoveryDays * 86400000 <= Date.now()) {
+        setCandidate(null);
+        state.current.epoch++;
+        setDevice('This device draft expired or was cleared.');
+        return;
+      }
+      const parsed = latest.current.schema.safeParse(stored.fields);
+      if (!parsed.success) {
+        setCandidate(null);
+        setDevice('This device draft is incompatible. Clear it in Account & privacy.');
+        return;
+      }
+      if (
+        stored.savedAt !== candidate.savedAt ||
+        stored.version !== candidate.version ||
+        canonicalJson(parsed.data) !== canonicalJson(candidate.fields)
+      ) {
+        setCandidate({ ...stored, fields: parsed.data });
+        setDevice('A newer device draft is available. Review its date before restoring.');
+        return;
+      }
+      latest.current.apply(parsed.data);
+      state.current.version = stored.version;
+      setCandidate(null);
+      if (stored.version !== latest.current.version) {
+        state.current.halt = true;
+        setConflict(true);
+        setError('This recovered draft used an older revision. Compare before saving.');
+      }
+    } catch {
+      setCandidate(null);
+      setDevice('This device draft could not be verified. Reload before restoring.');
     }
   }
   async function discardCandidate() {
