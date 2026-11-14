@@ -333,10 +333,32 @@
       "s3": 13906,
       "app": 3005,
       "e2e": 3600
-    }
+    },
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/45",
+    "mergeStatus": "merged",
+    "mergeCommit": "acb47ef83ef463f14425ca5113edf2618032745e"
   },
   "phase7BackupPolicy": {
     "dailyBackups": 30,
     "activation": "Requires approved protected off-host destination; no hosted activation or deletion authorized"
+  },
+  "phase7": {
+    "issues": [34, 35, 36, 37, 38],
+    "branch": "feature/34-release-hardening",
+    "worktree": "/workspace/inkwell-worktrees/phase-7",
+    "baseCommit": "acb47ef83ef463f14425ca5113edf2618032745e",
+    "target": "main",
+    "mergeAuthorized": true,
+    "deploymentAuthorized": false,
+    "resources": {
+      "compose": "inkwell_phase7",
+      "postgres": 55439,
+      "smtp": 11031,
+      "mailpit": 18031,
+      "s3": 13907,
+      "app": 3006,
+      "e2e": 3700
+    },
+    "hostedStatus": "Not provisioned; separately approved staging and operational validation remain"
   }
 }

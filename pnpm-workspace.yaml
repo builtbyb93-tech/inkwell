@@ -8,3 +8,7 @@ allowBuilds:
 
 # Only explicit, supported providers are installed; unused optional auth peers stay absent.
 autoInstallPeers: false
+
+# Reviewed Phase 7 security fix; matching API exercised by lint and regression checks.
+overrides:
+  'minimatch@>=7 <11': 11.0.2

@@ -25,6 +25,10 @@ const admin = new pg.Pool({ connectionString: raw, connectionTimeoutMillis: 3000
 assertLocalTestStorage();
 let created = false;
 let code = 1;
+admin.on('error', () => {
+  console.error('Isolated test database connection failed.');
+  code = 1;
+});
 try {
   const mail = new URL(process.env.MAILPIT_URL ?? 'http://127.0.0.1:18025');
   if (!['127.0.0.1', 'localhost'].includes(mail.hostname)) throw new Error('Local mail required.');
@@ -53,6 +57,13 @@ try {
       connectionString: target.toString(),
       connectionTimeoutMillis: 3000,
     });
+    let closingCleanup = false;
+    cleanup.on('error', (error) => {
+      if (!(closingCleanup && error.code === '57P01')) {
+        console.error('Isolated cleanup connection failed.');
+        code = 1;
+      }
+    });
     try {
       const result = await cleanup.query('SELECT "objectKey" FROM "Snapshot"');
       const objects = s3Storage();
@@ -63,6 +74,7 @@ try {
         code = 1;
       }
     } finally {
+      closingCleanup = true;
       await cleanup.end();
     }
     await admin.query(`DROP DATABASE "${name}" WITH (FORCE)`);

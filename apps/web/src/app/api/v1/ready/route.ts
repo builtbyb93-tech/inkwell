@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { reportFailure } from '@/server/observability';
 import type { ApiError, HealthResponse } from '@inkwell/contracts';
 import { isReady } from '@/server/readiness';
 
@@ -17,7 +17,7 @@ export async function GET() {
       error: {
         code: 'SERVICE_UNAVAILABLE',
         message: 'Service is not ready.',
-        requestId: randomUUID(),
+        requestId: reportFailure(503, 'SERVICE_UNAVAILABLE'),
       },
     } satisfies ApiError,
     { status: 503, headers },

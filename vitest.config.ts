@@ -16,6 +16,15 @@ export default defineConfig({
           fileParallelism: false,
         },
       },
+      {
+        test: {
+          name: 'backup',
+          testTimeout: 60000,
+          environment: 'node',
+          include: ['tests/integration/backup.test.mjs'],
+          fileParallelism: false,
+        },
+      },
     ],
   },
 });

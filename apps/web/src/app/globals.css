@@ -71,6 +71,7 @@ summary {
   min-height: 100vh;
 }
 .skip-link {
+  max-width: calc(100vw - 2rem);
   position: fixed;
   left: 1rem;
   top: -5rem;
@@ -269,6 +270,7 @@ h2 {
   }
   .mobile-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -406,7 +408,7 @@ textarea {
 }
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 1.25rem;
   margin-bottom: 1.25rem;
 }
@@ -836,4 +838,8 @@ fieldset {
   font: inherit;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.workspace-card h2 {
+  overflow-wrap: anywhere;
 }
