@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -91,7 +92,7 @@ export function PlotGroupList({ context: c }: { context: PlotContext }) {
     </section>
   );
 }
-export function PlotGroupEditor({
+function PlotGroupEditorInstance({
   context: c,
   groupId,
 }: {
@@ -113,6 +114,7 @@ export function PlotGroupEditor({
   const path = plotPath(c, '/groups' + (groupId ? '/' + groupId : '')),
     base = plotPath(c, '/groups');
   function accept(r: PlotGroupRecord) {
+    reliable.reset({ title: r.title, description: r.description, parentId: r.parentId }, r.version);
     setRow(r);
     setTitle(r.title);
     setDescription(r.description);
@@ -157,9 +159,35 @@ export function PlotGroupEditor({
       live = false;
     };
   }, [base, groupCursor]);
-  const dirty = row
-    ? title !== row.title || description !== row.description || parent !== (row.parentId ?? '')
-    : Boolean(title || description || parent);
+  const snapshot = (r: PlotGroupRecord) => ({
+    title: r.title,
+    description: r.description,
+    parentId: r.parentId,
+  });
+  const reliable = useReliableEditor({
+    kind: 'GROUP',
+    slot: path,
+    recordId: groupId,
+    projectId: c.projectId,
+    storyId: c.storyId,
+    version: row?.version ?? 0,
+    fields: { title, description, parentId: parent || null },
+    baseline: row ? snapshot(row) : { title: '', description: '', parentId: null },
+    schema: draftSchemas.GROUP,
+    loaded: !loading,
+    enabled: !pending && !row?.archivedAt,
+    apply: (f) => {
+      setTitle(f.title);
+      setDescription(f.description);
+      setParent(f.parentId ?? '');
+    },
+    ack: (f, v) => setRow((old) => (old ? { ...old, ...f, version: v } : old)),
+    current: async () => {
+      const r = await api<PlotGroupRecord>(path);
+      return { version: r.version, fields: snapshot(r) };
+    },
+  });
+  const dirty = reliable.dirty;
   async function save(body: unknown) {
     setPending(true);
     setError('');
@@ -171,6 +199,7 @@ export function PlotGroupEditor({
         ...(row ? { version: row.version } : {}),
       });
       if (!groupId) {
+        await reliable.created();
         navigating = true;
         router.push(plotUrl(c, '/groups/' + r.id));
         return;
@@ -202,7 +231,11 @@ export function PlotGroupEditor({
             aria-label="Edit plot group"
             onSubmit={(e) => {
               e.preventDefault();
-              void save({ title, description, parentId: parent || null });
+              if (groupId)
+                void reliable.flush().then((ok) => {
+                  if (ok) setStatus('Plot group saved.');
+                });
+              else void save({ title, description, parentId: parent || null });
             }}
           >
             <fieldset disabled={!ready || pending || Boolean(row?.archivedAt)}>
@@ -260,6 +293,7 @@ export function PlotGroupEditor({
           <p role="status" className="save-state">
             {dirty ? 'Unsaved group changes' : status || 'Showing saved group'}
           </p>
+          <ReliableStatus editor={reliable} />
           {error && (
             <p role="alert" className="form-error">
               {error} Your edits are still here.
@@ -269,14 +303,14 @@ export function PlotGroupEditor({
             <div className="inline-actions">
               <button
                 className="quiet-button"
-                disabled={!ready || pending || dirty}
+                disabled={!ready || pending || dirty || reliable.blocked}
                 onClick={() => void save({ archived: !row.archivedAt })}
               >
                 {row.archivedAt ? 'Restore plot group' : 'Archive plot group'}
               </button>
               <button
                 className="quiet-button"
-                disabled={!ready || pending}
+                disabled={!ready || pending || reliable.saving}
                 onClick={async () => {
                   setPending(true);
                   try {
@@ -297,5 +331,14 @@ export function PlotGroupEditor({
         </>
       )}
     </section>
+  );
+}
+
+export function PlotGroupEditor(props: Parameters<typeof PlotGroupEditorInstance>[0]) {
+  return (
+    <PlotGroupEditorInstance
+      key={props.context.projectId + ':' + props.context.storyId + ':' + (props.groupId ?? 'new')}
+      {...props}
+    />
   );
 }

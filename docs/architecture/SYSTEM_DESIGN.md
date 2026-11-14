@@ -27,3 +27,7 @@ See ADRs for stable authentication, S3 choice and private-repository protection.
 ## Phase 3 Story Bible
 
 Project and story Bible routes use the same versioned REST services and scoped transactions as future native clients. Portable Zod contracts describe record kinds, field-presence override modes, review decisions and typed relationships. Pure domain rules compare fields and validate endpoint kinds. Server-only Prisma services authorize every context/source/destination. Separate list, record, override/review and relationship components reuse Tiptap and safe rendering. No paid service, external AI or background task is required. See ADR-007.
+
+## Phase 5
+
+Workspace search uses qualified PostgreSQL FTS unions and effective override indexes (ADR-009). A shared client save/recovery coordinator serializes optimistic writes, keeps newer typing and exposes explicit conflict comparison. Content-free transactional receipts make retries acknowledge the original applied version; IndexedDB recovery remains optional and account/session partitioned (ADR-010). Versioned project archives use strict reusable contracts/graph validation and an all-or-nothing remapping transaction (ADR-011). No AI, paid service, asset upload, server content history or private offline cache is required.

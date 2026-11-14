@@ -1,3 +1,4 @@
+import { ProjectExport } from '@/components/project-portability';
 import Link from 'next/link';
 import { RecordEditor, RecordList } from '@/components/records';
 import { requireAccount } from '@/server/page-account';
@@ -14,6 +15,7 @@ export default async function Project({ params }: { params: Promise<{ projectId:
       </Link>
       <RecordEditor recordId={projectId} />
       <RecordList projectId={projectId} />
+      <ProjectExport projectId={projectId} />
     </div>
   );
 }

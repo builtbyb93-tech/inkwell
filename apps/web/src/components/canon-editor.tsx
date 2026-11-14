@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,7 +12,13 @@ import { useHydrated } from './use-hydrated';
 import { CanonOverrideEditor } from './canon-override';
 import { CanonRelations } from './canon-relations';
 import { CanonSceneReferences } from './scene-references';
-export function CanonDetail({ context: c, recordId }: { context: BibleContext; recordId: string }) {
+function CanonDetailInstance({
+  context: c,
+  recordId,
+}: {
+  context: BibleContext;
+  recordId: string;
+}) {
   const [row, setRow] = useState<CanonRecord | null>(null),
     [error, setError] = useState('');
   const path = canonPath(c, recordId);
@@ -56,7 +63,7 @@ export function CanonDetail({ context: c, recordId }: { context: BibleContext; r
     </div>
   );
 }
-export function CanonEditor({
+function CanonEditorInstance({
   context: c,
   initial,
 }: {
@@ -73,10 +80,48 @@ export function CanonEditor({
     [error, setError] = useState(''),
     [saved, setSaved] = useState(''),
     [editorKey, setEditorKey] = useState(0);
-  const dirty = row
-    ? name !== row.name || JSON.stringify(content) !== JSON.stringify(row.content)
-    : Boolean(name) || JSON.stringify(content) !== JSON.stringify(plainDocument(''));
+  const snapshot = (r: CanonRecord) => ({ kind: r.kind, name: r.name, content: r.content });
+  const reliable = useReliableEditor({
+    kind: 'CANON',
+    slot: canonPath(c, row?.id),
+    recordId: row?.id,
+    projectId: c.projectId,
+    storyId: c.storyId,
+    version: row?.version ?? 0,
+    fields: { kind, name, content },
+    baseline: row
+      ? snapshot(row)
+      : { kind: 'CHARACTER' as const, name: '', content: plainDocument('') },
+    schema: draftSchemas.CANON,
+    loaded: true,
+    enabled: !pending && !row?.archivedAt,
+    saveFields: (f) => ({ name: f.name, content: f.content }),
+    apply: (f) => {
+      setKind(f.kind);
+      setName(f.name);
+      setContent(f.content);
+      setEditorKey((n) => n + 1);
+    },
+    ack: (f, v) =>
+      setRow((old) =>
+        old
+          ? {
+              ...old,
+              name: f.name,
+              content: f.content,
+              effective: { name: f.name, content: f.content },
+              version: v,
+            }
+          : old,
+      ),
+    current: async () => {
+      const r = await api<CanonRecord>(canonPath(c, row?.id));
+      return { version: r.version, fields: snapshot(r) };
+    },
+  });
+  const dirty = reliable.dirty;
   function accept(r: CanonRecord) {
+    reliable.reset(snapshot(r), r.version);
     setRow(r);
     setName(r.name);
     setContent(r.content);
@@ -92,6 +137,7 @@ export function CanonEditor({
         ...(row ? { version: row.version } : {}),
       });
       if (!row) {
+        await reliable.created();
         router.push(bibleUrl(c, r.id));
         return;
       }
@@ -119,7 +165,11 @@ export function CanonEditor({
         aria-label="Edit canon"
         onSubmit={(e) => {
           e.preventDefault();
-          void action({ ...(row ? {} : { kind }), name, content });
+          if (row)
+            void reliable.flush().then((ok) => {
+              if (ok) setSaved('Saved.');
+            });
+          else void action({ kind, name, content });
         }}
       >
         <fieldset disabled={!ready || pending || Boolean(row?.archivedAt)}>
@@ -165,6 +215,7 @@ export function CanonEditor({
           {dirty ? 'Unsaved changes' : saved || 'All changes saved'}
         </p>
       </form>
+      <ReliableStatus editor={reliable} />
       {error && (
         <p role="alert" className="form-error">
           {error} Your draft is still here.
@@ -174,7 +225,7 @@ export function CanonEditor({
         <div className="inline-actions">
           <button
             className="quiet-button"
-            disabled={!ready || pending}
+            disabled={!ready || pending || reliable.saving}
             onClick={async () => {
               setPending(true);
               try {
@@ -192,7 +243,7 @@ export function CanonEditor({
           </button>
           <button
             className="quiet-button"
-            disabled={!ready || pending || dirty}
+            disabled={!ready || pending || dirty || reliable.blocked}
             onClick={() => void action({ archived: !row.archivedAt })}
           >
             {row.archivedAt ? 'Restore canon' : 'Archive canon'}
@@ -206,5 +257,29 @@ export function CanonEditor({
         </details>
       )}
     </section>
+  );
+}
+
+export function CanonDetail(props: Parameters<typeof CanonDetailInstance>[0]) {
+  return (
+    <CanonDetailInstance
+      key={props.context.projectId + ':' + (props.context.storyId ?? '') + ':' + props.recordId}
+      {...props}
+    />
+  );
+}
+
+export function CanonEditor(props: Parameters<typeof CanonEditorInstance>[0]) {
+  return (
+    <CanonEditorInstance
+      key={
+        props.context.projectId +
+        ':' +
+        (props.context.storyId ?? '') +
+        ':' +
+        (props.initial?.id ?? 'new')
+      }
+      {...props}
+    />
   );
 }

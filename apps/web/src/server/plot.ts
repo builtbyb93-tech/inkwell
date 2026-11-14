@@ -187,8 +187,9 @@ export async function updateGroup(
   groupId: string,
   version: number,
   input: z.infer<typeof PlotGroupPatch>,
+  transaction?: Tx,
 ) {
-  return database().$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     await plotContext(tx, a, c, true);
     const row = await requireGroup(tx, a, c, groupId);
     if (row.version !== version) conflict();
@@ -224,7 +225,8 @@ export async function updateGroup(
     if (!updated.count) conflict();
     await bumpSequence(tx, a, c);
     return groupDto(await requireGroup(tx, a, c, groupId));
-  });
+  };
+  return transaction ? perform(transaction) : database().$transaction(perform);
 }
 export async function getScene(a: AccountRecord, c: PlotContext, sceneId: string) {
   return database().$transaction(
@@ -263,8 +265,9 @@ export async function updateScene(
   sceneId: string,
   version: number,
   input: z.infer<typeof ScenePatch>,
+  transaction?: Tx,
 ) {
-  return database().$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     await plotContext(tx, a, c, true);
     const row = await requireScene(tx, a, c, sceneId);
     if (row.version !== version) conflict();
@@ -290,7 +293,8 @@ export async function updateScene(
     if (input.archived !== undefined && Boolean(row.archivedAt) !== input.archived)
       await bumpSequence(tx, a, c);
     return sceneDto(await requireScene(tx, a, c, sceneId));
-  });
+  };
+  return transaction ? perform(transaction) : database().$transaction(perform);
 }
 export async function moveScene(
   a: AccountRecord,

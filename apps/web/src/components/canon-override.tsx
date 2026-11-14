@@ -1,6 +1,7 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { plainDocument, type CanonRecord, type RichDocument } from '@inkwell/contracts';
 import { RichTextEditor } from '@inkwell/editor/react';
 import { RichTextView } from '@inkwell/editor/render';
@@ -27,6 +28,7 @@ export function CanonOverrideEditor({
 }) {
   const ready = useHydrated(),
     [row, setRow] = useState(initial),
+    [baseVersion, setBaseVersion] = useState(initial.version),
     [nameMode, setNameMode] = useState<Mode>(modes(initial).name),
     [contentMode, setContentMode] = useState<Mode>(modes(initial).content),
     [name, setName] = useState(initial.override?.name ?? initial.name),
@@ -36,15 +38,87 @@ export function CanonOverrideEditor({
     [error, setError] = useState(''),
     [saved, setSaved] = useState(''),
     [choices, setChoices] = useState<Partial<Record<'name' | 'content', 'KEEP' | 'INHERIT'>>>({});
-  const current = modes(row),
-    dirty =
-      nameMode !== current.name ||
-      contentMode !== current.content ||
-      (nameMode === 'CUSTOM' && name !== row.override?.name) ||
-      (contentMode === 'CUSTOM' &&
-        JSON.stringify(content) !== JSON.stringify(row.override?.content));
-  const path = canonPath(c, row.id);
+  const path = canonPath(c, row.id),
+    compared = useRef<CanonRecord | null>(null);
+  const snapshot = (r: CanonRecord) => ({
+    baseVersion: r.version,
+    nameMode: modes(r).name,
+    contentMode: modes(r).content,
+    name: r.override?.name ?? r.name,
+    content: r.override?.content ?? r.content,
+  });
+  const reliable = useReliableEditor({
+    kind: 'OVERRIDE',
+    slot: path + '/override',
+    recordId: row.id,
+    projectId: c.projectId,
+    storyId: c.storyId,
+    version: row.override?.version ?? 0,
+    fields: { baseVersion, nameMode, contentMode, name, content },
+    baseline: snapshot(row),
+    schema: draftSchemas.OVERRIDE,
+    loaded: true,
+    auto: false,
+    enabled: !pending && !row.archivedAt && !row.conflicts.length,
+    saveFields: (f) => ({
+      baseVersion: f.baseVersion,
+      name: f.nameMode === 'CUSTOM' ? { mode: f.nameMode, value: f.name } : { mode: f.nameMode },
+      content:
+        f.contentMode === 'CUSTOM'
+          ? { mode: f.contentMode, value: f.content }
+          : { mode: f.contentMode },
+    }),
+    apply: (f) => {
+      setBaseVersion(f.baseVersion);
+      setNameMode(f.nameMode);
+      setContentMode(f.contentMode);
+      setName(f.name);
+      setContent(f.content);
+      setEditorKey((n) => n + 1);
+    },
+    ack: (f, v) => {
+      setBaseVersion(f.baseVersion);
+      if (
+        compared.current &&
+        (compared.current.override?.version ?? 0) === v &&
+        compared.current.version === f.baseVersion
+      ) {
+        setRow(compared.current);
+        compared.current = null;
+      } else
+        setRow((old) => ({
+          ...old,
+          override: {
+            version: v,
+            baseVersion: f.baseVersion,
+            baseName: old.name,
+            baseContent: old.content,
+            hasName: f.nameMode !== 'INHERIT',
+            name: f.nameMode === 'CUSTOM' ? f.name : null,
+            hasContent: f.contentMode !== 'INHERIT',
+            content: f.contentMode === 'CUSTOM' ? f.content : null,
+          },
+          effective: {
+            name: f.nameMode === 'INHERIT' ? old.name : f.nameMode === 'CLEAR' ? '' : f.name,
+            content:
+              f.contentMode === 'INHERIT'
+                ? old.content
+                : f.contentMode === 'CLEAR'
+                  ? plainDocument('')
+                  : f.content,
+          },
+        }));
+    },
+    current: async () => {
+      const r = await api<CanonRecord>(path);
+      compared.current = r;
+      return { version: r.override?.version ?? 0, fields: snapshot(r) };
+    },
+  });
+  const dirty = reliable.dirty;
   function reset(r: CanonRecord) {
+    reliable.reset(snapshot(r), r.override?.version ?? 0);
+    setBaseVersion(r.version);
     setRow(r);
     setNameMode(modes(r).name);
     setContentMode(modes(r).content);
@@ -57,18 +131,8 @@ export function CanonOverrideEditor({
     setPending(true);
     setError('');
     try {
-      const r = await api<CanonRecord>(canonPath(c, row.id, '/override'), {
-        method: row.override ? 'PATCH' : 'POST',
-        ...(row.override ? { version: row.override.version } : { createOnly: true }),
-        body: {
-          baseVersion: row.version,
-          name: nameMode === 'CUSTOM' ? { mode: nameMode, value: name } : { mode: nameMode },
-          content:
-            contentMode === 'CUSTOM'
-              ? { mode: contentMode, value: content }
-              : { mode: contentMode },
-        },
-      });
+      if (!(await reliable.flush())) return;
+      const r = await api<CanonRecord>(path);
       reset(r);
       setSaved('Story override saved. Shared canon is unchanged.');
     } catch (e) {
@@ -245,6 +309,7 @@ export function CanonOverrideEditor({
           {dirty ? 'Unsaved story changes' : saved || 'Showing saved effective canon'}
         </p>
       </form>
+      <ReliableStatus editor={reliable} />
       {error && (
         <p role="alert" className="form-error">
           {error} Your draft is still here.
@@ -253,11 +318,13 @@ export function CanonOverrideEditor({
       <div className="inline-actions">
         <button
           className="quiet-button"
-          disabled={!ready || pending}
+          disabled={!ready || pending || reliable.saving}
           onClick={async () => {
             setPending(true);
             try {
-              setRow(await api<CanonRecord>(path));
+              const refreshed = await api<CanonRecord>(path);
+              setRow(refreshed);
+              setBaseVersion(refreshed.version);
               setChoices({});
               setError('');
               setSaved('Current shared revision loaded; draft preserved.');
@@ -272,7 +339,7 @@ export function CanonOverrideEditor({
         </button>
         <button
           className="quiet-button"
-          disabled={!ready || pending}
+          disabled={!ready || pending || reliable.saving}
           onClick={() => {
             reset(row);
             setError('');

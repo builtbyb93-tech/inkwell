@@ -2,13 +2,16 @@ import 'server-only';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
-import { principal } from './auth';
+import { principalContext } from './auth';
 import { authConfig } from './config';
 import { HttpError } from './http';
 export async function requireAccount() {
+  return (await requireAccountContext()).account;
+}
+export async function requireAccountContext() {
   const incoming = await headers();
   try {
-    return await principal(
+    return await principalContext(
       new NextRequest(authConfig().origin, { headers: { cookie: incoming.get('cookie') ?? '' } }),
     );
   } catch (error) {

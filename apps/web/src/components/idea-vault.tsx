@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import { useHydrated } from './use-hydrated';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -39,6 +40,18 @@ export function IdeaVault({
     [page, setPage] = useState<Page>({ items: [], nextCursor: null }),
     [pending, setPending] = useState(true),
     [error, setError] = useState('');
+  const recovery = useReliableEditor({
+    kind: 'IDEA',
+    slot: '/ideas/quick-capture',
+    version: 0,
+    fields: { capture },
+    baseline: { capture: '' },
+    schema: draftSchemas.CAPTURE,
+    loaded: hydrated,
+    enabled: !capturing,
+    apply: (f) => setCapture(f.capture),
+    ack: () => {},
+  });
   useEffect(() => {
     let live = true;
     setPending(true);
@@ -77,6 +90,7 @@ export function IdeaVault({
                 method: 'POST',
                 body: { title: ideaTitle(capture), content: plainDocument(capture) },
               });
+              await recovery.created();
               setCaptured(row);
               setCapture('');
               setRefresh((n) => n + 1);
@@ -99,7 +113,10 @@ export function IdeaVault({
             placeholder="What if…"
           />
           <div className="inline-actions">
-            <button className="button" disabled={!hydrated || capturing || !capture.trim()}>
+            <button
+              className="button"
+              disabled={!hydrated || capturing || recovery.blocked || !capture.trim()}
+            >
               {capturing ? 'Capturing…' : 'Capture idea'}
             </button>
             <Link href="/ideas/new">Write with formatting</Link>
@@ -115,6 +132,7 @@ export function IdeaVault({
             </p>
           )}
         </form>
+        <ReliableStatus editor={recovery} />
       </section>
       <details className="workspace-card vault-filters">
         <summary>Search & filter ideas</summary>

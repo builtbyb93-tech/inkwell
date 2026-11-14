@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import { useHydrated } from './use-hydrated';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -116,7 +117,7 @@ export function RecordList({ projectId }: { projectId?: string }) {
   );
 }
 
-export function RecordEditor({ projectId, recordId }: { projectId?: string; recordId?: string }) {
+function RecordEditorInstance({ projectId, recordId }: { projectId?: string; recordId?: string }) {
   const hydrated = useHydrated();
   const router = useRouter();
   const story = Boolean(projectId);
@@ -154,15 +155,56 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
       live = false;
     };
   }, [path, recordId]);
-  const dirty = record
-    ? title !== record.title ||
-      content !== ('synopsis' in record ? record.synopsis : record.description) ||
-      format !== ('format' in record ? record.format : '')
-    : Boolean(title || content || format);
+  const fields = story ? { title, synopsis: content, format } : { title, description: content };
+  const baseline = story
+    ? {
+        title: record?.title ?? '',
+        synopsis: record && 'synopsis' in record ? record.synopsis : '',
+        format: record && 'format' in record ? record.format : '',
+      }
+    : {
+        title: record?.title ?? '',
+        description: record && 'description' in record ? record.description : '',
+      };
+  const reliable = useReliableEditor({
+    kind: story ? 'STORY' : 'PROJECT',
+    slot: path,
+    recordId,
+    projectId,
+    version: record?.version ?? 0,
+    fields,
+    baseline,
+    schema: story ? draftSchemas.STORY : draftSchemas.PROJECT,
+    loaded: !loading,
+    enabled: !pending,
+    apply: (f) => {
+      setTitle(f.title);
+      setContent('synopsis' in f ? f.synopsis : f.description);
+      setFormat('format' in f ? f.format : '');
+    },
+    ack: (f, v) => setRecord((old) => (old ? { ...old, ...f, version: v } : old)),
+    current: async () => {
+      const r = await api<RecordRow>(path);
+      return {
+        version: r.version,
+        fields:
+          'synopsis' in r
+            ? { title: r.title, synopsis: r.synopsis, format: r.format }
+            : { title: r.title, description: r.description },
+      };
+    },
+  });
+  const dirty = reliable.dirty;
   async function reload() {
     setPending(true);
     try {
       const row = await api<RecordRow>(path);
+      reliable.reset(
+        'synopsis' in row
+          ? { title: row.title, synopsis: row.synopsis, format: row.format }
+          : { title: row.title, description: row.description },
+        row.version,
+      );
       setRecord(row);
       setTitle(row.title);
       setContent('synopsis' in row ? row.synopsis : row.description);
@@ -194,6 +236,10 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          if (recordId) {
+            if (await reliable.flush()) setSaved('Saved.');
+            return;
+          }
           setPending(true);
           setError('');
           setSaved('');
@@ -207,6 +253,7 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
               ...(record ? { version: record.version } : {}),
             });
             if (!recordId) {
+              await reliable.created();
               router.push(
                 story ? `/projects/${projectId}/stories/${row.id}` : `/projects/${row.id}`,
               );
@@ -285,14 +332,19 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
           </span>
         </div>
       </form>
+      <ReliableStatus editor={reliable} />
       {recordId && record && (
         <div className="record-actions">
-          <button className="quiet-button" disabled={!hydrated || pending} onClick={reload}>
+          <button
+            className="quiet-button"
+            disabled={!hydrated || pending || reliable.saving}
+            onClick={reload}
+          >
             Discard edits and reload
           </button>
           <button
             className="quiet-button"
-            disabled={!hydrated || pending || dirty}
+            disabled={!hydrated || pending || dirty || reliable.blocked}
             onClick={async () => {
               setPending(true);
               setError('');
@@ -322,5 +374,14 @@ export function RecordEditor({ projectId, recordId }: { projectId?: string; reco
         </p>
       )}
     </section>
+  );
+}
+
+export function RecordEditor(props: Parameters<typeof RecordEditorInstance>[0]) {
+  return (
+    <RecordEditorInstance
+      key={(props.projectId ?? '') + ':' + (props.recordId ?? 'new')}
+      {...props}
+    />
   );
 }

@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import { useHydrated } from './use-hydrated';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -13,7 +14,7 @@ import { RichTextEditor } from '@inkwell/editor/react';
 import { api, message } from './api-client';
 import { IdeaTaxonomy } from './idea-taxonomy';
 import { IdeaRelations } from './idea-relations';
-export function IdeaEditor({ ideaId }: { ideaId?: string }) {
+function IdeaEditorInstance({ ideaId }: { ideaId?: string }) {
   const hydrated = useHydrated();
   const router = useRouter();
   const [record, setRecord] = useState<IdeaRecord | null>(null),
@@ -27,6 +28,11 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
     [saved, setSaved] = useState(''),
     [epoch, setEpoch] = useState(0);
   function load(row: IdeaRecord) {
+    if (record)
+      reliable.reset(
+        { title: row.title, content: row.content, category: row.category, tags: row.tags },
+        row.version,
+      );
     setRecord(row);
     setTitle(row.title);
     setContent(row.content);
@@ -51,19 +57,44 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
       live = false;
     };
   }, [ideaId]);
-  const dirty = record
-    ? title !== record.title ||
-      JSON.stringify(content) !== JSON.stringify(record.content) ||
-      (category?.id ?? null) !== (record.category?.id ?? null) ||
-      tags
-        .map((t) => t.id)
-        .sort()
-        .join(',') !==
-        record.tags
-          .map((t) => t.id)
-          .sort()
-          .join(',')
-    : Boolean(title || content.content.some((n) => n.content?.length) || category || tags.length);
+  const reliable = useReliableEditor({
+    kind: 'IDEA',
+    slot: '/ideas/' + (ideaId ?? 'new'),
+    recordId: ideaId,
+    version: record?.version ?? 0,
+    fields: { title, content, category, tags },
+    baseline: {
+      title: record?.title ?? '',
+      content: record?.content ?? plainDocument(''),
+      category: record?.category ?? null,
+      tags: record?.tags ?? [],
+    },
+    schema: draftSchemas.IDEA,
+    loaded: !loading,
+    enabled: !pending && !record?.archivedAt,
+    saveFields: (f) => ({
+      title: f.title,
+      content: f.content,
+      categoryId: f.category?.id ?? null,
+      tagIds: f.tags.map((t) => t.id),
+    }),
+    apply: (f) => {
+      setTitle(f.title);
+      setContent(f.content);
+      setCategory(f.category);
+      setTags(f.tags);
+      setEpoch((n) => n + 1);
+    },
+    ack: (f, v) => setRecord((old) => (old ? { ...old, ...f, version: v } : old)),
+    current: async () => {
+      const r = await api<IdeaRecord>('/ideas/' + ideaId);
+      return {
+        version: r.version,
+        fields: { title: r.title, content: r.content, category: r.category, tags: r.tags },
+      };
+    },
+  });
+  const dirty = reliable.dirty;
   if (loading) return <p role="status">Loading idea…</p>;
   if (ideaId && !record)
     return (
@@ -85,6 +116,10 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
           aria-label="Edit idea"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (ideaId) {
+              if (await reliable.flush()) setSaved('Saved.');
+              return;
+            }
             setPending(true);
             setError('');
             setSaved('');
@@ -100,6 +135,7 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
                 },
               });
               if (!ideaId) {
+                await reliable.created();
                 router.push('/ideas/' + row.id);
                 return;
               }
@@ -165,11 +201,12 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
             </span>
           </div>
         </form>
+        <ReliableStatus editor={reliable} />
         {record && (
           <div className="record-actions">
             <button
               className="quiet-button"
-              disabled={!hydrated || pending}
+              disabled={!hydrated || pending || reliable.saving}
               onClick={async () => {
                 setPending(true);
                 try {
@@ -187,7 +224,7 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
             </button>
             <button
               className="quiet-button"
-              disabled={!hydrated || pending || dirty}
+              disabled={!hydrated || pending || dirty || reliable.blocked}
               onClick={async () => {
                 setPending(true);
                 setError('');
@@ -218,7 +255,7 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
           key={epoch}
           ideaId={record.id}
           version={record.version}
-          disabled={dirty || Boolean(record.archivedAt)}
+          disabled={dirty || reliable.blocked || Boolean(record.archivedAt)}
           pending={pending}
           onBusy={setPending}
           onVersion={(version) => setRecord((row) => (row ? { ...row, version } : row))}
@@ -226,4 +263,8 @@ export function IdeaEditor({ ideaId }: { ideaId?: string }) {
       )}
     </div>
   );
+}
+
+export function IdeaEditor(props: Parameters<typeof IdeaEditorInstance>[0]) {
+  return <IdeaEditorInstance key={props.ideaId ?? 'new'} {...props} />;
 }

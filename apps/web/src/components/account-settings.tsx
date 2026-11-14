@@ -1,10 +1,12 @@
 'use client';
+import { useRecovery } from './recovery-provider';
 import { useHydrated } from './use-hydrated';
 import { useState } from 'react';
 import type { AccountRecord } from '@inkwell/contracts';
 import { api, message } from './api-client';
 export function AccountSettings({ initial }: { initial: AccountRecord }) {
-  const hydrated = useHydrated();
+  const hydrated = useHydrated(),
+    recovery = useRecovery();
   const [account, setAccount] = useState(initial);
   const [name, setName] = useState(initial.displayName);
   const [pending, setPending] = useState(false);
@@ -86,6 +88,11 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
             setError('');
             try {
               await api('/account/sessions/revoke', { method: 'POST' });
+              try {
+                await recovery.clear({ signOut: true });
+              } catch {
+                /* Server sessions have already been revoked. */
+              }
               window.location.assign('/sign-in');
             } catch (err) {
               setError(message(err));
