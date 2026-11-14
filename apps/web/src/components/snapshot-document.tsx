@@ -1,3 +1,4 @@
+'use client';
 import type { SnapshotDocument as Document } from '@inkwell/contracts';
 import { RichTextView } from '@inkwell/editor/render';
 const labels: Record<string, string> = {
@@ -36,7 +37,7 @@ export function SnapshotDocumentView({
         stay private.
       </p>
       {doc.records.map((r) => (
-        <article className="snapshot-record" id={'copy-' + r.id} key={r.id}>
+        <article className="snapshot-record" id={'copy-' + r.id} key={r.id} tabIndex={-1}>
           <p className="eyebrow">
             {labels[r.kind]}
             {r.kind === 'CANON' ? ' · ' + r.canonKind.toLowerCase() : ''}
@@ -57,13 +58,30 @@ export function SnapshotDocumentView({
           <ul>
             {doc.relationships.map((r, i) => (
               <li key={i}>
-                <a href={'#copy-' + r.fromId}>{names.get(r.fromId)}</a> —{' '}
-                {r.label || labels[r.kind]} → <a href={'#copy-' + r.toId}>{names.get(r.toId)}</a>
+                <CopyNavigation id={r.fromId} name={names.get(r.fromId)!} /> —{' '}
+                {r.label || labels[r.kind]} →{' '}
+                <CopyNavigation id={r.toId} name={names.get(r.toId)!} />
               </li>
             ))}
           </ul>
         </section>
       )}
     </div>
+  );
+}
+
+function CopyNavigation({ id, name }: { id: string; name: string }) {
+  return (
+    <button
+      type="button"
+      className="snapshot-connection"
+      onClick={() => {
+        const target = document.getElementById('copy-' + id);
+        target?.focus({ preventScroll: true });
+        target?.scrollIntoView({ block: 'start' });
+      }}
+    >
+      {name}
+    </button>
   );
 }

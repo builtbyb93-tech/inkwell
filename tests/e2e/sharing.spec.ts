@@ -38,7 +38,7 @@ test('owners select and preview a frozen copy, then revoke a read-only link with
   context,
   browser,
   baseURL,
-}) => {
+}, testInfo) => {
   test.setTimeout(60000);
   const f = await fixture(context.request, baseURL!);
   await page.goto('/projects/' + f.project.id + '/sharing?storyId=' + f.story.id);
@@ -60,7 +60,10 @@ test('owners select and preview a frozen copy, then revoke a read-only link with
   const url = await link.inputValue(),
     token = new URLSearchParams(new URL(url).hash.slice(1)).get('token')!;
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-  const guest = await browser.newContext({ baseURL: baseURL! }),
+  const guest = await browser.newContext({
+      baseURL: baseURL!,
+      viewport: testInfo.project.use.viewport!,
+    }),
     view = await guest.newPage();
   try {
     await view.goto(url);
@@ -112,7 +115,7 @@ test('permitted downloads match the private preview and every public response fo
   context,
   browser,
   baseURL,
-}) => {
+}, testInfo) => {
   const f = await fixture(context.request, baseURL!),
     snapshot = await post(context.request, baseURL!, f.path, {
       title: 'Downloadable lantern',
@@ -122,7 +125,10 @@ test('permitted downloads match the private preview and every public response fo
       expiresAt: new Date(Date.now() + 3600000).toISOString(),
       allowDownload: true,
     }),
-    guest = await browser.newContext({ baseURL: baseURL! }),
+    guest = await browser.newContext({
+      baseURL: baseURL!,
+      viewport: testInfo.project.use.viewport!,
+    }),
     view = await guest.newPage();
   try {
     const requests: string[] = [];
@@ -212,5 +218,71 @@ test('sharing routes reject foreign owners, unknown selections and unsafe link p
     ).toBe(404);
   } finally {
     await other.dispose();
+  }
+});
+
+test('connection navigation preserves the share capability through keyboard movement and reload', async ({
+  context,
+  browser,
+  baseURL,
+}, testInfo) => {
+  const f = await fixture(context.request, baseURL!);
+  const character = await post(context.request, baseURL!, `/projects/${f.project.id}/canon`, {
+    kind: 'CHARACTER',
+    name: 'Lantern keeper',
+    content: plainDocument('A selected traveler'),
+  });
+  const linked = await context.request.post(
+    `/api/v1/projects/${f.project.id}/stories/${f.story.id}/plot/scenes/${f.scene.id}/canon-links`,
+    {
+      headers: { Origin: baseURL!, 'If-Match': '"1"' },
+      data: { kind: 'CHARACTER', canonId: character.id },
+    },
+  );
+  expect(linked.status()).toBe(201);
+  const snapshot = await post(context.request, baseURL!, f.path, {
+    title: 'Connected lantern',
+    storyId: f.story.id,
+    selection: { ...selected(f.scene.id), canonIds: [character.id], relationships: true },
+  });
+  expect(snapshot.document.relationships).toHaveLength(1);
+  const link = await post(
+    context.request,
+    baseURL!,
+    f.path + '/' + snapshot.snapshot.id + '/links',
+    {
+      expiresAt: new Date(Date.now() + 3600000).toISOString(),
+      allowDownload: false,
+    },
+  );
+  const guest = await browser.newContext({
+      baseURL: baseURL!,
+      viewport: testInfo.project.use.viewport!,
+    }),
+    view = await guest.newPage();
+  try {
+    const errors: string[] = [];
+    view.on('pageerror', (error) => errors.push(error.name));
+    const url = baseURL + '/share#token=' + link.token;
+    await view.goto(url);
+    const connection = view
+      .getByRole('region', { name: 'Selected relationships' })
+      .getByRole('button', { name: 'Lantern keeper', exact: true });
+    await connection.focus();
+    await view.keyboard.press('Enter');
+    await expect(view).toHaveURL(url);
+    await expect(view.locator('article').filter({ hasText: 'A selected traveler' })).toBeFocused();
+    await view.reload();
+    await expect(view.getByRole('heading', { level: 1 })).toHaveText('Connected lantern');
+    await expect(connection).toBeVisible();
+    await connection.click();
+    await expect(view).toHaveURL(url);
+    await expect(view).toHaveTitle(/Inkwell/);
+    expect(errors).toEqual([]);
+    await view.screenshot({
+      path: '/tmp/inkwell-phase6-sharing-' + testInfo.project.name + '.png',
+    });
+  } finally {
+    await guest.close();
   }
 });

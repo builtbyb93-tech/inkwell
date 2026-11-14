@@ -827,3 +827,13 @@ fieldset {
 .snapshot-links input[readonly] {
   width: 100%;
 }
+
+.snapshot-connection {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
