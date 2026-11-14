@@ -60,6 +60,12 @@ jobs:
         with: { node-version: 24.22.1, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm db:generate
+      - name: Start isolated private S3
+        run: node scripts/storage-local.mjs
+        env:
+          COMPOSE_PROJECT_NAME: inkwell_ci_storage
+          S3_BUCKET: inkwell-ci
+          S3_PORT: 13906
       - run: pnpm test:integration
 
   browser:
@@ -94,6 +100,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps --no-shell chromium
       - run: pnpm build
+      - name: Start isolated private S3
+        run: node scripts/storage-local.mjs
+        env:
+          COMPOSE_PROJECT_NAME: inkwell_ci_storage
+          S3_BUCKET: inkwell-ci
+          S3_PORT: 13906
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()

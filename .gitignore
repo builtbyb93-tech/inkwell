@@ -13,3 +13,5 @@ packages/db/generated/
 *.log
 .tools/
 next-env.d.ts
+
+.local/

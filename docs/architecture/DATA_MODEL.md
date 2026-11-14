@@ -54,3 +54,7 @@ ADR-008 defines the one canonical sequence, archived-row retention, conditional 
 ## Phase 5 reliability
 
 Migration `20261114050000_search_and_saves` adds generated vectors/GIN indexes, effective override search triggers and workspace-qualified SaveReceipt. Receipts have a unique target slot and request key, positive applied version and SHA-256 checks; no draft content is stored there. Existing Vault FTS, composite FKs, canon guards and deferred scene order constraint are preserved. Derived override refresh leaves editorial versions/base snapshots/timestamps intact. ADR-009–011 define scope, retry and archive invariants. Browser recovery is separate from the database and uses the explicitly approved seven-day policy. Only local/disposable migration execution is authorized.
+
+## Phase 6 snapshots and links
+
+Migration `20261114060000_snapshot_sharing` adds SnapshotStatus, Snapshot and ShareLink. Qualified project/workspace/story FKs preserve ownership. SQL guards freeze payload identity (UUID/key/digest/size/title/count/format/creation), permit only PENDING→READY/FAILED transitions, require READY copies for token issue and prevent policy mutation/revocation reversal. Link hashes are unique; expiry/version checks and scoped list indexes apply. Original creative data/FTS/canon/order guards remain untouched. Only disposable local databases have received the migration.

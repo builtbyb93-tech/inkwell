@@ -799,3 +799,41 @@ fieldset {
   gap: 1rem;
   margin-block: 1rem;
 }
+
+.snapshot-choices {
+  list-style: none;
+  padding: 0;
+}
+.snapshot-choices li {
+  padding-block: 0.35rem;
+}
+.snapshot-record {
+  border-top: 1px solid var(--border);
+  margin-block: 1.5rem;
+  padding-top: 1rem;
+  overflow-wrap: anywhere;
+}
+.snapshot-document {
+  overflow-wrap: anywhere;
+}
+.snapshot-plain {
+  white-space: pre-wrap;
+}
+.snapshot-links {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: 2rem;
+}
+.snapshot-links input[readonly] {
+  width: 100%;
+}
+
+.snapshot-connection {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

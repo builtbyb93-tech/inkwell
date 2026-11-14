@@ -22,7 +22,8 @@
     "db:migrate": "node --env-file-if-exists=.env scripts/database.mjs migrate deploy",
     "db:validate": "node --env-file-if-exists=.env scripts/database.mjs validate",
     "check": "pnpm peers check && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
-    "security:secrets": "node scripts/secret-scan.mjs"
+    "security:secrets": "node scripts/secret-scan.mjs",
+    "storage:local": "node --env-file-if-exists=.env scripts/storage-local.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
@@ -42,7 +43,9 @@
     "@inkwell/contracts": "workspace:*",
     "@inkwell/domain": "workspace:*",
     "@inkwell/db": "workspace:*",
-    "vite": "8.3.8"
+    "vite": "8.3.8",
+    "@inkwell/storage": "workspace:*",
+    "@aws-sdk/client-s3": "3.1168.0"
   },
   "type": "module"
 }

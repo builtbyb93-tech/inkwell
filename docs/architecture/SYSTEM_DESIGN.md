@@ -31,3 +31,7 @@ Project and story Bible routes use the same versioned REST services and scoped t
 ## Phase 5
 
 Workspace search uses qualified PostgreSQL FTS unions and effective override indexes (ADR-009). A shared client save/recovery coordinator serializes optimistic writes, keeps newer typing and exposes explicit conflict comparison. Content-free transactional receipts make retries acknowledge the original applied version; IndexedDB recovery remains optional and account/session partitioned (ADR-010). Versioned project archives use strict reusable contracts/graph validation and an all-or-nothing remapping transaction (ADR-011). No AI, paid service, asset upload, server content history or private offline cache is required.
+
+## Phase 6
+
+Private snapshot selection → repeatable-read allowed projection → database-reserved PENDING identity → private S3 write/read/hash verification → READY copy → explicit link issue. Public view/download resolves only frozen DTOs, with fresh policy checks before/after object I/O. `packages/storage` owns explicit-credential S3 transport and bounded object reads; native clients continue to use `/api/v1`. No browser receives storage credentials, object paths, source IDs or an edit capability. ADR-012 records transaction uncertainty, failure cleanup, tested Garage behavior and token transport. No hosted resource is provisioned by local bootstrap/CI.

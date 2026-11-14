@@ -24,6 +24,8 @@ model User {
 }
 
 model Workspace {
+  snapshots Snapshot[]
+  shareLinks ShareLink[]
   saveReceipts       SaveReceipt[]
   plotGroups         PlotGroup[]
   id                 String              @id @default(uuid()) @db.Uuid
@@ -85,6 +87,7 @@ model RateLimitBucket {
 }
 
 model Project {
+  snapshots Snapshot[]
   plotGroups         PlotGroup[]
   id                 String                  @id @default(uuid()) @db.Uuid
   workspaceId        String                  @db.Uuid
@@ -109,6 +112,7 @@ model Project {
 }
 
 model Story {
+  snapshots Snapshot[]
   plotGroups  PlotGroup[]
   id          String      @id @default(uuid()) @db.Uuid
   workspaceId String      @db.Uuid
@@ -503,4 +507,50 @@ model SaveReceipt {
 
   @@unique([workspaceId, targetKey])
   @@unique([workspaceId, requestKey])
+}
+
+
+enum SnapshotStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+model Snapshot {
+  id String @id @default(uuid()) @db.Uuid
+  workspaceId String @db.Uuid
+  workspace Workspace @relation(fields:[workspaceId], references:[id], onDelete:Restrict)
+  projectId String @db.Uuid
+  project Project @relation(fields:[projectId,workspaceId], references:[id,workspaceId], onDelete:Restrict)
+  storyId String? @db.Uuid
+  story Story? @relation(fields:[storyId,projectId,workspaceId], references:[id,projectId,workspaceId], onDelete:Restrict)
+  title String
+  objectKey String @unique
+  contentHash String
+  byteSize Int
+  recordCount Int
+  payloadVersion Int @default(1)
+  status SnapshotStatus @default(PENDING)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  links ShareLink[]
+  @@unique([id,workspaceId])
+  @@index([workspaceId,projectId,status,createdAt,id])
+}
+
+model ShareLink {
+  id String @id @default(uuid()) @db.Uuid
+  workspaceId String @db.Uuid
+  workspace Workspace @relation(fields:[workspaceId], references:[id], onDelete:Restrict)
+  snapshotId String @db.Uuid
+  snapshot Snapshot @relation(fields:[snapshotId,workspaceId], references:[id,workspaceId], onDelete:Restrict)
+  tokenHash String @unique
+  expiresAt DateTime @db.Timestamptz(3)
+  allowDownload Boolean @default(false)
+  revokedAt DateTime? @db.Timestamptz(3)
+  version Int @default(1)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  @@index([workspaceId,snapshotId,createdAt,id])
+  @@index([expiresAt])
 }

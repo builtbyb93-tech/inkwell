@@ -13,6 +13,7 @@ export function AppFrame({ children, name }: { children: React.ReactNode; name?:
           ['/projects', 'Projects & stories'],
           ['/search', 'Search'],
           ['/imports', 'Import project'],
+          ['/sharing', 'Snapshot sharing'],
           ['/settings', 'Account & privacy'],
         ]
       : [
