@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { MobileNavigation } from './mobile-navigation';
 import { ThemeSelect } from './theme-select';
 import { SignOutButton } from './sign-out';
 
@@ -39,10 +40,7 @@ export function AppFrame({ children, name }: { children: React.ReactNode; name?:
         <Link className="wordmark" href={name !== undefined ? '/dashboard' : '/'}>
           Inkwell<span aria-hidden="true">.</span>
         </Link>
-        <details>
-          <summary>Explore</summary>
-          <nav aria-label="Mobile navigation">{links}</nav>
-        </details>
+        <MobileNavigation>{links}</MobileNavigation>
       </header>
       <aside className="sidebar">
         <Link className="wordmark" href={name !== undefined ? '/dashboard' : '/'}>
