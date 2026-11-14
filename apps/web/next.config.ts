@@ -11,6 +11,7 @@ const config: NextConfig = {
     '@inkwell/domain',
     '@inkwell/ui',
     '@inkwell/editor',
+    '@inkwell/storage',
   ],
   poweredByHeader: false,
   async headers() {

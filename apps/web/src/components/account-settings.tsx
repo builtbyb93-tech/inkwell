@@ -67,7 +67,10 @@ export function AccountSettings({ initial }: { initial: AccountRecord }) {
       </section>
       <section className="workspace-card">
         <h2>Privacy & AI</h2>
-        <p>Your workspace is private. Sharing is coming in a later milestone.</p>
+        <p>
+          Your workspace is private. Only snapshots you explicitly select and share are visible
+          through a read-only link.
+        </p>
         <p>
           <strong>AI is disabled.</strong> Your story content is not sent to an AI provider. Core
           organization needs no AI service.

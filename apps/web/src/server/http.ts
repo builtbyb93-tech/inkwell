@@ -59,10 +59,10 @@ export function revision(request: Request) {
     throw new HttpError(400, 'VALIDATION_ERROR', 'If-Match must contain a quoted record version.');
   return value;
 }
-export async function json<T>(request: Request, schema: z.ZodType<T>): Promise<T> {
+export async function json<T>(request: Request, schema: z.ZodType<T>, max = 32768): Promise<T> {
   if (request.headers.get('content-type')?.split(';')[0] !== 'application/json')
     throw new HttpError(415, 'VALIDATION_ERROR', 'Send JSON content.');
-  const text = await boundedText(request, 32768);
+  const text = await boundedText(request, max);
   try {
     const result = schema.safeParse(JSON.parse(text));
     if (result.success) return result.data;

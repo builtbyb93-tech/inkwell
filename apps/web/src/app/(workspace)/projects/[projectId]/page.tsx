@@ -13,6 +13,9 @@ export default async function Project({ params }: { params: Promise<{ projectId:
       <Link className="button" href={`/projects/${projectId}/canon`}>
         Open project Story Bible
       </Link>
+      <Link className="button" href={`/projects/${projectId}/sharing`}>
+        Share selected content
+      </Link>
       <RecordEditor recordId={projectId} />
       <RecordList projectId={projectId} />
       <ProjectExport projectId={projectId} />

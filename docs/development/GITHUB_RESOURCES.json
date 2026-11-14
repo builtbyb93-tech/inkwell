@@ -312,6 +312,31 @@
       "records": 10000,
       "warmP95Ms": 250,
       "environment": "local; VPS validation later"
+    },
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/44",
+    "mergeStatus": "merged",
+    "mergeCommit": "bf471da347fe9cf5dc06cecd13eb6abba183e767"
+  },
+  "phase6": {
+    "issues": [31, 32, 33],
+    "branch": "feature/31-snapshot-sharing",
+    "worktree": "/workspace/inkwell-worktrees/phase-6",
+    "baseCommit": "bf471da347fe9cf5dc06cecd13eb6abba183e767",
+    "target": "main",
+    "mergeAuthorized": true,
+    "deploymentAuthorized": false,
+    "resources": {
+      "compose": "inkwell_phase6",
+      "postgres": 55438,
+      "smtp": 11030,
+      "mailpit": 18030,
+      "s3": 13906,
+      "app": 3005,
+      "e2e": 3600
     }
+  },
+  "phase7BackupPolicy": {
+    "dailyBackups": 30,
+    "activation": "Requires approved protected off-host destination; no hosted activation or deletion authorized"
   }
 }

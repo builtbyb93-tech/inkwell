@@ -62,3 +62,9 @@ Plot Board is available from navigation or each story. Board/list share canonica
 The workspace now has Search, project JSON export and validated separate-project import. Existing creative editors autosave with visible acknowledgement, preserved newer typing and explicit stale-edit comparison. New records and canon inheritance/review decisions remain explicit saves. Account & privacy controls optional seven-day recovery on this browser; sign-out clears its drafts. Recovery depends on browser storage and never replaces online persistence or a backup.
 
 The private version 1 archive includes archived content, canon override bases, scene order/copy ancestry, relationships and relevant Idea sources. It excludes unrelated project links and account/session data. Limits are 8 MiB and 10,000 archive rows; imports commit transactionally with remapped IDs. See ADR-009–011 and API contracts. No hosted migration/deployment has been performed; Phase 6 snapshot sharing and Phase 7 release gates remain.
+
+### Phase 6 — read-only snapshots
+
+Open **Snapshot sharing** or a project's **Share selected content** action. Choose records and optional connections, create a private frozen copy, preview it, then explicitly choose link expiry and JSON download permission. Source edits stay private. Revoke links from the same preview; raw links are shown only once. Shared copies contain new IDs and no live private traversal. Revocation blocks future requests; it cannot recall content recipients already copied.
+
+For local/CI sharing tests, run `pnpm storage:local` after configuring the worktree's local .env; it creates an isolated private Garage service and ignored credentials. Then run the normal integration/browser suites. Do not point test tooling at hosted storage. Hosted S3 configuration, backup/restore and Coolify activation remain separately approved release work. See ADR-012 and the API/security/deployment plans.

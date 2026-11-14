@@ -168,18 +168,20 @@ export function WorkspaceSearch() {
   );
 }
 
-function ScopeSelect({
+export function ScopeSelect({
   label,
   projectId,
   value,
   onChange,
   archived,
+  allLabel,
 }: {
   label: string;
   projectId?: string;
   value: string;
   onChange: (v: string) => void;
   archived: boolean;
+  allLabel?: string;
 }) {
   type Row = ProjectRecord | StoryRecord;
   type Page = { items: Row[]; nextCursor: string | null };
@@ -220,7 +222,7 @@ function ScopeSelect({
           onChange={(e) => onChange(e.target.value)}
           disabled={busy}
         >
-          <option value="">Every {label.toLowerCase()}</option>
+          <option value="">{allLabel ?? `Every ${label.toLowerCase()}`}</option>
           {rows.map((r) => (
             <option key={r.id} value={r.id}>
               {r.title}

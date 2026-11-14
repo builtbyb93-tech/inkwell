@@ -4,7 +4,7 @@ The owner's v0.6 directive and explicit approvals govern. Read product, architec
 
 ## Scope and approvals
 
-- Current authorization: Phases 0–4 are merged. The owner authorized Phase 5 Search/Recovery/Portability (#26–#30) and all in-scope PR merges after required checks/review. Approved recovery: seven days on device, clear on sign-out. Approved local search gate: 10,000 mixed records, warm p95 ≤250 ms; VPS validation remains a release gate. Do not ask again for those decisions or merge approval. No auto-merge or protection bypass; deployment/hosted migrations/infrastructure, DNS, destructive actions, paid services and scope/major architecture changes remain separate gates.
+- Current authorization: Phases 0–5 are merged. The owner instructed “finish all remaining phases and merge all to complete project”: Phase 6 (#31–#33) and Phase 7 (#34–#38) implementation and reviewed/tested in-scope merges are authorized. Do not ask again per file/milestone merge. No auto-merge or protection bypass. Hosted staging provisioning/deployment, production migrations/deployment, infrastructure, DNS, destructive actions and paid services retain separate explicit gates. Never claim operational acceptance before actual verification. Approved recovery/search policies remain seven days/clear on sign-out and 10,000 mixed records, warm local p95 ≤250 ms.
 - Standing owner approval covers reviewed, tested, in-scope PR merges. Do not enable auto-merge.
 - Provisioning, production migrations/deployment, DNS, destructive actions, paid dependencies, scope/major architecture changes, and deletion of unmerged worktrees/branches require their own approval.
 - Do not modify unrelated projects. Use `builtbyb93-tech/inkwell`; ordinary work uses branches/worktrees, not forks.

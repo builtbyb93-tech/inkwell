@@ -112,3 +112,4 @@ export * from './canon';
 export * from './plot';
 export * from './reliability';
 export * from './archive';
+export * from './sharing';

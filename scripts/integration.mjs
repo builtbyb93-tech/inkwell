@@ -1,3 +1,4 @@
+import { assertLocalTestStorage, s3Storage } from '@inkwell/storage';
 import { randomUUID, randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import pg from 'pg';
@@ -20,6 +21,7 @@ const testEnv = {
   DATABASE_URL: target.toString(),
   NEXTAUTH_SECRET: randomBytes(32).toString('base64url'),
 };
+assertLocalTestStorage();
 let created = false;
 let exitCode = 1;
 try {
@@ -43,7 +45,25 @@ try {
       : 'Integration database setup failed; verify the local configuration.',
   );
 } finally {
-  if (created) await admin.query(`DROP DATABASE "${name}" WITH (FORCE)`);
+  if (created) {
+    const cleanup = new pg.Pool({
+      connectionString: target.toString(),
+      connectionTimeoutMillis: 3000,
+    });
+    try {
+      const result = await cleanup.query('SELECT "objectKey" FROM "Snapshot"');
+      const objects = s3Storage();
+      for (const row of result.rows) await objects.remove(row.objectKey);
+    } catch (error) {
+      if (error?.code !== '42P01') {
+        console.error('Isolated test object cleanup failed.');
+        exitCode = 1;
+      }
+    } finally {
+      await cleanup.end();
+    }
+    await admin.query(`DROP DATABASE "${name}" WITH (FORCE)`);
+  }
   await admin.end();
 }
 process.exitCode = exitCode;
