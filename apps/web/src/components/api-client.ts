@@ -29,6 +29,7 @@ export async function api<T>(
     cache: 'no-store',
   });
   const result = await response.json();
+  if (response.status === 401) window.dispatchEvent(new Event('inkwell-session-expired'));
   if (!response.ok)
     throw new ApiClientError(
       result.error?.message ?? 'Something went wrong. Please try again.',

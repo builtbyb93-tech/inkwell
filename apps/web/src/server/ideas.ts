@@ -188,8 +188,9 @@ export async function updateIdea(
     tagIds?: string[] | undefined;
     archived?: boolean | undefined;
   },
+  transaction?: Tx,
 ) {
-  return database().$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     await claimIdea(tx, account, ideaId, version, false);
     const current = await requireIdea(account, ideaId, tx);
     if (current.archivedAt && Object.keys(input).some((k) => k !== 'archived'))
@@ -216,7 +217,8 @@ export async function updateIdea(
       },
     });
     return ideaDto(await requireIdea(account, ideaId, tx));
-  });
+  };
+  return transaction ? perform(transaction) : database().$transaction(perform);
 }
 export async function listIdeas(account: AccountRecord, search: URLSearchParams) {
   const parsed = IdeaListQuery.safeParse(Object.fromEntries(search));

@@ -24,6 +24,7 @@ model User {
 }
 
 model Workspace {
+  saveReceipts       SaveReceipt[]
   plotGroups         PlotGroup[]
   id                 String              @id @default(uuid()) @db.Uuid
   ownerId            String              @unique @db.Uuid
@@ -85,24 +86,26 @@ model RateLimitBucket {
 
 model Project {
   plotGroups         PlotGroup[]
-  id                 String              @id @default(uuid()) @db.Uuid
-  workspaceId        String              @db.Uuid
-  workspace          Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  id                 String                  @id @default(uuid()) @db.Uuid
+  workspaceId        String                  @db.Uuid
+  workspace          Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
   title              String
-  description        String              @default("")
-  version            Int                 @default(1)
-  archivedAt         DateTime?           @db.Timestamptz(3)
-  createdAt          DateTime            @default(now()) @db.Timestamptz(3)
-  updatedAt          DateTime            @updatedAt @db.Timestamptz(3)
+  description        String                  @default("")
+  version            Int                     @default(1)
+  archivedAt         DateTime?               @db.Timestamptz(3)
+  createdAt          DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime                @updatedAt @db.Timestamptz(3)
   canonOverrides     CanonOverride[]
   canonRelationships CanonRelationship[]
   stories            Story[]
   characters         CanonRecord[]
   scenes             Scene[]
   ideaConversions    IdeaConversion[]
+  searchVector       Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([id, workspaceId])
   @@index([workspaceId, archivedAt, createdAt, id])
+  @@index([searchVector], type: Gin, map: "Project_search_gin")
 }
 
 model Story {
@@ -123,14 +126,16 @@ model Story {
   canonRecords       CanonRecord[]
   canonOverrides     CanonOverride[]
   canonRelationships CanonRelationship[]
-  sequenceVersion    Int                 @default(0)
+  sequenceVersion    Int                     @default(0)
   scenes             Scene[]
   ideaLinks          IdeaStoryLink[]
-  conversions        IdeaConversion[]    @relation("ConvertedStory")
-  sceneConversions   IdeaConversion[]    @relation("ConversionParentStory")
+  conversions        IdeaConversion[]        @relation("ConvertedStory")
+  sceneConversions   IdeaConversion[]        @relation("ConversionParentStory")
+  searchVector       Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([id, projectId, workspaceId])
   @@index([workspaceId, projectId, archivedAt, createdAt, id])
+  @@index([searchVector], type: Gin, map: "Story_search_gin")
 }
 
 model IdeaCategory {
@@ -205,67 +210,71 @@ model IdeaTagAssignment {
 model CanonRecord {
   sceneCharacters      SceneCharacterLink[]
   sceneLocations       SceneLocationLink[]
-  id                   String               @id @default(uuid()) @db.Uuid
-  workspaceId          String               @db.Uuid
-  workspace            Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
-  projectId            String               @db.Uuid
-  project              Project              @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
-  kind                 CanonKind            @default(CHARACTER)
-  scope                CanonScope           @default(SHARED)
-  storyId              String?              @db.Uuid
-  story                Story?               @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  id                   String                  @id @default(uuid()) @db.Uuid
+  workspaceId          String                  @db.Uuid
+  workspace            Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId            String                  @db.Uuid
+  project              Project                 @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  kind                 CanonKind               @default(CHARACTER)
+  scope                CanonScope              @default(SHARED)
+  storyId              String?                 @db.Uuid
+  story                Story?                  @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
   overrides            CanonOverride[]
-  outgoing             CanonRelationship[]  @relation("CanonFrom")
-  incoming             CanonRelationship[]  @relation("CanonTo")
+  outgoing             CanonRelationship[]     @relation("CanonFrom")
+  incoming             CanonRelationship[]     @relation("CanonTo")
   name                 String
   content              Json
-  contentSchemaVersion Int                  @default(1)
+  contentSchemaVersion Int                     @default(1)
   contentText          String
-  version              Int                  @default(1)
-  archivedAt           DateTime?            @db.Timestamptz(3)
-  createdAt            DateTime             @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime             @updatedAt @db.Timestamptz(3)
+  version              Int                     @default(1)
+  archivedAt           DateTime?               @db.Timestamptz(3)
+  createdAt            DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                @updatedAt @db.Timestamptz(3)
   conversions          IdeaConversion[]
+  searchVector         Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([id, projectId, workspaceId])
   @@index([workspaceId, projectId, scope, storyId, kind, archivedAt])
   @@index([workspaceId, projectId, archivedAt, createdAt, id])
   @@map("Character")
+  @@index([searchVector], type: Gin, map: "Character_search_gin")
 }
 
 model Scene {
-  status               SceneStatus          @default(PLANNED)
-  groupId              String?              @db.Uuid
-  group                PlotGroup?           @relation(fields: [groupId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
-  duplicatedFromId     String?              @db.Uuid
-  duplicatedFrom       Scene?               @relation("SceneCopies", fields: [duplicatedFromId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
-  copies               Scene[]              @relation("SceneCopies")
+  status               SceneStatus             @default(PLANNED)
+  groupId              String?                 @db.Uuid
+  group                PlotGroup?              @relation(fields: [groupId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
+  duplicatedFromId     String?                 @db.Uuid
+  duplicatedFrom       Scene?                  @relation("SceneCopies", fields: [duplicatedFromId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
+  copies               Scene[]                 @relation("SceneCopies")
   characters           SceneCharacterLink[]
   locations            SceneLocationLink[]
-  id                   String               @id @default(uuid()) @db.Uuid
-  workspaceId          String               @db.Uuid
-  workspace            Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
-  projectId            String               @db.Uuid
-  project              Project              @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
-  storyId              String               @db.Uuid
-  story                Story                @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  id                   String                  @id @default(uuid()) @db.Uuid
+  workspaceId          String                  @db.Uuid
+  workspace            Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId            String                  @db.Uuid
+  project              Project                 @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  storyId              String                  @db.Uuid
+  story                Story                   @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
   title                String
   content              Json
-  contentSchemaVersion Int                  @default(1)
+  contentSchemaVersion Int                     @default(1)
   contentText          String
   position             Int
-  version              Int                  @default(1)
-  archivedAt           DateTime?            @db.Timestamptz(3)
-  createdAt            DateTime             @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime             @updatedAt @db.Timestamptz(3)
+  version              Int                     @default(1)
+  archivedAt           DateTime?               @db.Timestamptz(3)
+  createdAt            DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                @updatedAt @db.Timestamptz(3)
   ideaLinks            IdeaSceneLink[]
   conversions          IdeaConversion[]
+  searchVector         Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([id, storyId, projectId, workspaceId])
   @@unique([storyId, position])
   @@index([workspaceId, projectId, storyId, groupId, archivedAt, position])
   @@index([duplicatedFromId, storyId, projectId, workspaceId])
   @@index([workspaceId, projectId, storyId, archivedAt, createdAt, id])
+  @@index([searchVector], type: Gin, map: "Scene_search_gin")
 }
 
 model IdeaStoryLink {
@@ -362,31 +371,35 @@ enum CanonRelationshipKind {
 }
 
 model CanonOverride {
-  id                       String      @id @default(uuid()) @db.Uuid
-  workspaceId              String      @db.Uuid
-  workspace                Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
-  projectId                String      @db.Uuid
-  project                  Project     @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
-  storyId                  String      @db.Uuid
-  story                    Story       @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
-  canonId                  String      @db.Uuid
-  canon                    CanonRecord @relation(fields: [canonId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
-  hasName                  Boolean     @default(false)
+  id                       String                  @id @default(uuid()) @db.Uuid
+  workspaceId              String                  @db.Uuid
+  workspace                Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId                String                  @db.Uuid
+  project                  Project                 @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  storyId                  String                  @db.Uuid
+  story                    Story                   @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  canonId                  String                  @db.Uuid
+  canon                    CanonRecord             @relation(fields: [canonId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  hasName                  Boolean                 @default(false)
   name                     String?
-  hasContent               Boolean     @default(false)
+  hasContent               Boolean                 @default(false)
   contentText              String?
   content                  Json?
-  contentSchemaVersion     Int         @default(1)
+  contentSchemaVersion     Int                     @default(1)
   baseVersion              Int
   baseName                 String
   baseContent              Json
-  baseContentSchemaVersion Int         @default(1)
-  version                  Int         @default(1)
-  createdAt                DateTime    @default(now()) @db.Timestamptz(3)
-  updatedAt                DateTime    @updatedAt @db.Timestamptz(3)
+  baseContentSchemaVersion Int                     @default(1)
+  version                  Int                     @default(1)
+  createdAt                DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt                DateTime                @updatedAt @db.Timestamptz(3)
+  effectiveName            String                  @default("")
+  effectiveText            String                  @default("")
+  searchVector             Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([canonId, storyId])
   @@index([workspaceId, projectId, storyId])
+  @@index([searchVector], type: Gin, map: "CanonOverride_search_gin")
 }
 
 model CanonRelationship {
@@ -421,26 +434,28 @@ enum SceneStatus {
 }
 
 model PlotGroup {
-  id          String      @id @default(uuid()) @db.Uuid
-  workspaceId String      @db.Uuid
-  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
-  projectId   String      @db.Uuid
-  project     Project     @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
-  storyId     String      @db.Uuid
-  story       Story       @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
-  parentId    String?     @db.Uuid
-  parent      PlotGroup?  @relation("PlotChildren", fields: [parentId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
-  children    PlotGroup[] @relation("PlotChildren")
-  title       String
-  description String      @default("")
-  version     Int         @default(1)
-  archivedAt  DateTime?   @db.Timestamptz(3)
-  createdAt   DateTime    @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime    @updatedAt @db.Timestamptz(3)
-  scenes      Scene[]
+  id           String                  @id @default(uuid()) @db.Uuid
+  workspaceId  String                  @db.Uuid
+  workspace    Workspace               @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  projectId    String                  @db.Uuid
+  project      Project                 @relation(fields: [projectId, workspaceId], references: [id, workspaceId], onDelete: Restrict)
+  storyId      String                  @db.Uuid
+  story        Story                   @relation(fields: [storyId, projectId, workspaceId], references: [id, projectId, workspaceId], onDelete: Restrict)
+  parentId     String?                 @db.Uuid
+  parent       PlotGroup?              @relation("PlotChildren", fields: [parentId, storyId, projectId, workspaceId], references: [id, storyId, projectId, workspaceId], onDelete: Restrict)
+  children     PlotGroup[]             @relation("PlotChildren")
+  title        String
+  description  String                  @default("")
+  version      Int                     @default(1)
+  archivedAt   DateTime?               @db.Timestamptz(3)
+  createdAt    DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime                @updatedAt @db.Timestamptz(3)
+  scenes       Scene[]
+  searchVector Unsupported("tsvector") @default(dbgenerated())
 
   @@unique([id, storyId, projectId, workspaceId])
   @@index([workspaceId, projectId, storyId, parentId, archivedAt, createdAt, id])
+  @@index([searchVector], type: Gin, map: "PlotGroup_search_gin")
 }
 
 model SceneCharacterLink {
@@ -473,4 +488,19 @@ model SceneLocationLink {
   @@unique([sceneId, canonId])
   @@index([workspaceId, projectId, canonId, createdAt, id])
   @@index([workspaceId, storyId, sceneId])
+}
+
+model SaveReceipt {
+  id             String    @id @default(uuid()) @db.Uuid
+  workspaceId    String    @db.Uuid
+  workspace      Workspace @relation(fields: [workspaceId], references: [id], onDelete: Restrict)
+  targetKey      String
+  requestKey     String    @db.Uuid
+  requestHash    String
+  appliedVersion Int
+  createdAt      DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@unique([workspaceId, targetKey])
+  @@unique([workspaceId, requestKey])
 }

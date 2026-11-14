@@ -1,3 +1,4 @@
+import type { Tx } from './ideas';
 import 'server-only';
 import { Id, ListQuery, ProjectRecord, StoryRecord, type AccountRecord } from '@inkwell/contracts';
 import { decodeCursor, encodeCursor } from '@inkwell/domain';
@@ -106,10 +107,11 @@ export async function updateProject(
     description?: string | undefined;
     archived?: boolean | undefined;
   },
+  transaction?: Tx,
 ) {
   const db = database();
   id(projectId);
-  return db.$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     const result = await tx.project.updateMany({
       where: { id: projectId, workspaceId: account.workspaceId, version },
       data: {
@@ -131,7 +133,8 @@ export async function updateProject(
     }
     const row = await tx.project.findUniqueOrThrow({ where: { id: projectId } });
     return projectDto(row);
-  });
+  };
+  return transaction ? perform(transaction) : db.$transaction(perform);
 }
 export async function listStories(
   account: AccountRecord,
@@ -206,11 +209,12 @@ export async function updateStory(
     format?: string | undefined;
     archived?: boolean | undefined;
   },
+  transaction?: Tx,
 ) {
   id(projectId);
   id(storyId);
   const db = database();
-  return db.$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     // Match the child first so foreign IDs cannot reveal parent archive state.
     const own = await tx.story.findFirst({
       where: { id: storyId, projectId, workspaceId: account.workspaceId },
@@ -234,7 +238,8 @@ export async function updateStory(
     });
     if (result.count !== 1) conflict();
     return storyDto(await tx.story.findUniqueOrThrow({ where: { id: storyId } }));
-  });
+  };
+  return transaction ? perform(transaction) : db.$transaction(perform);
 }
 export async function summary(account: AccountRecord) {
   const db = database();

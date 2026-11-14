@@ -1,4 +1,5 @@
 'use client';
+import { useReliableEditor, ReliableStatus, draftSchemas } from './reliable-editor';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -15,7 +16,7 @@ import { api, message } from './api-client';
 import { plotPath, plotUrl, plotLabel, type PlotContext } from './plot-path';
 import { useHydrated } from './use-hydrated';
 import { SceneReferences } from './scene-references';
-export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sceneId?: string }) {
+function SceneEditorInstance({ context: c, sceneId }: { context: PlotContext; sceneId?: string }) {
   const ready = useHydrated(),
     router = useRouter(),
     [row, setRow] = useState<SceneRecord | null>(null),
@@ -37,6 +38,10 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
   const path = plotPath(c, '/scenes' + (sceneId ? '/' + sceneId : '')),
     groupsPath = plotPath(c, '/groups');
   function accept(r: SceneRecord) {
+    reliable.reset(
+      { title: r.title, content: r.content, status: r.status, groupId: r.groupId },
+      r.version,
+    );
     setRow(r);
     setTitle(r.title);
     setContent(r.content);
@@ -90,14 +95,44 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
       live = false;
     };
   }, [groupsPath, groupCursor, sceneId]);
-  const dirty = row
-    ? title !== row.title ||
-      status !== row.status ||
-      JSON.stringify(content) !== JSON.stringify(row.content)
-    : Boolean(title) ||
-      JSON.stringify(content) !== JSON.stringify(plainDocument('')) ||
-      status !== 'PLANNED' ||
-      Boolean(groupId);
+  const snapshot = (r: SceneRecord) => ({
+    title: r.title,
+    content: r.content,
+    status: r.status,
+    groupId: r.groupId,
+  });
+  const reliable = useReliableEditor({
+    kind: 'SCENE',
+    slot: path,
+    recordId: sceneId,
+    projectId: c.projectId,
+    storyId: c.storyId,
+    version: row?.version ?? 0,
+    fields: { title, content, status, groupId: groupId || null },
+    baseline: row
+      ? snapshot(row)
+      : { title: '', content: plainDocument(''), status: 'PLANNED' as const, groupId: null },
+    schema: draftSchemas.SCENE,
+    loaded: !loading,
+    enabled: !pending && !row?.archivedAt,
+    saveFields: (f) => ({ title: f.title, content: f.content, status: f.status }),
+    apply: (f) => {
+      setTitle(f.title);
+      setContent(f.content);
+      setStatus(f.status);
+      setGroupId(f.groupId ?? '');
+      setEditorKey((n) => n + 1);
+    },
+    ack: (f, v) =>
+      setRow((old) =>
+        old ? { ...old, title: f.title, content: f.content, status: f.status, version: v } : old,
+      ),
+    current: async () => {
+      const r = await api<SceneRecord>(path);
+      return { version: r.version, fields: snapshot(r) };
+    },
+  });
+  const dirty = reliable.dirty;
   async function save(body: unknown) {
     setPending(true);
     setError('');
@@ -109,6 +144,7 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
         ...(row ? { version: row.version } : {}),
       });
       if (!sceneId) {
+        await reliable.created();
         navigating = true;
         router.push(plotUrl(c, '/scenes/' + r.id));
         return;
@@ -171,6 +207,12 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
               aria-label="Edit scene"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (sceneId) {
+                  void reliable.flush().then((ok) => {
+                    if (ok) setSaved('Scene saved.');
+                  });
+                  return;
+                }
                 void save({
                   title,
                   content,
@@ -257,6 +299,7 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
                 ? 'Unsaved scene changes'
                 : saved || (row ? 'All scene changes saved' : 'Not saved yet')}
             </p>
+            <ReliableStatus editor={reliable} />
             {error && (
               <p role="alert" className="form-error">
                 {error} Your draft is still here.
@@ -266,14 +309,16 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
               <div className="inline-actions">
                 <button
                   className="quiet-button"
-                  disabled={!ready || pending || dirty}
+                  disabled={!ready || pending || reliable.blocked || dirty}
                   onClick={() => void save({ archived: !row.archivedAt })}
                 >
                   {row.archivedAt ? 'Restore scene' : 'Archive scene'}
                 </button>
                 <button
                   className="quiet-button"
-                  disabled={!ready || pending || dirty || Boolean(row.archivedAt)}
+                  disabled={
+                    !ready || pending || reliable.blocked || dirty || Boolean(row.archivedAt)
+                  }
                   onClick={async () => {
                     setPending(true);
                     setError('');
@@ -296,7 +341,7 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
                 </button>
                 <button
                   className="quiet-button"
-                  disabled={!ready || pending}
+                  disabled={!ready || pending || reliable.saving}
                   onClick={async () => {
                     setPending(true);
                     try {
@@ -331,10 +376,19 @@ export function SceneEditor({ context: c, sceneId }: { context: PlotContext; sce
           sceneId={row.id}
           version={row.version}
           revision={refsRevision}
-          disabled={!ready || pending || dirty || Boolean(row.archivedAt)}
+          disabled={!ready || pending || reliable.blocked || dirty || Boolean(row.archivedAt)}
           onWrite={reference}
         />
       )}
     </div>
+  );
+}
+
+export function SceneEditor(props: Parameters<typeof SceneEditorInstance>[0]) {
+  return (
+    <SceneEditorInstance
+      key={props.context.projectId + ':' + props.context.storyId + ':' + (props.sceneId ?? 'new')}
+      {...props}
+    />
   );
 }

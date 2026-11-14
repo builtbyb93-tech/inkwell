@@ -1,4 +1,5 @@
 import 'server-only';
+import { createHmac } from 'node:crypto';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getToken } from 'next-auth/jwt';
@@ -81,6 +82,9 @@ export function authOptions(): NextAuthOptions {
 }
 
 export async function principal(request: NextRequest): Promise<AccountRecord> {
+  return (await principalContext(request)).account;
+}
+export async function principalContext(request: NextRequest) {
   const config = authConfig();
   const token = await getToken({
     req: request,
@@ -119,13 +123,23 @@ export async function principal(request: NextRequest): Promise<AccountRecord> {
     session.authVersion !== user.authVersion
   )
     throw unauthenticated();
-  return {
+  const account: AccountRecord = {
     id: user.id,
     email: user.email,
     displayName: user.displayName,
     version: user.version,
     aiEnabled: false,
     workspaceId: user.workspace.id,
+  };
+  return {
+    account,
+    recovery: {
+      owner: user.id + ':' + user.workspace.id,
+      tag: createHmac('sha256', config.secret)
+        .update('recovery:' + session.id)
+        .digest('hex'),
+      startedAt: session.createdAt.getTime(),
+    },
   };
 }
 export function unauthenticated() {

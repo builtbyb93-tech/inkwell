@@ -56,3 +56,9 @@ One canonical repository; feature branches and isolated worktrees; main is admin
 Open Story Bible from the navigation to choose a shared project Bible, or open a story and choose its Story Bible. Shared edits require project context; local records and overrides stay specific to their story. See ADR-007 for scope, typed links, explicit clears and conflict review. PR #41 (Phase 2) merged at `57bc6ba`; Phase 3 PR #42 merged at `889dc16`; standing owner approval covers subsequent in-scope PR merges after checks/review. Deployment remains separately gated.
 
 Plot Board is available from navigation or each story. Board/list share canonical scene numbers; desktop drag and keyboard/mobile move controls use the same versioned sequence contract. Root/child groups organize views without separate orders. See ADR-008 for ordering, typed links, archive and duplicate semantics. Owner standing approval covers in-scope reviewed/tested PR merges; deployment remains separately gated.
+
+### Phase 5 — search, recovery and portability
+
+The workspace now has Search, project JSON export and validated separate-project import. Existing creative editors autosave with visible acknowledgement, preserved newer typing and explicit stale-edit comparison. New records and canon inheritance/review decisions remain explicit saves. Account & privacy controls optional seven-day recovery on this browser; sign-out clears its drafts. Recovery depends on browser storage and never replaces online persistence or a backup.
+
+The private version 1 archive includes archived content, canon override bases, scene order/copy ancestry, relationships and relevant Idea sources. It excludes unrelated project links and account/session data. Limits are 8 MiB and 10,000 archive rows; imports commit transactionally with remapped IDs. See ADR-009–011 and API contracts. No hosted migration/deployment has been performed; Phase 6 snapshot sharing and Phase 7 release gates remain.

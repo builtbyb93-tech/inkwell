@@ -772,3 +772,30 @@ fieldset {
     display: none;
   }
 }
+
+.reliability-panel {
+  margin-block: 1rem;
+}
+.recovery-choice {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-block: 1rem;
+  overflow-wrap: anywhere;
+}
+.recovery-choice dl > div {
+  margin-block: 0.75rem;
+}
+.recovery-choice dt {
+  font-weight: 600;
+}
+.recovery-choice dd {
+  margin-inline-start: 0;
+  white-space: pre-wrap;
+}
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  margin-block: 1rem;
+}

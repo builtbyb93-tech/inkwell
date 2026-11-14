@@ -18,3 +18,5 @@
 Phase 2 includes minimal typed Character/Scene target creation needed for conversions. Full canon management and Plot Board remain Phases 3/4. Concurrency checks accompany first writers, not only Phase 5.
 
 Native apps, generation, marketplace, collaboration and specialized publishing editors are excluded. No deadline, pricing, retention period, load target or SLA is invented. Resolve those explicitly before dependent work ships.
+
+Phase 5 owner decisions recorded 2026-11-14: unsaved device drafts expire after seven days and clear on sign-out; local search gate is exactly 10,000 mixed searchable records with warm p95 ≤250 ms. These are explicit approvals, not inferred retention/SLA promises. Search, acknowledged saves, optional recovery and version 1 transactional text portability are implemented in Phase 5; native/offline sync, sharing and release gates remain as scoped.

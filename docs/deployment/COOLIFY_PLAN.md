@@ -41,3 +41,11 @@ Story Bible adds migration `20261113030000_story_bible`, preserving legacy Chara
 ## Phase 4 migration boundary
 
 `20261113040000_plot_board` preserves existing scene IDs/content/positions/provenance and adds scoped groups, status/copy fields and typed scene links. Order uniqueness becomes deferred-capable; SQL triggers and that constraint are migration-owned. Fresh and pre-Plot upgrade paths are exercised only in disposable local databases. Before hosting: approved backup and restore rehearsal, SQL/locking review, release image/commit, separate migration/runtime roles and a recovery plan preserving new group/link/scene data. Reverting the app alone is not permission to drop data or casually remove guards. No Coolify/VPS, staging visibility, DNS, production schema or deployment change occurs in this milestone. Standing PR merge approval is not deployment authorization.
+
+## Phase 5 migration and recovery considerations
+
+No deployment, hosted migration or Coolify resource change occurred during Phase 5 implementation. Before approved staging rollout, back up and verify restoration of the preceding release/database; rehearse additive migration `20261114050000_search_and_saves` on an isolated restored copy. It builds generated vectors/GIN indexes and effective override backfill/triggers, so measure table locks, build time and disk headroom on actual data. Preserve migration-owned prior FTS, canon/type/tree guards and deferred ordering constraints.
+
+Use the approved immutable release commit/image and distinct staging secrets/database as before. Browser recovery needs a secure context (HTTPS outside loopback), accessible IndexedDB/WebCrypto, private no-store responses, and no service-worker cache of private API/editor content. Verify session expiry/sign-out, cross-tab clearing and restored-search plans on staging. The approved local 10,000-record p95 gate is not evidence of VPS performance.
+
+If migration/release validation fails, stop promotion. Choose the rehearsed compatible application rollback or restore the verified backup under an approved recovery plan; do not drop populated creative tables or run an ad-hoc destructive reverse migration. Production migration/deployment and infrastructure/DNS remain separate owner authorization gates.

@@ -11,6 +11,8 @@ export function AppFrame({ children, name }: { children: React.ReactNode; name?:
           ['/bible', 'Story Bible'],
           ['/plot', 'Plot Board'],
           ['/projects', 'Projects & stories'],
+          ['/search', 'Search'],
+          ['/imports', 'Import project'],
           ['/settings', 'Account & privacy'],
         ]
       : [

@@ -161,8 +161,9 @@ export async function updateCanon(
   recordId: string,
   version: number,
   input: z.infer<typeof CanonPatch>,
+  transaction?: Tx,
 ) {
-  return database().$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     const row = await canonRow(tx, a, c, recordId);
     await canonContext(tx, a, c, true);
     if (c.storyId && row.scope === 'SHARED')
@@ -187,7 +188,8 @@ export async function updateCanon(
     });
     if (!changed.count) conflict();
     return canonDto(await canonRow(tx, a, c, recordId));
-  });
+  };
+  return transaction ? perform(transaction) : database().$transaction(perform);
 }
 export async function saveOverride(
   a: AccountRecord,
@@ -195,8 +197,9 @@ export async function saveOverride(
   recordId: string,
   version: number,
   input: z.infer<typeof OverrideInput>,
+  transaction?: Tx,
 ) {
-  return database().$transaction(async (tx) => {
+  const perform = async (tx: Tx) => {
     if (!c.storyId) notFound();
     await canonContext(tx, a, c, true);
     const row = await canonRow(tx, a, c, recordId),
@@ -243,7 +246,8 @@ export async function saveOverride(
         },
       });
     return canonDto(await canonRow(tx, a, c, recordId));
-  });
+  };
+  return transaction ? perform(transaction) : database().$transaction(perform);
 }
 export async function reviewOverride(
   a: AccountRecord,

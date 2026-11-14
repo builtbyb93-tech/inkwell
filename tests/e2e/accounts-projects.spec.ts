@@ -13,9 +13,10 @@ async function holdSaveResponse(page: Page, path: string) {
   const ready = new Promise<void>((resolve) => {
     reached = resolve;
   });
-  const pattern = '**' + path;
+  const draft = path.includes('/stories/');
+  const pattern = draft ? '**/api/v1/draft-saves' : '**' + path;
   await page.route(pattern, async (route) => {
-    if (route.request().method() !== 'PATCH') return route.continue();
+    if (route.request().method() !== (draft ? 'POST' : 'PATCH')) return route.continue();
     const response = await route.fetch();
     reached();
     await gate;
@@ -111,19 +112,21 @@ test('verified accounts organize private projects and stories, recover access, a
   await expect(page.getByRole('main').getByRole('alert')).toContainText('changed elsewhere');
   await expect(page.getByLabel('Title', { exact: true })).toHaveValue('My unsaved title');
   await page.getByRole('button', { name: 'Discard edits and reload' }).click();
-  await expect(page.getByRole('status')).toHaveText('Current version loaded.');
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Current version loaded.' }),
+  ).toBeVisible();
   await page.getByLabel('Title', { exact: true }).fill('A saved title');
   const heldStory = await holdSaveResponse(page, storyPath);
   try {
     await page.getByRole('button', { name: 'Save changes', exact: true }).click();
     await heldStory.ready;
-    await expect(page.getByLabel('Title', { exact: true })).toBeDisabled();
-    await expect(page.getByLabel('Story format', { exact: true })).toBeDisabled();
-    await expect(page.getByLabel('Synopsis', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('Title', { exact: true })).toBeEnabled();
+    await expect(page.getByLabel('Story format', { exact: true })).toBeEnabled();
+    await expect(page.getByLabel('Synopsis', { exact: true })).toBeEnabled();
   } finally {
     heldStory.release();
   }
-  await expect(page.getByRole('status')).toHaveText('Saved.');
+  await expect(page.getByRole('status').filter({ hasText: /^Saved\.$/ })).toBeVisible();
   await heldStory.remove();
   await expect(page.getByLabel('Title', { exact: true })).toBeEnabled();
   await page.reload();
@@ -243,7 +246,7 @@ test('verified accounts organize private projects and stories, recover access, a
   } finally {
     heldAccount.release();
   }
-  await expect(page.getByRole('status')).toHaveText('Saved.');
+  await expect(page.getByRole('status').filter({ hasText: /^Saved\.$/ })).toBeVisible();
   await heldAccount.remove();
   await expect(page.getByLabel('Your name', { exact: true })).toBeEnabled();
   await expect(page.getByText('AI is disabled.', { exact: true })).toBeVisible();

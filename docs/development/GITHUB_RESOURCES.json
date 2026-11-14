@@ -283,7 +283,35 @@
       "mailpit": 18028,
       "app": 3003,
       "e2e": 3400
-    }
+    },
+    "mergeStatus": "merged",
+    "mergeCommit": "2864e32f448604d633e932916398ba16b5bed16b",
+    "pullRequest": "https://github.com/builtbyb93-tech/inkwell/pull/43"
   },
-  "standingMergeAuthorization": "Owner approved all in-scope merges after required checks/review; auto-merge remains disabled; deployment separately gated"
+  "standingMergeAuthorization": "Owner approved all in-scope merges after required checks/review; auto-merge remains disabled; deployment separately gated",
+  "phase5": {
+    "issues": [26, 27, 28, 29, 30],
+    "branch": "feature/26-recovery-portability",
+    "worktree": "/workspace/inkwell-worktrees/phase-5",
+    "baseCommit": "2864e32f448604d633e932916398ba16b5bed16b",
+    "target": "main",
+    "mergeAuthorized": true,
+    "deploymentAuthorized": false,
+    "activeWorktrees": 1,
+    "schemaOwner": "Phase 5 integration task",
+    "resources": {
+      "compose": "inkwell_phase5",
+      "postgres": 55437,
+      "smtp": 11029,
+      "mailpit": 18029,
+      "app": 3004,
+      "e2e": 3500
+    },
+    "approvedRecoveryDays": 7,
+    "approvedSearchGate": {
+      "records": 10000,
+      "warmP95Ms": 250,
+      "environment": "local; VPS validation later"
+    }
+  }
 }

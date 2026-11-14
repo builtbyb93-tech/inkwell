@@ -58,3 +58,9 @@ After verified Phase 2 merge, implement #17 shared records → #18 local records
 ## Phase 4 issue execution
 
 Verified approved Phase 3 merge → #21 group integrity → #22 scene details/links → #23 atomic ordering → #24 shared board/list accessible movement → #25 duplicate/archive. One schema owner and integrated feature branch coordinate these dependencies. Publish validation/PR evidence before Review; mark Complete only after verified acceptance and merge under the standing owner approval. Phase 5 Reliability/Portability follows the merged Plot Board, with autosave/recovery/global search/import/export still distinct scope.
+
+## Phase 5 implementation allocation
+
+#25 and Phase 4 PR #43 are merged (`2864e32f448604d633e932916398ba16b5bed16b`). #26–#30 form one cohesive reliability/portability milestone on `feature/26-recovery-portability`, `/workspace/inkwell-worktrees/phase-5`, target `main`, that base commit. #26 provides workspace search/filter/index groundwork; #27 provides acknowledged optimistic save/retry; #28 adds optional scoped device recovery using #27; #29 defines complete project archive/export; #30 depends on #29's format and earlier graph integrity for validation/remapping/rollback. Schema ownership and integration are centralized in this worktree. Historical phase worktrees are retained inactive; no shared writable test databases or concurrent source edits are used.
+
+Owner decisions recorded 2026-11-14: seven-day device recovery, clear on sign-out; 10,000 mixed searchable records, warm local p95 ≤250 ms. Standing approval covers reviewed/tested in-scope PR merges. No auto-merge, collaborator/reviewer invitations, hosted migrations or deployment. Phase 6 snapshot sharing depends on this phase's complete authorized graph/portability and remains a distinct milestone.

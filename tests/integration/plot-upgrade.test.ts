@@ -110,6 +110,53 @@ it('upgrades existing converted scenes without changing IDs, positions, content 
     expect(
       (await target.query('SELECT id FROM "IdeaSceneLink" WHERE "sceneId"=$1', [scene])).rows[0].id,
     ).toBe(link);
+    const canon = randomUUID(),
+      override = randomUUID();
+    await target.query(
+      'INSERT INTO "Character"(id,"workspaceId","projectId",name,content,"contentText","updatedAt") VALUES($1,$2,$3,$4,$5,$6,now())',
+      [canon, ws, project, 'Legacy canon', JSON.stringify(doc), 'Legacy notes'],
+    );
+    await target.query(
+      'INSERT INTO "CanonOverride"(id,"workspaceId","projectId","storyId","canonId","hasName",name,"baseVersion","baseName","baseContent",version,"updatedAt") VALUES($1,$2,$3,$4,$5,true,$6,1,$7,$8,3,$9)',
+      [
+        override,
+        ws,
+        project,
+        story,
+        canon,
+        'Legacy story canon',
+        'Legacy canon',
+        JSON.stringify(doc),
+        new Date('2026-01-01T00:00:00Z'),
+      ],
+    );
+    const before = (await target.query('SELECT * FROM "CanonOverride" WHERE id=$1', [override]))
+      .rows[0];
+    await target.query(
+      await readFile(new URL('20261114050000_search_and_saves/migration.sql', root), 'utf8'),
+    );
+    const after = (await target.query('SELECT * FROM "CanonOverride" WHERE id=$1', [override]))
+      .rows[0];
+    const { effectiveName, effectiveText, searchVector, ...kept } = after;
+    void searchVector;
+    expect(kept).toEqual(before);
+    expect(effectiveName).toBe('Legacy story canon');
+    expect(effectiveText).toBe('Legacy notes');
+    expect(
+      (
+        await target.query(
+          'SELECT "searchVector" @@ websearch_to_tsquery(\'simple\',\'existing\') AS found FROM "Idea" WHERE id=$1',
+          [idea],
+        )
+      ).rows[0].found,
+    ).toBe(true);
+    expect(
+      (
+        await target.query(
+          "SELECT condeferrable FROM pg_constraint WHERE conname='Scene_storyId_position_key'",
+        )
+      ).rows[0].condeferrable,
+    ).toBe(true);
   } finally {
     await target?.end();
     if (created) await admin.query(`DROP DATABASE "${name}"`);
