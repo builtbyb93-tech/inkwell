@@ -144,6 +144,17 @@ test('private navigation and capture reflow at narrow widths and enlarged text w
     .click();
   await expect(page).toHaveURL(/\/ideas$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Idea Vault.');
+  await expect(page.locator('.mobile-header details')).not.toHaveAttribute('open');
+  await page.getByText('Explore', { exact: true }).focus();
+  await page.keyboard.press('Enter');
+  const currentLink = page
+    .getByRole('navigation', { name: 'Mobile navigation' })
+    .getByRole('link', { name: 'Idea Vault', exact: true });
+  await currentLink.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.mobile-header details')).not.toHaveAttribute('open');
+  await expect(page.getByRole('main')).toBeFocused();
+
   for (const theme of ['light', 'dark']) {
     await page.getByLabel('Theme', { exact: true }).selectOption(theme);
     expect(
